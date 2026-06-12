@@ -344,7 +344,11 @@
   (function manifesto() {
     var el = document.getElementById("manifestoText");
     if (!el) return;
-    var accents = ["pdf", "pound", "deserve", "numbers", "read"];
+    // WordPress (wp_localize_script) can override the accent words via
+    // a global VENDO.accents array; the literal is the static-site default.
+    var accents = (window.VENDO && window.VENDO.accents && window.VENDO.accents.length)
+      ? window.VENDO.accents
+      : ["pdf", "pound", "deserve", "numbers", "read"];
     var words = el.textContent.trim().split(/\s+/);
     el.innerHTML = words.map(function (w) {
       var isAccent = accents.some(function (a) { return w.toLowerCase().indexOf(a) === 0; });

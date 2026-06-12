@@ -9,6 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
+// Backend customisation: Customizer fields, helpers, Case Studies CPT.
+require get_template_directory() . '/inc/customizer.php';
+require get_template_directory() . '/inc/helpers.php';
+require get_template_directory() . '/inc/case-studies.php';
+
 if ( ! function_exists( 'vendo_setup' ) ) {
 	/**
 	 * Theme supports.
@@ -71,6 +76,10 @@ function vendo_assets() {
 		$ver,
 		true
 	);
+
+	// Hand the Customizer-defined manifesto accent words to main.js.
+	$accents = array_filter( array_map( 'trim', explode( ',', strtolower( vendo_mod( 'manifesto_accents' ) ) ) ) );
+	wp_localize_script( 'vendo-main', 'VENDO', array( 'accents' => array_values( $accents ) ) );
 }
 add_action( 'wp_enqueue_scripts', 'vendo_assets' );
 

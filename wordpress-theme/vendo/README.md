@@ -1,23 +1,49 @@
 # Vendo Digital — WordPress Theme
 
-A custom one-page WordPress theme for the Vendo Digital landing page. The
-animated front-end (GSAP scroll story, Three.js hero, services showcase,
-sticky word-stack process, rotating V. badge) is preserved exactly — the
-markup the JavaScript depends on is identical to the original static site.
+A custom one-page WordPress theme for the Vendo Digital landing page,
+**fully editable from the WordPress admin** with zero plugin dependencies.
+The animated front-end (GSAP scroll story, Three.js hero, services
+showcase, sticky word-stack process, rotating V. badge) is preserved
+exactly — the markup the JavaScript depends on is identical to the
+original static site.
+
+## Editing content (no code needed)
+
+- **All page copy** → **Appearance → Customize → Vendo — Page Content**,
+  grouped by section (Hero, Marquee, Why Vendo + Stats, Client Results,
+  Services, Niche Cards, How It Works, CTA, Contact & Footer), with live
+  preview. Everything defaults to the designed copy, so a fresh install
+  looks exactly like the original.
+- **Client results grid** → the **Case Studies** menu in the admin
+  sidebar. Each case study: title, one-line blurb (the Excerpt field),
+  and a Card Settings box for tags, card background (sage / charcoal /
+  Vendo Green) and visual style (app window / dashboard / phones /
+  website). Reorder with the Order attribute. Until you publish your
+  first case study, the four designed defaults are shown.
+- **Manifesto accent words** (the green words that light up on scroll)
+  are a Customizer field too — they're passed from PHP into the GSAP
+  script via `wp_localize_script`.
+
+Built on WordPress-native APIs only (Customizer + custom post type +
+meta boxes) — no ACF or other plugins required.
 
 ## What's inside
 
 ```
 vendo/
-├── style.css          WordPress theme header (required). Real CSS is in assets/.
-├── functions.php      Enqueues fonts, CSS, GSAP, ScrollTrigger, Three.js, main.js
-├── header.php         <head> + preloader, cursor, grain, nav, fullscreen menu
-├── front-page.php     The landing page (hero → footer)
-├── footer.php         Footer markup + wp_footer()
-├── index.php          Fallback (re-uses front-page.php)
+├── style.css            WordPress theme header (required). Real CSS is in assets/.
+├── functions.php        Enqueues assets; loads inc/; localizes JS settings
+├── header.php           <head> + preloader, cursor, grain, nav, fullscreen menu
+├── front-page.php       The landing page, templated from Customizer settings
+├── footer.php           Footer (contact/socials from Customizer) + wp_footer()
+├── index.php            Fallback (re-uses front-page.php)
+├── inc/
+│   ├── customizer.php   ~70 settings with the designed copy as defaults
+│   ├── helpers.php      vendo_mod/vendo_words/mock renderer/case defaults
+│   └── case-studies.php Case Study post type + Card Settings meta box
 └── assets/
-    ├── css/style.css  Full stylesheet (byte-for-byte from the static site)
-    └── js/main.js     All interactions (byte-for-byte from the static site)
+    ├── css/style.css    Full stylesheet (byte-for-byte from the static site)
+    └── js/main.js       All interactions (accent words overridable from WP)
 ```
 
 ## Install
@@ -40,8 +66,7 @@ vendo/
 - **The free-audit CTA** currently uses a `mailto:` link. To capture
   submissions in WordPress instead, install Contact Form 7 or WPForms and
   replace the CTA link/button with the form shortcode.
-- **Editing copy:** this is the static theme — text lives in `front-page.php`.
-  To let non-developers edit the hero, stats, services and case studies from
-  the dashboard, the next step is an ACF (Advanced Custom Fields) layer plus a
-  "Case Study" custom post type.
 - **Requires** WordPress 6.0+ and PHP 7.4+.
+- `wordpress-theme/_render-test.php` (one level up, outside this folder) is a
+  development harness that renders the theme without WordPress for testing —
+  don't include it in the theme zip.

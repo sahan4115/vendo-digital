@@ -25,21 +25,21 @@
       </div>
       <div class="f-col">
         <span class="f-head">Social</span>
-        <a href="https://www.instagram.com/vendo_digital/" data-line>Instagram</a>
-        <a href="#" data-line>Facebook</a>
-        <a href="https://uk.linkedin.com/company/vendo-digital-ltd" data-line>LinkedIn</a>
-        <a href="#" data-line>YouTube</a>
+        <a href="<?php echo esc_url( vendo_mod( 'ig' ) ); ?>" data-line>Instagram</a>
+        <a href="<?php echo esc_url( vendo_mod( 'fb' ) ); ?>" data-line>Facebook</a>
+        <a href="<?php echo esc_url( vendo_mod( 'li' ) ); ?>" data-line>LinkedIn</a>
+        <a href="<?php echo esc_url( vendo_mod( 'yt' ) ); ?>" data-line>YouTube</a>
       </div>
       <div class="f-col">
         <span class="f-head">Office</span>
-        <span class="f-text">5 Sandiford Road<br/>Sutton, Surrey SM3 9RN</span>
-        <a href="mailto:hello@vendodigital.co.uk" data-line>hello@vendodigital.co.uk</a>
-        <a href="tel:02071014967" data-line>0207 101 4967</a>
+        <span class="f-text"><?php vendo_the( 'addr1' ); ?><br/><?php vendo_the( 'addr2' ); ?></span>
+        <a href="mailto:<?php echo esc_attr( vendo_mod( 'email' ) ); ?>" data-line><?php vendo_the( 'email' ); ?></a>
+        <a href="tel:<?php echo esc_attr( preg_replace( '/\s+/', '', vendo_mod( 'phone' ) ) ); ?>" data-line><?php vendo_the( 'phone' ); ?></a>
       </div>
     </div>
     <div class="footer-bar">
-      <span>&copy; <?php echo esc_html( date( 'Y' ) ); ?> Vendo Digital Ltd.</span>
-      <span>www.vendodigital.co.uk</span>
+      <span>&copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php vendo_the( 'copyright' ); ?></span>
+      <span><?php vendo_the( 'site_url_label' ); ?></span>
       <button class="to-top" id="toTop" data-magnetic>Back to top &uarr;</button>
     </div>
   </footer>

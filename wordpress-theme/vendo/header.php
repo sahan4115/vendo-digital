@@ -66,7 +66,7 @@
       <a href="#contact"><em>05</em><span>Free audit</span></a>
     </nav>
     <div class="menu-foot">
-      <a href="mailto:hello@vendodigital.co.uk">hello@vendodigital.co.uk</a>
-      <span>Sutton, Surrey</span>
+      <a href="mailto:<?php echo esc_attr( vendo_mod( 'email' ) ); ?>"><?php vendo_the( 'email' ); ?></a>
+      <span><?php vendo_the( 'city_short' ); ?></span>
     </div>
   </div>
