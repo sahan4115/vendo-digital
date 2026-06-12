@@ -340,7 +340,7 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
 }
 .vbadge-ring { position: absolute; inset: 0; animation: spin 26s linear infinite; }
 .vbadge-mark {
-  position: absolute; inset: 20%;
+  position: absolute; inset: 30%;
   animation: coin 7s cubic-bezier(0.6, 0, 0.4, 1) infinite;
   transform-style: preserve-3d;
   filter:
