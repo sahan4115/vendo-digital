@@ -482,8 +482,10 @@
     var steps = Array.prototype.slice.call(document.querySelectorAll(".fstep"));
     if (!steps.length) return;
 
-    steps.forEach(function (wrap) {
-      var panel = wrap.querySelector(".fpanel");
+    var panels = steps.map(function (w) { return w.querySelector(".fpanel"); });
+
+    steps.forEach(function (wrap, i) {
+      var panel = panels[i];
       var fill = wrap.querySelector(".fword-fill");
 
       if (prefersReduced) {
@@ -501,6 +503,25 @@
         opacity: 0, y: 28, duration: 0.9, ease: "expo.out", stagger: 0.08,
         scrollTrigger: { trigger: wrap, start: "top 70%", once: true }
       });
+
+      // incoming card settles flat from a slight deal-the-card tilt
+      // (±1.8deg keeps corner overhang inside the card's side margins)
+      gsap.fromTo(panel,
+        { rotation: i % 2 ? -1.8 : 1.8 },
+        {
+          rotation: 0, ease: "none",
+          scrollTrigger: { trigger: wrap, start: "top bottom", end: "top 25%", scrub: 0.3 }
+        });
+
+      // the card underneath recedes as this one slides over it
+      if (i > 0) {
+        gsap.fromTo(panels[i - 1],
+          { scale: 1, opacity: 1, filter: "brightness(1)" },
+          {
+            scale: 0.93, opacity: 0.45, filter: "brightness(0.6)", ease: "none",
+            scrollTrigger: { trigger: wrap, start: "top bottom", end: "top top", scrub: 0.3 }
+          });
+      }
 
       // scrub the word fill, left to right, across the sticky hold
       ScrollTrigger.create({

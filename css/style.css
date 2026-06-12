@@ -789,22 +789,46 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
 .flow-head { padding: clamp(72px, 12vh, 140px) var(--pad) 0; }
 .flow-head .section-head { margin-bottom: clamp(20px, 4vh, 40px); }
 
-/* each wrapper is taller than the viewport; the panel inside sticks,
-   creating a hold during which the giant word fills with green */
-.fstep { height: 190vh; }
-.fstep:last-child { height: 160vh; }
+/* each wrapper is taller than the viewport; the card inside sticks,
+   creating a hold during which the giant word fills with green.
+   Cards stack like a deck: staggered sticky tops let each previous
+   card peek out above the one covering it. */
+.fstep { height: 180vh; }
+.fstep:last-child { height: 150vh; }
 .fpanel {
-  position: sticky; top: 0;
-  height: 100svh;
+  --peek: 3svh;
+  position: sticky; top: var(--peek);
+  height: 88svh;
+  /* side margins absorb the corner overhang of the ±1.8deg deal-in tilt,
+     so rotated cards never widen the document */
+  margin: 0 clamp(16px, 2.5vw, 32px);
   display: flex; flex-direction: column; justify-content: center;
-  gap: clamp(14px, 2.5vh, 28px);
-  padding: clamp(20px, 4vh, 48px) var(--pad);
-  border-top: 1px solid var(--sage);
-  background: var(--black);
+  gap: clamp(12px, 2.2vh, 24px);
+  padding: clamp(20px, 3.5vh, 44px) clamp(20px, 4vw, 64px);
+  border: 1px solid rgba(142, 254, 187, 0.16);
+  border-radius: clamp(20px, 3vw, 36px);
+  background:
+    radial-gradient(120% 100% at 85% 0%, rgba(9, 34, 31, 0.95), rgba(5, 20, 18, 0.98) 60%),
+    var(--black);
+  box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.5), 0 30px 80px rgba(0, 0, 0, 0.45);
   overflow: hidden;
+  transform-origin: center top;
+  will-change: transform;
 }
-.fstep:nth-child(odd) .fpanel { background: radial-gradient(110% 90% at 85% 10%, rgba(9, 34, 31, 0.9), var(--black) 60%); }
-.fstep:nth-child(even) .fpanel { background: radial-gradient(110% 90% at 15% 90%, rgba(9, 34, 31, 0.9), var(--black) 60%); }
+.fstep[data-flow="1"] .fpanel { --peek: 5.5svh; background: radial-gradient(120% 100% at 12% 100%, rgba(9, 34, 31, 0.95), rgba(5, 20, 18, 0.98) 60%), var(--black); }
+.fstep[data-flow="2"] .fpanel { --peek: 8svh; }
+/* faint inner top edge so stacked slivers read as card rims */
+.fpanel::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(142, 254, 187, 0.45), transparent);
+}
+.fghost {
+  position: absolute; right: clamp(-10px, -0.5vw, 0px); bottom: -0.18em;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(160px, 26vw, 380px); line-height: 1; letter-spacing: -0.05em;
+  color: rgba(142, 254, 187, 0.05);
+  pointer-events: none; user-select: none;
+}
 
 .fmeta { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
 .fkicker {
@@ -819,7 +843,7 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
 /* the giant word: outlined ghost + green fill revealed by clip-path */
 .fword {
   position: relative; line-height: 0.92;
-  font-size: clamp(88px, 21vw, 320px);
+  font-size: clamp(72px, 18vw, 270px);
   letter-spacing: -0.04em;
   user-select: none;
 }
