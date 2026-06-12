@@ -340,10 +340,12 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
 }
 .vbadge-ring { position: absolute; inset: 0; animation: spin 26s linear infinite; }
 .vbadge-mark {
-  position: absolute; inset: 13%;
+  position: absolute; inset: 20%;
   animation: coin 7s cubic-bezier(0.6, 0, 0.4, 1) infinite;
   transform-style: preserve-3d;
-  filter: drop-shadow(0 0 24px rgba(142, 254, 187, 0.25));
+  filter:
+    drop-shadow(0 0 10px rgba(142, 254, 187, 0.55))
+    drop-shadow(0 0 30px rgba(142, 254, 187, 0.3));
 }
 @keyframes coin { to { transform: rotateY(360deg); } }
 /* lean in: the whole badge spins faster while hovered */
