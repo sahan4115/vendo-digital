@@ -310,7 +310,7 @@
   (function reveals() {
     if (prefersReduced) return;
     var targets = [
-      ".section-head", ".case", ".meta-card", ".step",
+      ".section-head", ".case", ".meta-card",
       ".work-more", ".cta-title", ".btn-big", ".cta-note", ".cta-ring"
     ];
     document.querySelectorAll(targets.join(",")).forEach(function (el) {
@@ -461,6 +461,87 @@
         if (viz) viz.style.transform = "";
       });
     }
+  })();
+
+  /* ════════ PROCESS — pinned horizontal scroll ════════
+     Desktop: the section pins and the 4 steps slide horizontally as you
+     scroll vertically, driving a progress meter and a live step counter.
+     Mobile / reduced-motion: a vertical timeline that reveals on scroll.  */
+  (function process() {
+    var section = document.getElementById("process");
+    if (!section) return;
+    var pin = document.getElementById("processPin");
+    var stage = document.getElementById("processStage");
+    var track = document.getElementById("processTrack");
+    var steps = Array.prototype.slice.call(track.querySelectorAll(".pstep"));
+    var bar = document.getElementById("ppBar");
+    var numEl = document.getElementById("ppNum");
+
+    function setBar(p) { if (bar) bar.style.transform = "scaleX(" + p + ")"; }
+    function setActive(idx) {
+      steps.forEach(function (s, i) { s.classList.toggle("is-active", i === idx); });
+      if (numEl) numEl.textContent = String(idx + 1).padStart(2, "0");
+    }
+
+    if (prefersReduced) {
+      steps.forEach(function (s) { s.classList.add("is-active"); });
+      setBar(1);
+      return;
+    }
+
+    var mm = gsap.matchMedia();
+
+    // ── Desktop: horizontal pin ──
+    mm.add("(min-width: 820px)", function () {
+      pin.classList.add("is-horizontal");
+      stage.classList.add("is-horizontal");
+      track.classList.add("is-horizontal");
+
+      var distance = function () { return track.scrollWidth - stage.clientWidth; };
+      var tween = gsap.to(track, { x: function () { return -distance(); }, ease: "none" });
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: function () { return "+=" + distance(); },
+        pin: pin,
+        scrub: 0.6,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        animation: tween,
+        onUpdate: function (self) {
+          setBar(self.progress);
+          setActive(Math.round(self.progress * (steps.length - 1)));
+        }
+      });
+      setActive(0);
+
+      // gsap.matchMedia reverts the tween + ScrollTrigger automatically;
+      // we just drop the layout classes.
+      return function () {
+        pin.classList.remove("is-horizontal");
+        stage.classList.remove("is-horizontal");
+        track.classList.remove("is-horizontal");
+        gsap.set(track, { x: 0 });
+      };
+    });
+
+    // ── Mobile: vertical timeline ──
+    mm.add("(max-width: 819px)", function () {
+      steps.forEach(function (s) {
+        gsap.from(s, {
+          opacity: 0, y: 48, duration: 0.9, ease: "expo.out",
+          scrollTrigger: { trigger: s, start: "top 86%", once: true }
+        });
+      });
+      ScrollTrigger.create({
+        trigger: track, start: "top 78%", end: "bottom 65%", scrub: 0.4,
+        onUpdate: function (self) {
+          setBar(self.progress);
+          setActive(Math.min(steps.length - 1, Math.floor(self.progress * steps.length)));
+        }
+      });
+    });
   })();
 
   /* ════════ TILT CARDS (stats) ════════ */

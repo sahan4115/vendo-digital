@@ -350,36 +350,87 @@
       </div>
     </section>
 
-    <!-- ════════ PROCESS ════════ -->
+    <!-- ════════ PROCESS (pinned horizontal scroll) ════════ -->
     <section class="process" id="process">
-      <div class="section-head">
-        <span class="section-num">04</span>
-        <span class="section-tag">How we work</span>
-      </div>
-      <div class="process-track" id="processTrack">
-        <div class="step">
-          <span class="step-num">①</span>
-          <h3>Discover</h3>
-          <p>Stakeholder workshops, user interviews and audit of what exists. We map the real problem — not the assumed one.</p>
-          <span class="step-time">Week 1–2</span>
+      <div class="process-pin" id="processPin">
+        <div class="process-head">
+          <div class="section-head">
+            <span class="section-num">04</span>
+            <span class="section-tag">How we work</span>
+          </div>
+          <div class="pp">
+            <span class="pp-count"><b id="ppNum">01</b><i>&nbsp;/ 04</i></span>
+            <div class="pp-bar"><span id="ppBar"></span></div>
+            <span class="pp-hint">Keep scrolling →</span>
+          </div>
         </div>
-        <div class="step">
-          <span class="step-num">②</span>
-          <h3>Define</h3>
-          <p>Journeys, information architecture and low-fi flows. Every screen earns its place before it gets dressed.</p>
-          <span class="step-time">Week 3–4</span>
-        </div>
-        <div class="step">
-          <span class="step-num">③</span>
-          <h3>Design</h3>
-          <p>High-fidelity UI, motion studies and a living design system. Tested with real users, iterated weekly.</p>
-          <span class="step-time">Week 5–8</span>
-        </div>
-        <div class="step">
-          <span class="step-num">④</span>
-          <h3>Deliver</h3>
-          <p>Developer pairing through build, QA on every breakpoint, and a measurement plan so wins are provable.</p>
-          <span class="step-time">Week 9+</span>
+
+        <div class="process-stage" id="processStage">
+          <div class="process-track" id="processTrack">
+
+            <article class="pstep is-active" data-step="0">
+              <span class="pstep-index" aria-hidden="true">01</span>
+              <div class="pstep-visual">
+                <div class="viz viz-discover" aria-hidden="true">
+                  <span class="rd r1"></span><span class="rd r2"></span><span class="rd r3"></span>
+                  <span class="rd-sweep"></span>
+                  <span class="rd-dot d1"></span><span class="rd-dot d2"></span>
+                </div>
+              </div>
+              <div class="pstep-info">
+                <span class="pstep-time">Week 1–2</span>
+                <h3 class="pstep-title">Discover</h3>
+                <p class="pstep-desc">Stakeholder workshops, user interviews and an audit of what exists. We map the real problem — not the assumed one.</p>
+              </div>
+            </article>
+
+            <article class="pstep" data-step="1">
+              <span class="pstep-index" aria-hidden="true">02</span>
+              <div class="pstep-visual">
+                <div class="viz viz-define" aria-hidden="true">
+                  <span class="wf head"></span>
+                  <span class="wf"></span>
+                  <span class="wf short"></span>
+                  <div class="wf-grid"><i></i><i></i><i></i></div>
+                </div>
+              </div>
+              <div class="pstep-info">
+                <span class="pstep-time">Week 3–4</span>
+                <h3 class="pstep-title">Define</h3>
+                <p class="pstep-desc">Journeys, information architecture and low-fi flows. Every screen earns its place before it gets dressed.</p>
+              </div>
+            </article>
+
+            <article class="pstep" data-step="2">
+              <span class="pstep-index" aria-hidden="true">03</span>
+              <div class="pstep-visual">
+                <div class="viz viz-design" aria-hidden="true">
+                  <span class="scr s1"></span><span class="scr s2"></span><span class="scr s3"></span>
+                </div>
+              </div>
+              <div class="pstep-info">
+                <span class="pstep-time">Week 5–8</span>
+                <h3 class="pstep-title">Design</h3>
+                <p class="pstep-desc">High-fidelity UI, motion studies and a living design system. Tested with real users, iterated weekly.</p>
+              </div>
+            </article>
+
+            <article class="pstep" data-step="3">
+              <span class="pstep-index" aria-hidden="true">04</span>
+              <div class="pstep-visual">
+                <div class="viz viz-deliver" aria-hidden="true">
+                  <div class="bars"><i></i><i></i><i></i><i></i></div>
+                  <span class="check"></span>
+                </div>
+              </div>
+              <div class="pstep-info">
+                <span class="pstep-time">Week 9+</span>
+                <h3 class="pstep-title">Deliver</h3>
+                <p class="pstep-desc">Developer pairing through build, QA on every breakpoint, and a measurement plan so wins are provable.</p>
+              </div>
+            </article>
+
+          </div>
         </div>
       </div>
     </section>
