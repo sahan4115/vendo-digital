@@ -11,6 +11,12 @@
   var hasGSAP = typeof window.gsap !== "undefined";
   var hasThree = typeof window.THREE !== "undefined";
 
+  // The preloader intro plays from the top; letting the browser restore a
+  // mid-page scroll position would skip it and skew ScrollTrigger's
+  // measurements taken during load.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  try { window.scrollTo({ top: 0, behavior: "instant" }); } catch (e) { window.scrollTo(0, 0); }
+
   /* ── Graceful fallback if CDNs fail ───────── */
   if (!hasGSAP) {
     document.documentElement.classList.add("no-gsap");
@@ -205,7 +211,12 @@
       })
       .to(preloader, {
         yPercent: -100, duration: 0.9, ease: "expo.inOut",
-        onComplete: function () { preloader.remove(); }
+        onComplete: function () {
+          preloader.remove();
+          // re-measure pinned sections: the scrollbar only appears once
+          // body[data-loading] overflow:hidden is lifted, changing widths
+          ScrollTrigger.refresh();
+        }
       })
       // hero reveal
       .to(heroWords, { y: 0, duration: 1.2, stagger: 0.09 }, "-=0.45")
@@ -333,7 +344,7 @@
   (function manifesto() {
     var el = document.getElementById("manifestoText");
     if (!el) return;
-    var accents = ["fail", "enjoy", "fix", "love", "mediocre"];
+    var accents = ["pdf", "pound", "deserve", "numbers", "read"];
     var words = el.textContent.trim().split(/\s+/);
     el.innerHTML = words.map(function (w) {
       var isAccent = accents.some(function (a) { return w.toLowerCase().indexOf(a) === 0; });
@@ -463,82 +474,39 @@
     }
   })();
 
-  /* ════════ PROCESS — pinned horizontal scroll ════════
-     Desktop: the section pins and the 4 steps slide horizontally as you
-     scroll vertically, driving a progress meter and a live step counter.
-     Mobile / reduced-motion: a vertical timeline that reveals on scroll.  */
-  (function process() {
-    var section = document.getElementById("process");
-    if (!section) return;
-    var pin = document.getElementById("processPin");
-    var stage = document.getElementById("processStage");
-    var track = document.getElementById("processTrack");
-    var steps = Array.prototype.slice.call(track.querySelectorAll(".pstep"));
-    var bar = document.getElementById("ppBar");
-    var numEl = document.getElementById("ppNum");
+  /* ════════ PROCESS — sticky word-stack ════════
+     CSS position:sticky does the pinning (each .fstep wrapper is taller
+     than the viewport, holding its panel on screen). GSAP scrubs the
+     giant word's green fill across that hold and wakes each visual.    */
+  (function flow() {
+    var steps = Array.prototype.slice.call(document.querySelectorAll(".fstep"));
+    if (!steps.length) return;
 
-    function setBar(p) { if (bar) bar.style.transform = "scaleX(" + p + ")"; }
-    function setActive(idx) {
-      steps.forEach(function (s, i) { s.classList.toggle("is-active", i === idx); });
-      if (numEl) numEl.textContent = String(idx + 1).padStart(2, "0");
-    }
+    steps.forEach(function (wrap) {
+      var panel = wrap.querySelector(".fpanel");
+      var fill = wrap.querySelector(".fword-fill");
 
-    if (prefersReduced) {
-      steps.forEach(function (s) { s.classList.add("is-active"); });
-      setBar(1);
-      return;
-    }
+      if (prefersReduced) {
+        panel.classList.add("is-active");
+        if (fill) fill.style.clipPath = "inset(-5% 0% -5% 0)";
+        return;
+      }
 
-    var mm = gsap.matchMedia();
-
-    // ── Desktop: horizontal pin ──
-    mm.add("(min-width: 820px)", function () {
-      pin.classList.add("is-horizontal");
-      stage.classList.add("is-horizontal");
-      track.classList.add("is-horizontal");
-
-      var distance = function () { return track.scrollWidth - stage.clientWidth; };
-      var tween = gsap.to(track, { x: function () { return -distance(); }, ease: "none" });
-
+      // wake the visual + reveal the copy as the panel arrives
       ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: function () { return "+=" + distance(); },
-        pin: pin,
-        scrub: 0.6,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        animation: tween,
-        onUpdate: function (self) {
-          setBar(self.progress);
-          setActive(Math.round(self.progress * (steps.length - 1)));
-        }
+        trigger: wrap, start: "top 60%", once: true,
+        onEnter: function () { panel.classList.add("is-active"); }
       });
-      setActive(0);
-
-      // gsap.matchMedia reverts the tween + ScrollTrigger automatically;
-      // we just drop the layout classes.
-      return function () {
-        pin.classList.remove("is-horizontal");
-        stage.classList.remove("is-horizontal");
-        track.classList.remove("is-horizontal");
-        gsap.set(track, { x: 0 });
-      };
-    });
-
-    // ── Mobile: vertical timeline ──
-    mm.add("(max-width: 819px)", function () {
-      steps.forEach(function (s) {
-        gsap.from(s, {
-          opacity: 0, y: 48, duration: 0.9, ease: "expo.out",
-          scrollTrigger: { trigger: s, start: "top 86%", once: true }
-        });
+      gsap.from(panel.querySelectorAll(".fmeta, .fline, .ftime"), {
+        opacity: 0, y: 28, duration: 0.9, ease: "expo.out", stagger: 0.08,
+        scrollTrigger: { trigger: wrap, start: "top 70%", once: true }
       });
+
+      // scrub the word fill, left to right, across the sticky hold
       ScrollTrigger.create({
-        trigger: track, start: "top 78%", end: "bottom 65%", scrub: 0.4,
+        trigger: wrap, start: "top top", end: "bottom bottom", scrub: 0.3,
         onUpdate: function (self) {
-          setBar(self.progress);
-          setActive(Math.min(steps.length - 1, Math.floor(self.progress * steps.length)));
+          if (fill) fill.style.clipPath = "inset(-5% " + (100 - self.progress * 100) + "% -5% 0)";
         }
       });
     });
