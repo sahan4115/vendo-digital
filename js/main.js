@@ -334,7 +334,7 @@
     if (prefersReduced) return;
     var targets = [
       ".section-head", ".case", ".meta-card", ".fork-card",
-      ".svc-detail", ".ccard", ".faq details",
+      ".svc-detail", ".ccard", ".faq2-item", ".bento-tile", ".tstep",
       ".work-more", ".cta-title", ".btn-big", ".cta-note", ".cta-ring"
     ];
     document.querySelectorAll(targets.join(",")).forEach(function (el) {
@@ -630,6 +630,12 @@
     rows.forEach(function (row) {
       row.addEventListener("pointerenter", function (e) {
         if (!hoverMQ2.matches || e.pointerType === "touch") return;
+        // First reveal: snap the card to the cursor instantly, otherwise it
+        // visibly flies in from the screen corner (x/y default to 0,0).
+        if (!card.classList.contains("is-on")) {
+          gsap.set(card, { x: e.clientX + 24, y: e.clientY - 112 });
+          lastX = e.clientX;
+        }
         var name = row.querySelector(".t-name").textContent.trim();
         avatar.textContent = name.split(/\s+/).map(function (w) { return w.charAt(0); }).slice(0, 2).join("").toUpperCase();
         roleEl.textContent = row.querySelector(".t-role").textContent;
@@ -643,6 +649,49 @@
       card.classList.remove("is-on");
       gsap.to(card, { scale: 0.85, duration: 0.3, ease: "power3.out" });
       rTo(0);
+    });
+  })();
+
+  /* ════════ FAQ (faq2) — exclusive animated accordion ════════ */
+  (function faq2() {
+    var items = Array.prototype.slice.call(document.querySelectorAll(".faq2-item"));
+    if (!items.length) return;
+    items.forEach(function (item) {
+      var btn = item.querySelector(".faq2-q");
+      btn.addEventListener("click", function () {
+        var open = item.classList.contains("is-open");
+        items.forEach(function (i) {
+          i.classList.remove("is-open");
+          i.querySelector(".faq2-q").setAttribute("aria-expanded", "false");
+        });
+        if (!open) {
+          item.classList.add("is-open");
+          btn.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+  })();
+
+  /* ════════ TIMELINE — rail fills as you scroll ════════ */
+  (function timeline() {
+    var tl = document.querySelector(".tline");
+    if (!tl) return;
+    var fill = tl.querySelector(".tline-fill");
+    var steps = Array.prototype.slice.call(tl.querySelectorAll(".tstep"));
+
+    if (prefersReduced) {
+      if (fill) fill.style.transform = "scaleY(1)";
+      steps.forEach(function (s) { s.classList.add("is-lit"); });
+      return;
+    }
+    ScrollTrigger.create({
+      trigger: tl, start: "top 72%", end: "bottom 55%", scrub: 0.4,
+      onUpdate: function (self) {
+        if (fill) fill.style.transform = "scaleY(" + self.progress + ")";
+        steps.forEach(function (s, i) {
+          s.classList.toggle("is-lit", self.progress >= i / steps.length + 0.04);
+        });
+      }
     });
   })();
 

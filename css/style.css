@@ -785,7 +785,7 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
   font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--green);
 }
 .fork-link svg { width: 18px; height: 18px; transition: transform .4s var(--ease); }
-.fork-card:hover .fork-link svg { transform: translateX(6px); }
+.fork-card:hover .fork-link svg, .fork-link:hover svg { transform: translateX(6px); }
 @media (min-width: 760px) { .fork-grid { grid-template-columns: 1fr 1fr; } }
 
 /* ── SEO visual (services panel 2) ──────────── */
@@ -1164,35 +1164,155 @@ html.no-gsap .fword-fill { clip-path: none; }
 .nav-links a.is-active { color: var(--white); }
 .nav-links a.is-active::after { transform: scaleX(1); }
 
-/* ── FAQ accordion (native <details>) ───────── */
-.faq { max-width: 860px; }
-.faq details {
-  border-bottom: 1px solid var(--sage);
+/* ── FAQ — split layout, numbered, animated ──── */
+.faq2 {
+  display: grid; gap: clamp(28px, 4vw, 64px);
+  grid-template-columns: 1fr;
 }
-.faq summary {
-  list-style: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: space-between; gap: 18px;
-  padding: clamp(18px, 2.5vw, 26px) 4px;
-  font-family: var(--font-display); font-weight: 800;
-  font-size: clamp(17px, 2.4vw, 24px); letter-spacing: -0.01em;
-  transition: color .3s;
+@media (min-width: 900px) {
+  .faq2 { grid-template-columns: 0.85fr 1.15fr; align-items: start; }
+  .faq2-intro { position: sticky; top: calc(var(--nav-h) + 24px); }
 }
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after {
-  content: "+";
+.faq2-intro h2 {
+  font-size: clamp(30px, 4.5vw, 54px);
+  margin-bottom: 14px;
+}
+.faq2-intro h2 em { font-family: var(--font-body); font-style: italic; font-weight: 400; color: var(--green); }
+.faq2-intro p { color: var(--gray); max-width: 40ch; margin-bottom: 22px; }
+
+.faq2-list { border-top: 1px solid var(--sage); }
+.faq2-item { border-bottom: 1px solid var(--sage); transition: background-color .35s; }
+.faq2-item.is-open { background: linear-gradient(90deg, rgba(9, 34, 31, 0.55), transparent 80%); }
+.faq2-q {
+  width: 100%; text-align: left;
+  display: flex; align-items: center; gap: clamp(14px, 2vw, 22px);
+  padding: clamp(18px, 2.6vw, 28px) clamp(6px, 1.5vw, 16px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq2-q:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+.faq2-idx {
   flex: 0 0 auto;
-  width: 30px; height: 30px;
-  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 13px; color: var(--green);
+  min-width: 2.2em;
+  transition: transform .4s var(--ease);
+}
+.faq2-item.is-open .faq2-idx { transform: translateY(-2px); }
+.faq2-q strong {
+  flex: 1;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(17px, 2.3vw, 24px); letter-spacing: -0.01em;
+  line-height: 1.25;
+  transition: color .3s, transform .45s var(--ease);
+}
+.faq2-item.is-open .faq2-q strong, .faq2-q:hover strong { color: var(--green); }
+.faq2-q:hover strong { transform: translateX(6px); }
+.faq2-ico {
+  flex: 0 0 auto; position: relative;
+  width: 34px; height: 34px;
   border: 1px solid var(--charcoal); border-radius: 50%;
-  color: var(--green); font-weight: 400; font-size: 20px;
-  transition: transform .4s var(--ease), background-color .3s, color .3s;
+  transition: background-color .35s, border-color .35s, transform .5s var(--ease);
 }
-.faq details[open] summary { color: var(--green); }
-.faq details[open] summary::after { transform: rotate(45deg); background: var(--green); color: var(--black); border-color: var(--green); }
-.faq details > p {
-  padding: 0 4px clamp(18px, 2.5vw, 26px);
-  color: var(--gray); max-width: 64ch;
+.faq2-ico::before, .faq2-ico::after {
+  content: ""; position: absolute; top: 50%; left: 50%;
+  width: 12px; height: 1.5px; background: var(--white);
+  transform: translate(-50%, -50%);
+  transition: transform .5s var(--ease), background-color .35s;
 }
+.faq2-ico::after { transform: translate(-50%, -50%) rotate(90deg); }
+.faq2-item.is-open .faq2-ico { background: var(--green); border-color: var(--green); transform: rotate(135deg); }
+.faq2-item.is-open .faq2-ico::before, .faq2-item.is-open .faq2-ico::after { background: var(--black); }
+.faq2-a {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows .5s var(--ease);
+}
+.faq2-item.is-open .faq2-a { grid-template-rows: 1fr; }
+.faq2-a > div { overflow: hidden; }
+.faq2-a p {
+  color: var(--gray); max-width: 60ch;
+  padding: 0 clamp(6px, 1.5vw, 16px) clamp(20px, 2.6vw, 28px) calc(clamp(6px, 1.5vw, 16px) + 2.2em + clamp(14px, 2vw, 22px));
+}
+
+/* ── Bento grid (service pages: what you get) ── */
+.bento {
+  display: grid; gap: clamp(12px, 1.6vw, 20px);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 680px) { .bento { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1020px) { .bento { grid-template-columns: repeat(3, 1fr); } }
+.bento-tile {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+  border: 1px solid var(--sage); border-radius: var(--radius);
+  background: linear-gradient(160deg, rgba(9, 34, 31, 0.55), rgba(5, 20, 18, 0.3));
+  padding: clamp(22px, 2.6vw, 36px);
+  transition: border-color .4s, transform .45s var(--ease);
+}
+.bento-tile:hover { border-color: rgba(142, 254, 187, 0.5); transform: translateY(-5px); }
+.bento-tile .b-ico { font-size: 26px; line-height: 1; }
+.bento-tile h3 { font-size: clamp(18px, 2.2vw, 24px); }
+.bento-tile p { color: var(--gray); font-size: 14.5px; }
+.bento-tile.is-wide { grid-column: span 1; }
+@media (min-width: 680px) { .bento-tile.is-wide { grid-column: span 2; } }
+.bento-tile.is-accent {
+  background: var(--green); border-color: var(--green);
+  justify-content: center;
+}
+.bento-tile.is-accent h3 { color: var(--black); font-size: clamp(22px, 2.8vw, 32px); }
+.bento-tile.is-accent p { color: rgba(5, 20, 18, 0.75); font-weight: 500; }
+.bento-tile.is-accent::after {
+  content: "→"; position: absolute; right: 22px; bottom: 16px;
+  font-size: 26px; color: var(--black);
+  transition: transform .4s var(--ease);
+}
+.bento-tile.is-accent:hover::after { transform: translateX(8px); }
+
+/* ── Timeline (service pages: how it runs) ──── */
+.tline { position: relative; max-width: 760px; padding-left: clamp(34px, 5vw, 56px); }
+.tline-rail {
+  position: absolute; left: 10px; top: 8px; bottom: 8px;
+  width: 2px; background: var(--sage);
+}
+.tline-fill {
+  position: absolute; left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: var(--green);
+  transform: scaleY(0); transform-origin: top;
+}
+.tstep { position: relative; padding: 0 0 clamp(30px, 5vh, 52px); }
+.tstep:last-child { padding-bottom: 0; }
+.tstep::before {
+  content: "";
+  position: absolute; left: calc(-1 * clamp(34px, 5vw, 56px) + 4px); top: 6px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--black);
+  border: 2px solid var(--charcoal);
+  transition: border-color .4s, background-color .4s, box-shadow .4s;
+}
+.tstep.is-lit::before { border-color: var(--green); background: var(--green); box-shadow: 0 0 14px rgba(142, 254, 187, 0.5); }
+.tstep .t-kick {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--green);
+}
+.tstep h3 { font-size: clamp(22px, 3vw, 32px); margin: 6px 0 8px; }
+.tstep p { color: var(--gray); max-width: 56ch; }
+
+/* ── Pull band (big italic statement) ───────── */
+.pull-band {
+  border-top: 1px solid var(--sage);
+  border-bottom: 1px solid var(--sage);
+  background: rgba(9, 34, 31, 0.35);
+  padding: clamp(40px, 7vh, 80px) var(--pad);
+}
+.pull-band p {
+  font-family: var(--font-body); font-style: italic;
+  font-size: clamp(22px, 3.6vw, 44px); line-height: 1.3;
+  letter-spacing: -0.01em;
+  max-width: 26ch;
+}
+.pull-band p b { font-family: var(--font-display); font-style: normal; font-weight: 800; color: var(--green); }
 
 /* ── Contact cards ──────────────────────────── */
 .contact-grid {
