@@ -562,6 +562,77 @@
     });
   })();
 
+  /* ════════ TEAM — typographic index + cursor-chasing card ════════
+     Desktop: hovering a name dims the rest and a profile card chases
+     the cursor, tilting with horizontal velocity. Touch: rows expand
+     to show the specialty line.                                       */
+  (function team() {
+    var list = document.getElementById("teamList");
+    if (!list) return;
+    var rows = Array.prototype.slice.call(list.querySelectorAll(".tmember"));
+    var hoverMQ2 = window.matchMedia("(min-width: 900px) and (hover: hover)");
+
+    // Inject the tap-to-expand specialty rows (mobile)
+    rows.forEach(function (row) {
+      var d = document.createElement("span");
+      d.className = "t-spec-row";
+      d.textContent = row.getAttribute("data-spec") || "";
+      row.appendChild(d);
+      row.addEventListener("click", function () {
+        if (hoverMQ2.matches) return; // desktop uses the hover card instead
+        var open = row.classList.contains("is-open");
+        rows.forEach(function (r) { r.classList.remove("is-open"); });
+        if (!open) row.classList.add("is-open");
+      });
+    });
+
+    if (!prefersReduced) {
+      gsap.from(rows, {
+        opacity: 0, y: 30, duration: 0.8, ease: "expo.out", stagger: 0.05,
+        scrollTrigger: { trigger: list, start: "top 82%", once: true }
+      });
+    }
+
+    // Cursor-chasing profile card
+    var card = document.getElementById("teamCard");
+    if (!card || prefersReduced) return;
+    var avatar = card.querySelector(".tc-avatar");
+    var roleEl = card.querySelector(".tc-role");
+    var specEl = card.querySelector(".tc-spec");
+    var xTo = gsap.quickTo(card, "x", { duration: 0.45, ease: "power3.out" });
+    var yTo = gsap.quickTo(card, "y", { duration: 0.45, ease: "power3.out" });
+    var rTo = gsap.quickTo(card, "rotation", { duration: 0.6, ease: "power3.out" });
+    var lastX = 0;
+    gsap.set(card, { scale: 0.85 });
+
+    list.addEventListener("pointermove", function (e) {
+      if (!hoverMQ2.matches || e.pointerType === "touch") return;
+      xTo(e.clientX + 24);
+      yTo(e.clientY - 112);
+      var dx = e.clientX - lastX;
+      lastX = e.clientX;
+      rTo(Math.max(-10, Math.min(10, dx * 0.6)));
+    });
+
+    rows.forEach(function (row) {
+      row.addEventListener("pointerenter", function (e) {
+        if (!hoverMQ2.matches || e.pointerType === "touch") return;
+        var name = row.querySelector(".t-name").textContent.trim();
+        avatar.textContent = name.split(/\s+/).map(function (w) { return w.charAt(0); }).slice(0, 2).join("").toUpperCase();
+        roleEl.textContent = row.querySelector(".t-role").textContent;
+        specEl.textContent = row.getAttribute("data-spec") || "";
+        card.classList.add("is-on");
+        gsap.to(card, { scale: 1, duration: 0.4, ease: "back.out(1.6)" });
+      });
+    });
+
+    list.addEventListener("pointerleave", function () {
+      card.classList.remove("is-on");
+      gsap.to(card, { scale: 0.85, duration: 0.3, ease: "power3.out" });
+      rTo(0);
+    });
+  })();
+
   /* ════════ BACK TO TOP ════════ */
   (function toTop() {
     var btn = document.getElementById("toTop");

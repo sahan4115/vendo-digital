@@ -225,6 +225,7 @@ body.menu-open main, body.menu-open .footer, body.menu-open .nav > :not(.burger)
 .menu.is-open .menu-links a:nth-child(3) span { transition-delay: .1s; }
 .menu.is-open .menu-links a:nth-child(4) span { transition-delay: .15s; }
 .menu.is-open .menu-links a:nth-child(5) span { transition-delay: .2s; }
+.menu.is-open .menu-links a:nth-child(6) span { transition-delay: .25s; }
 .menu-links a:active span, .menu-links a:hover span { color: var(--green); }
 .menu-foot {
   position: absolute; bottom: max(24px, env(safe-area-inset-bottom)); left: var(--pad); right: var(--pad);
@@ -977,6 +978,99 @@ html.no-gsap .fword-fill { clip-path: none; }
   transform: rotate(40deg);
 }
 .fpanel.is-active .viz-deliver .check { opacity: 1; transform: scale(1); }
+
+/* ── Team — typographic index + cursor card ─── */
+.team { position: relative; }
+.team-list { list-style: none; border-top: 1px solid var(--sage); }
+.tmember {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "idx name" "idx role" "idx spec";
+  column-gap: clamp(14px, 3vw, 32px);
+  align-items: baseline;
+  padding: clamp(14px, 2vw, 22px) clamp(4px, 1vw, 12px);
+  border-bottom: 1px solid var(--sage);
+  cursor: pointer;
+  outline: none;
+  transition: opacity .35s var(--ease), background-color .35s;
+}
+.tmember:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+.t-idx {
+  grid-area: idx;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 13px; color: var(--green);
+  min-width: 2.2em;
+}
+.t-name {
+  grid-area: name;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(26px, 4.6vw, 58px);
+  letter-spacing: -0.03em; line-height: 1.05;
+  transition: transform .45s var(--ease), color .35s;
+}
+.t-role {
+  grid-area: role;
+  color: var(--gray); font-size: clamp(13px, 1.6vw, 16px);
+}
+/* mobile tap-to-expand specialty */
+.t-spec-row {
+  grid-area: spec;
+  max-height: 0; overflow: hidden;
+  color: var(--green); font-size: 14px;
+  transition: max-height .45s var(--ease), padding .45s var(--ease);
+}
+.tmember.is-open .t-spec-row { max-height: 90px; padding-top: 8px; }
+
+/* the marquee move: hovering one row dims all the others */
+@media (hover: hover) and (min-width: 900px) {
+  .tmember {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "idx name role";
+  }
+  .team-list:hover .tmember { opacity: 0.22; }
+  .team-list .tmember:hover { opacity: 1; }
+  .tmember:hover { background: rgba(9, 34, 31, 0.45); }
+  .tmember:hover .t-name { color: var(--green); transform: translateX(14px); }
+  .t-spec-row { display: none; }
+}
+
+.team-dogs {
+  margin-top: clamp(22px, 4vh, 36px);
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(18px, 2.6vw, 28px);
+  color: var(--white);
+}
+.team-dogs em { font-style: italic; font-family: var(--font-body); font-weight: 400; color: var(--gray); font-size: 0.72em; }
+
+/* cursor-chasing profile card */
+.team-card {
+  position: fixed; top: 0; left: 0; z-index: 90;
+  width: 224px;
+  padding: 18px;
+  border-radius: 16px;
+  background: linear-gradient(165deg, #0d2f2a, var(--sage) 70%);
+  border: 1px solid rgba(142, 254, 187, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  /* transform (x/y/rotation/scale) is driven entirely by GSAP —
+     transitioning it here would fight the per-frame writes */
+  transition: opacity .25s var(--ease);
+  will-change: transform;
+  display: none;
+}
+@media (hover: hover) and (min-width: 900px) { .team-card { display: block; } }
+.team-card.is-on { opacity: 1; }
+.tc-avatar {
+  display: grid; place-items: center;
+  width: 64px; height: 64px; border-radius: 50%;
+  margin-bottom: 12px;
+  background: var(--green); color: var(--black);
+  font-family: var(--font-display); font-weight: 800; font-size: 22px;
+  letter-spacing: -0.02em;
+}
+.tc-role { display: block; font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--green); margin-bottom: 6px; }
+.tc-spec { display: block; font-size: 13.5px; color: var(--white); line-height: 1.45; }
 
 /* ── CTA ────────────────────────────────────── */
 .cta {
