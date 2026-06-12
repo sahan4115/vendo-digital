@@ -326,6 +326,34 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
 .section-hint { margin-left: auto; color: var(--charcoal); }
 
 /* ── Manifesto ──────────────────────────────── */
+.manifesto-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: clamp(24px, 4vw, 64px);
+}
+
+/* rotating V. badge */
+.vbadge {
+  position: relative; flex: 0 0 auto;
+  width: clamp(170px, 20vw, 280px); aspect-ratio: 1;
+  display: none;
+  perspective: 700px;
+}
+.vbadge-ring { position: absolute; inset: 0; animation: spin 26s linear infinite; }
+.vbadge-mark {
+  position: absolute; inset: 13%;
+  animation: coin 7s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 0 24px rgba(142, 254, 187, 0.25));
+}
+@keyframes coin { to { transform: rotateY(360deg); } }
+/* lean in: the whole badge spins faster while hovered */
+.vbadge:hover .vbadge-mark { animation-duration: 1.8s; }
+.vbadge:hover .vbadge-ring { animation-duration: 8s; }
+@media (min-width: 900px) { .vbadge { display: block; } }
+@media (prefers-reduced-motion: reduce) {
+  .vbadge-ring, .vbadge-mark { animation: none; }
+}
+
 .manifesto-text {
   font-family: var(--font-display); font-weight: 700;
   font-size: clamp(26px, 5.2vw, 58px);
@@ -801,7 +829,7 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
   height: 88svh;
   /* side margins absorb the corner overhang of the ±1.8deg deal-in tilt,
      so rotated cards never widen the document */
-  margin: 0 clamp(16px, 2.5vw, 32px);
+  margin: 0 clamp(22px, 2.5vw, 32px);
   display: flex; flex-direction: column; justify-content: center;
   gap: clamp(12px, 2.2vh, 24px);
   padding: clamp(20px, 3.5vh, 44px) clamp(20px, 4vw, 64px);
@@ -812,7 +840,8 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
     var(--black);
   box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.5), 0 30px 80px rgba(0, 0, 0, 0.45);
   overflow: hidden;
-  transform-origin: center top;
+  /* pivot from the centre so the deal-in tilt swings corners the least */
+  transform-origin: center center;
   will-change: transform;
 }
 .fstep[data-flow="1"] .fpanel { --peek: 5.5svh; background: radial-gradient(120% 100% at 12% 100%, rgba(9, 34, 31, 0.95), rgba(5, 20, 18, 0.98) 60%), var(--black); }
