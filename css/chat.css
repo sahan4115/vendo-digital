@@ -1,0 +1,183 @@
+/* ════════════════════════════════════════════════════════════
+   VENDO CHAT widget — self-contained styles (works on any theme).
+   Brand: Vendo Green #8EFEBB · Vendo Black #051412 · Sage #09221F
+   ════════════════════════════════════════════════════════════ */
+#vchat {
+  --vch-green: #8EFEBB;
+  --vch-black: #051412;
+  --vch-sage: #09221F;
+  --vch-gray: #ABABAB;
+  --vch-white: #F4FBF7;
+  --vch-display: "Manrope", system-ui, sans-serif;
+  --vch-body: "Instrument Sans", system-ui, sans-serif;
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 9999;
+  font-family: var(--vch-body);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* ── Launcher ───────────────────────────────── */
+#vchatBtn {
+  position: relative;
+  width: 60px; height: 60px;
+  border: 0; border-radius: 50%;
+  background: var(--vch-green);
+  cursor: pointer;
+  display: grid; place-items: center;
+  box-shadow: 0 10px 30px rgba(5, 20, 18, 0.45), 0 0 0 1px rgba(5,20,18,0.08);
+  transition: transform .25s cubic-bezier(.65,.05,0,1), box-shadow .25s;
+}
+#vchatBtn:hover { transform: scale(1.07); box-shadow: 0 14px 36px rgba(5, 20, 18, 0.5); }
+#vchatBtn svg { width: 26px; height: 26px; fill: var(--vch-black); }
+.vchat-badge {
+  position: absolute; top: 2px; right: 2px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #2ecc71; border: 2px solid var(--vch-green);
+  animation: vchPulse 2.2s ease infinite;
+}
+@keyframes vchPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(46,204,113,.45);} 55% { box-shadow: 0 0 0 7px rgba(46,204,113,0);} }
+#vchat.is-open #vchatBtn { transform: scale(0); pointer-events: none; }
+
+/* ── Panel ──────────────────────────────────── */
+#vchatPanel {
+  position: absolute; right: 0; bottom: 0;
+  width: min(370px, calc(100vw - 24px));
+  height: min(560px, calc(100dvh - 40px));
+  display: flex; flex-direction: column;
+  background: var(--vch-black);
+  color: var(--vch-white);
+  border: 1px solid rgba(142, 254, 187, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  opacity: 0; visibility: hidden;
+  transform: translateY(16px) scale(.97);
+  transform-origin: bottom right;
+  transition: opacity .3s, transform .3s cubic-bezier(.65,.05,0,1), visibility 0s .3s;
+}
+#vchat.is-open #vchatPanel {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity .3s, transform .3s cubic-bezier(.65,.05,0,1);
+}
+
+/* ── Header ─────────────────────────────────── */
+.vchat-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--vch-sage);
+  border-bottom: 1px solid rgba(142, 254, 187, 0.15);
+}
+.vchat-id { display: flex; align-items: center; gap: 11px; }
+.vchat-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--vch-green); color: var(--vch-black);
+  display: grid; place-items: center;
+  font-family: var(--vch-display); font-weight: 800; font-size: 16px;
+}
+.vchat-id strong { font-family: var(--vch-display); font-size: 15px; display: block; }
+.vchat-id em { font-style: normal; font-size: 12px; color: var(--vch-gray); }
+.vchat-close {
+  border: 0; background: none; color: var(--vch-gray);
+  font-size: 26px; line-height: 1; cursor: pointer; padding: 4px 8px;
+}
+.vchat-close:hover { color: var(--vch-white); }
+
+/* ── Log ────────────────────────────────────── */
+.vchat-log {
+  flex: 1; overflow-y: auto;
+  padding: 16px 14px 8px;
+  display: flex; flex-direction: column; gap: 8px;
+  scrollbar-width: thin; scrollbar-color: var(--vch-sage) transparent;
+}
+.vchat-msg {
+  max-width: 84%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  white-space: pre-wrap; word-wrap: break-word;
+  animation: vchIn .25s ease both;
+}
+@keyframes vchIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.vchat-msg.bot {
+  align-self: flex-start;
+  background: var(--vch-sage);
+  border: 1px solid rgba(142, 254, 187, 0.12);
+  border-bottom-left-radius: 4px;
+}
+.vchat-msg.me {
+  align-self: flex-end;
+  background: var(--vch-green); color: var(--vch-black);
+  border-bottom-right-radius: 4px;
+  font-weight: 500;
+}
+.vchat-typing { display: flex; gap: 5px; padding: 13px 16px; }
+.vchat-typing i {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--vch-gray);
+  animation: vchDot 1.1s ease infinite;
+}
+.vchat-typing i:nth-child(2) { animation-delay: .15s; }
+.vchat-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes vchDot { 0%,60%,100% { transform: none; opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+/* ── Quick chips ────────────────────────────── */
+.vchat-chips {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  padding: 6px 14px 10px;
+}
+.vchat-chips:empty { padding: 0; }
+.vchat-chips button {
+  border: 1px solid rgba(142, 254, 187, 0.4);
+  background: none; color: var(--vch-green);
+  font-family: var(--vch-display); font-weight: 700; font-size: 13px;
+  border-radius: 100px; padding: 7px 13px;
+  cursor: pointer;
+  transition: background-color .2s, color .2s, transform .2s;
+}
+.vchat-chips button:hover { background: var(--vch-green); color: var(--vch-black); transform: translateY(-1px); }
+
+/* ── Input bar ──────────────────────────────── */
+.vchat-bar {
+  display: flex; gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(142, 254, 187, 0.12);
+  background: rgba(9, 34, 31, 0.6);
+}
+.vchat-bar input {
+  flex: 1;
+  background: var(--vch-black);
+  border: 1px solid rgba(171, 171, 171, 0.25);
+  border-radius: 100px;
+  color: var(--vch-white);
+  font-family: var(--vch-body); font-size: 15px;
+  padding: 11px 16px;
+  outline: none;
+}
+.vchat-bar input:focus { border-color: rgba(142, 254, 187, 0.6); }
+.vchat-bar input::placeholder { color: var(--vch-gray); }
+.vchat-bar button {
+  width: 44px; height: 44px; flex: 0 0 44px;
+  border: 0; border-radius: 50%;
+  background: var(--vch-green); color: var(--vch-black);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform .2s;
+}
+.vchat-bar button:hover { transform: scale(1.06); }
+.vchat-bar button svg { width: 20px; height: 20px; }
+
+/* ── Small screens: full-width sheet ────────── */
+@media (max-width: 480px) {
+  #vchatPanel {
+    width: calc(100vw - 16px);
+    height: min(72dvh, 560px);
+    right: -10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #vchatBtn, #vchatPanel, .vchat-msg, .vchat-chips button { transition: none; animation: none; }
+  .vchat-badge, .vchat-typing i { animation: none; }
+}
