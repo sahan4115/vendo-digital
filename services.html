@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services — Vendo Digital</title>
+  <meta name="description" content="Web design, Google Ads, SEO, content and paid social from Vendo Digital — five things we're genuinely good at, with no lock-in contracts." />
+  <meta name="theme-color" content="#051412" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23051412'/%3E%3Ctext x='6' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='22' fill='%238EFEBB'%3EV%3C/text%3E%3Ccircle cx='26' cy='23' r='3' fill='%238EFEBB'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+</head>
+<body>
+
+  <div class="page-veil" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor-text"></span></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a class="nav-logo" href="index.html" aria-label="Vendo home" data-magnetic>Vendo<span class="dot">.</span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="results.html" data-line>Results</a>
+      <a href="services.html" class="is-active" data-line>Services</a>
+      <a href="dental.html" data-line>Dental</a>
+      <a href="studio.html" data-line>Studio</a>
+    </nav>
+    <a class="btn btn-nav" href="contact.html" data-magnetic><span class="btn-fill"></span><span class="btn-label">Free audit</span></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu-links" aria-label="Menu">
+      <a href="results.html"><em>01</em><span>Results</span></a>
+      <a href="services.html"><em>02</em><span>Services</span></a>
+      <a href="dental.html"><em>03</em><span>Dental</span></a>
+      <a href="studio.html"><em>04</em><span>Studio</span></a>
+      <a href="contact.html"><em>05</em><span>Free audit</span></a>
+    </nav>
+    <div class="menu-foot">
+      <a href="mailto:hello@vendodigital.co.uk">hello@vendodigital.co.uk</a>
+      <span>Sutton, Surrey</span>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <section class="page-hero">
+      <div class="hero-inner">
+        <p class="hero-eyebrow"><span class="pulse-dot"></span>What we do</p>
+        <h1 class="hero-title" aria-label="Five things, done properly.">
+          <span class="line"><span class="word">Five</span> <span class="word">things,</span></span>
+          <span class="line"><span class="word ital">done</span>&nbsp;<span class="word green">properly<i class="dot">.</i></span></span>
+        </h1>
+        <p class="hero-sub">Nothing we're not good at. Every service below comes with transparent reporting and no lock-in contracts.</p>
+      </div>
+    </section>
+
+    <!-- ════════ INTERACTIVE SHOWCASE ════════ -->
+    <section class="services">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <span class="section-tag">At a glance</span>
+        <span class="section-hint">Hover to explore</span>
+      </div>
+
+      <div class="svc" id="svc">
+        <div class="svc-list" id="svcList" role="tablist" aria-label="Services" aria-orientation="vertical">
+          <button class="svc-item is-active" data-svc="0" role="tab" aria-selected="true" aria-controls="svc-panel-0" id="svc-tab-0">
+            <span class="svc-idx">01</span>
+            <span class="svc-name">Web Design</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="1" role="tab" aria-selected="false" aria-controls="svc-panel-1" id="svc-tab-1" tabindex="-1">
+            <span class="svc-idx">02</span>
+            <span class="svc-name">Google Ads</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="2" role="tab" aria-selected="false" aria-controls="svc-panel-2" id="svc-tab-2" tabindex="-1">
+            <span class="svc-idx">03</span>
+            <span class="svc-name">SEO</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="3" role="tab" aria-selected="false" aria-controls="svc-panel-3" id="svc-tab-3" tabindex="-1">
+            <span class="svc-idx">04</span>
+            <span class="svc-name">Content &amp; Brand</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="4" role="tab" aria-selected="false" aria-controls="svc-panel-4" id="svc-tab-4" tabindex="-1">
+            <span class="svc-idx">05</span>
+            <span class="svc-name">Paid Social</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="svc-marker" aria-hidden="true"></span>
+        </div>
+
+        <div class="svc-stage" id="svcStage">
+          <span class="svc-watermark" id="svcWatermark" aria-hidden="true">01</span>
+
+          <div class="svc-panel is-active" data-panel="0" id="svc-panel-0" role="tabpanel" aria-labelledby="svc-tab-0">
+            <div class="svc-visual">
+              <div class="viz viz-product" aria-hidden="true">
+                <div class="viz-app">
+                  <div class="viz-topbar"><i></i><i></i><i></i></div>
+                  <div class="viz-hero"></div>
+                  <div class="viz-chips"><span></span><span class="on"></span><span></span></div>
+                  <div class="viz-blocks"><b></b><b class="t"></b><b></b><b class="t on"></b></div>
+                </div>
+                <div class="viz-cursor"></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">Fast, conversion-focused websites on WordPress and Shopify. Built to turn visitors into enquiries — not just to look good in a portfolio.</p>
+              <ul class="svc-tags"><li>WordPress</li><li>Shopify</li><li>Landing pages</li></ul>
+            </div>
+          </div>
+
+          <div class="svc-panel" data-panel="1" id="svc-panel-1" role="tabpanel" aria-labelledby="svc-tab-1" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-research" aria-hidden="true">
+                <svg class="viz-flow" viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet">
+                  <path class="viz-path" d="M24 30 H120 a18 18 0 0 1 18 18 V62 a18 18 0 0 0 18 18 H196" fill="none"/>
+                  <g class="viz-node n1"><circle cx="24" cy="30" r="9"/></g>
+                  <g class="viz-node n2"><circle cx="120" cy="30" r="9"/></g>
+                  <g class="viz-node n3"><circle cx="156" cy="80" r="9"/></g>
+                  <g class="viz-node n4"><circle cx="196" cy="80" r="9"/></g>
+                </svg>
+                <div class="viz-funnel"><i style="--w:100%"></i><i style="--w:72%"></i><i style="--w:48%"></i><i style="--w:31%"></i></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">Campaigns aimed at buyers, not browsers — led by a Head of Paid Media who used to work at Google. Weekly optimisation, transparent reporting, no minimum term.</p>
+              <ul class="svc-tags"><li>Search</li><li>Shopping</li><li>Remarketing</li></ul>
+            </div>
+          </div>
+
+          <div class="svc-panel" data-panel="2" id="svc-panel-2" role="tabpanel" aria-labelledby="svc-tab-2" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-seo" aria-hidden="true">
+                <svg class="seo-chart" viewBox="0 0 220 120" preserveAspectRatio="xMidYMid meet">
+                  <path class="seo-line" d="M10 104 C 45 100, 65 78, 95 70 S 145 46, 170 32 S 200 14, 212 8" fill="none"/>
+                </svg>
+                <span class="seo-badge">#1</span>
+                <div class="seo-pills"><i style="--w:84%"></i><i style="--w:62%"></i><i style="--w:44%"></i></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">Technical fixes, content and digital PR that compound month over month — reported as revenue and leads, not just rankings.</p>
+              <ul class="svc-tags"><li>Technical SEO</li><li>Content</li><li>Digital PR</li></ul>
+            </div>
+          </div>
+
+          <div class="svc-panel" data-panel="3" id="svc-panel-3" role="tabpanel" aria-labelledby="svc-tab-3" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-brand" aria-hidden="true">
+                <div class="viz-mark">V<span>.</span></div>
+                <div class="viz-specimen">Aa</div>
+                <div class="viz-palette"><i></i><i></i><i></i><i></i></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">No jargon, no waffle, no hype. Credible copy and bespoke, hand-crafted logos that give your business instant recognition and trust.</p>
+              <ul class="svc-tags"><li>Copywriting</li><li>Logo design</li><li>Brand</li></ul>
+            </div>
+          </div>
+
+          <div class="svc-panel" data-panel="4" id="svc-panel-4" role="tabpanel" aria-labelledby="svc-tab-4" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-motion" aria-hidden="true">
+                <span class="viz-ring r1"></span>
+                <span class="viz-ring r2"></span>
+                <span class="viz-ring r3"></span>
+                <div class="viz-play"></div>
+                <div class="viz-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">Strategic Facebook and Instagram campaigns that build genuinely engaged audiences — and turn them into measurable sales.</p>
+              <ul class="svc-tags"><li>Meta ads</li><li>Creative</li><li>Audiences</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ THE DETAIL ════════ -->
+    <section class="manifesto">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <span class="section-tag">In detail</span>
+      </div>
+
+      <article class="svc-detail">
+        <div>
+          <h3>Web Design</h3>
+          <p class="q">“Our site looks fine but nobody enquires.”</p>
+        </div>
+        <div>
+          <p>We design and build responsive, mobile-first websites on WordPress and Shopify that load fast and are designed to convert visitors into customers. Every build ships with analytics wired in, so you can see exactly what the site is doing for you.</p>
+          <ul class="svc-tags"><li>Design &amp; build</li><li>Speed optimisation</li><li>Conversion tracking</li></ul>
+        </div>
+      </article>
+
+      <article class="svc-detail">
+        <div>
+          <h3>Google Ads</h3>
+          <p class="q">“We're paying for clicks that never become customers.”</p>
+        </div>
+        <div>
+          <p>Search, Shopping and remarketing campaigns that connect your ads with people actively looking for what you sell — led by a Head of Paid Media who used to work at Google. Weekly optimisation and reporting you can actually read.</p>
+          <ul class="svc-tags"><li>Search &amp; Shopping</li><li>Remarketing</li><li>Weekly optimisation</li></ul>
+        </div>
+      </article>
+
+      <article class="svc-detail">
+        <div>
+          <h3>SEO</h3>
+          <p class="q">“We're invisible for the searches we should own.”</p>
+        </div>
+        <div>
+          <p>Technical fixes, content and digital PR that build your organic presence month over month. We report revenue and leads, not just rankings — because position three for the right phrase beats position one for the wrong one.</p>
+          <ul class="svc-tags"><li>Technical SEO</li><li>Content</li><li>Digital PR &amp; outreach</li></ul>
+        </div>
+      </article>
+
+      <article class="svc-detail">
+        <div>
+          <h3>Content &amp; Brand</h3>
+          <p class="q">“We sound like everyone else in our industry.”</p>
+        </div>
+        <div>
+          <p>No jargon, no waffle, no hype — credible, powerful words that get straight to the point, plus bespoke hand-crafted logos that give your business instant recognition and a clear sense of credibility.</p>
+          <ul class="svc-tags"><li>Copywriting</li><li>Blog writing</li><li>Logo design</li></ul>
+        </div>
+      </article>
+
+      <article class="svc-detail">
+        <div>
+          <h3>Paid Social</h3>
+          <p class="q">“We post, but it never turns into sales.”</p>
+        </div>
+        <div>
+          <p>Strategic Facebook and Instagram campaigns that build genuinely engaged audiences across your chosen platforms — and turn that attention into measurable sales, not just likes.</p>
+          <ul class="svc-tags"><li>Meta ads</li><li>Creative</li><li>Audience building</li></ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- ════════ CTA ════════ -->
+    <section class="cta">
+      <h2 class="cta-title">
+        <span class="line">Not sure which</span>
+        <span class="line">one you <em>need</em><i class="dot">?</i></span>
+      </h2>
+      <a class="btn btn-big" href="contact.html" data-magnetic data-cursor="Audit">
+        <span class="btn-fill"></span><span class="btn-label">Start with the free audit</span>
+      </a>
+      <p class="cta-note">It tells you exactly where the leaks are — then you decide.</p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <span class="footer-logo" aria-hidden="true">Vendo<span class="dot">.</span></span>
+    </div>
+    <div class="footer-grid">
+      <div class="f-col">
+        <span class="f-head">Sitemap</span>
+        <a href="results.html" data-line>Results</a>
+        <a href="services.html" data-line>Services</a>
+        <a href="dental.html" data-line>Dental</a>
+        <a href="studio.html" data-line>Studio</a>
+        <a href="contact.html" data-line>Free audit</a>
+      </div>
+      <div class="f-col">
+        <span class="f-head">Social</span>
+        <a href="https://www.instagram.com/vendo_digital/" data-line>Instagram</a>
+        <a href="#" data-line>Facebook</a>
+        <a href="https://uk.linkedin.com/company/vendo-digital-ltd" data-line>LinkedIn</a>
+        <a href="#" data-line>YouTube</a>
+      </div>
+      <div class="f-col">
+        <span class="f-head">Office</span>
+        <span class="f-text">5 Sandiford Road<br/>Sutton, Surrey SM3 9RN</span>
+        <a href="mailto:hello@vendodigital.co.uk" data-line>hello@vendodigital.co.uk</a>
+        <a href="tel:02071014967" data-line>0207 101 4967</a>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>© 2026 Vendo Digital Ltd.</span>
+      <span>www.vendodigital.co.uk</span>
+      <button class="to-top" id="toTop" data-magnetic>Back to top ↑</button>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/chat.js" defer></script>
+</body>
+</html>

@@ -173,13 +173,25 @@
     var preloader = document.getElementById("preloader");
     var countEl = document.getElementById("preCount");
     var heroWords = document.querySelectorAll(".hero-title .word");
+    var extras = gsap.utils.toArray(".hero-eyebrow, .hero-sub, .btn-hero, .hero-scroll");
     var tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
     if (prefersReduced) {
       if (preloader) preloader.remove();
       document.body.removeAttribute("data-loading");
       gsap.set(heroWords, { y: 0 });
-      gsap.set(".hero-eyebrow, .hero-sub, .btn-hero, .hero-scroll", { opacity: 1 });
+      if (extras.length) gsap.set(extras, { opacity: 1 });
+      return;
+    }
+
+    // Inner pages have no preloader — play a fast page-enter instead
+    // (the sage veil is CSS-only; this lifts the hero copy in under it).
+    if (!preloader) {
+      document.body.removeAttribute("data-loading");
+      if (extras.length) gsap.set(extras, { opacity: 0, y: 24 });
+      gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.2 })
+        .to(heroWords, { y: 0, duration: 1.1, stagger: 0.08 })
+        .to(extras, { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 }, "-=0.7");
       return;
     }
 
@@ -321,7 +333,8 @@
   (function reveals() {
     if (prefersReduced) return;
     var targets = [
-      ".section-head", ".case", ".meta-card",
+      ".section-head", ".case", ".meta-card", ".fork-card",
+      ".svc-detail", ".ccard", ".faq details",
       ".work-more", ".cta-title", ".btn-big", ".cta-note", ".cta-ring"
     ];
     document.querySelectorAll(targets.join(",")).forEach(function (el) {
