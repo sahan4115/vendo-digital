@@ -3,7 +3,7 @@
  * Plugin Name:       Vendo SEO
  * Plugin URI:        https://github.com/sahan4115/vendo-digital
  * Description:       Lightweight SEO for Vendo Digital: meta description, canonical, Open Graph / Twitter cards and LocalBusiness JSON-LD — configured under Settings → Vendo SEO. Stands down automatically if Yoast, Rank Math, AIOSEO or SEOPress is active.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Vendo Digital
@@ -16,19 +16,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'VENDO_SEO_VERSION', '1.0.0' );
+define( 'VENDO_SEO_VERSION', '1.0.1' );
 define( 'VENDO_SEO_OPTION', 'vendo_seo_options' );
 
-/* ══════════════════════════════════════════════════════════════
+/* ==============================================================
    Options
-   ══════════════════════════════════════════════════════════════ */
+   ============================================================== */
 
 /**
  * Default option values (Vendo Digital's real details).
  *
  * @return array
  */
-function vendo_seo_defaults() {
+function vseo_defaults() {
 	return array(
 		'enabled'       => 1,
 		'seo_title'     => 'Vendo Digital — PPC, SEO & Web Design Agency, Surrey',
@@ -61,21 +61,21 @@ function vendo_seo_defaults() {
  * @param string $key Option key.
  * @return mixed
  */
-function vendo_seo_get( $key ) {
-	$opts = wp_parse_args( (array) get_option( VENDO_SEO_OPTION, array() ), vendo_seo_defaults() );
+function vseo_get( $key ) {
+	$opts = wp_parse_args( (array) get_option( VENDO_SEO_OPTION, array() ), vseo_defaults() );
 	return isset( $opts[ $key ] ) ? $opts[ $key ] : '';
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ==============================================================
    Guards
-   ══════════════════════════════════════════════════════════════ */
+   ============================================================== */
 
 /**
  * Is a dedicated SEO plugin already handling meta/schema?
  *
  * @return bool
  */
-function vendo_seo_conflict() {
+function vseo_conflict() {
 	return defined( 'WPSEO_VERSION' )      // Yoast.
 		|| defined( 'RANK_MATH_VERSION' )  // Rank Math.
 		|| defined( 'AIOSEO_VERSION' )     // All in One SEO.
@@ -87,20 +87,20 @@ function vendo_seo_conflict() {
  *
  * @return bool
  */
-function vendo_seo_active() {
-	return vendo_seo_get( 'enabled' ) && ! vendo_seo_conflict();
+function vseo_active() {
+	return vseo_get( 'enabled' ) && ! vseo_conflict();
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ==============================================================
    Front-end output
-   ══════════════════════════════════════════════════════════════ */
+   ============================================================== */
 
 /**
  * Canonical URL for the current view.
  *
  * @return string
  */
-function vendo_seo_canonical() {
+function vseo_canonical() {
 	if ( is_front_page() ) {
 		return home_url( '/' );
 	}
@@ -118,8 +118,8 @@ function vendo_seo_canonical() {
  *
  * @return string
  */
-function vendo_seo_description() {
-	$desc = vendo_seo_get( 'seo_desc' );
+function vseo_description() {
+	$desc = vseo_get( 'seo_desc' );
 	if ( ! is_front_page() && is_singular() ) {
 		$excerpt = get_the_excerpt();
 		if ( $excerpt ) {
@@ -135,13 +135,13 @@ function vendo_seo_description() {
  * @param string $title Current title.
  * @return string
  */
-function vendo_seo_title_filter( $title ) {
-	if ( vendo_seo_active() && is_front_page() && vendo_seo_get( 'seo_title' ) ) {
-		return vendo_seo_get( 'seo_title' );
+function vseo_title_filter( $title ) {
+	if ( vseo_active() && is_front_page() && vseo_get( 'seo_title' ) ) {
+		return vseo_get( 'seo_title' );
 	}
 	return $title;
 }
-add_filter( 'pre_get_document_title', 'vendo_seo_title_filter' );
+add_filter( 'pre_get_document_title', 'vseo_title_filter' );
 
 /**
  * Richer robots directive.
@@ -149,29 +149,29 @@ add_filter( 'pre_get_document_title', 'vendo_seo_title_filter' );
  * @param array $robots Directives.
  * @return array
  */
-function vendo_seo_robots( $robots ) {
-	if ( vendo_seo_active() && ( is_front_page() || is_singular() ) ) {
+function vseo_robots( $robots ) {
+	if ( vseo_active() && ( is_front_page() || is_singular() ) ) {
 		$robots['max-image-preview'] = 'large';
 		$robots['max-snippet']       = -1;
 		$robots['max-video-preview'] = -1;
 	}
 	return $robots;
 }
-add_filter( 'wp_robots', 'vendo_seo_robots' );
+add_filter( 'wp_robots', 'vseo_robots' );
 
 /**
  * Head output: description, canonical, OG/Twitter, JSON-LD.
  */
-function vendo_seo_head() {
-	if ( ! vendo_seo_active() ) {
+function vseo_head() {
+	if ( ! vseo_active() ) {
 		return;
 	}
 
-	$site_name = vendo_seo_get( 'business_name' ) ?: get_bloginfo( 'name' );
-	$desc      = vendo_seo_description();
-	$canonical = vendo_seo_canonical();
-	$title     = is_front_page() && vendo_seo_get( 'seo_title' ) ? vendo_seo_get( 'seo_title' ) : wp_get_document_title();
-	$og_image  = vendo_seo_get( 'og_image' );
+	$site_name = vseo_get( 'business_name' ) ?: get_bloginfo( 'name' );
+	$desc      = vseo_description();
+	$canonical = vseo_canonical();
+	$title     = is_front_page() && vseo_get( 'seo_title' ) ? vseo_get( 'seo_title' ) : wp_get_document_title();
+	$og_image  = vseo_get( 'og_image' );
 
 	echo "\n<!-- Vendo SEO v" . esc_html( VENDO_SEO_VERSION ) . " -->\n";
 	if ( $desc ) {
@@ -200,32 +200,32 @@ function vendo_seo_head() {
 		echo '<meta name="twitter:image" content="' . esc_url( $og_image ) . "\" />\n";
 	}
 
-	$json = wp_json_encode( vendo_seo_schema(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+	$json = wp_json_encode( vseo_schema(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 	if ( $json ) {
 		echo '<script type="application/ld+json">' . $json . "</script>\n"; // phpcs:ignore WordPress.Security.EscapeOutput -- wp_json_encode output.
 	}
 	echo "<!-- /Vendo SEO -->\n";
 }
-add_action( 'wp_head', 'vendo_seo_head', 5 );
+add_action( 'wp_head', 'vseo_head', 5 );
 
 /**
  * JSON-LD @graph: ProfessionalService + WebSite + WebPage.
  *
  * @return array
  */
-function vendo_seo_schema() {
+function vseo_schema() {
 	$home    = home_url( '/' );
 	$biz_id  = $home . '#business';
 	$site_id = $home . '#website';
-	$name    = vendo_seo_get( 'business_name' ) ?: get_bloginfo( 'name' );
-	$desc    = vendo_seo_description();
-	$image   = vendo_seo_get( 'og_image' );
+	$name    = vseo_get( 'business_name' ) ?: get_bloginfo( 'name' );
+	$desc    = vseo_description();
+	$image   = vseo_get( 'og_image' );
 
-	$knows = array_values( array_filter( array_map( 'trim', explode( ',', vendo_seo_get( 'knows_about' ) ) ) ) );
+	$knows = array_values( array_filter( array_map( 'trim', explode( ',', vseo_get( 'knows_about' ) ) ) ) );
 
 	$same_as = array();
 	foreach ( array( 'social_ig', 'social_fb', 'social_li', 'social_yt' ) as $net ) {
-		$url = trim( vendo_seo_get( $net ) );
+		$url = trim( vseo_get( $net ) );
 		if ( $url && '#' !== $url ) {
 			$same_as[] = $url;
 		}
@@ -237,18 +237,18 @@ function vendo_seo_schema() {
 		'name'         => $name,
 		'url'          => $home,
 		'description'  => $desc,
-		'email'        => vendo_seo_get( 'email' ),
-		'telephone'    => vendo_seo_get( 'phone' ),
-		'priceRange'   => vendo_seo_get( 'price_range' ),
-		'foundingDate' => vendo_seo_get( 'founding_year' ),
-		'areaServed'   => vendo_seo_get( 'area_served' ),
+		'email'        => vseo_get( 'email' ),
+		'telephone'    => vseo_get( 'phone' ),
+		'priceRange'   => vseo_get( 'price_range' ),
+		'foundingDate' => vseo_get( 'founding_year' ),
+		'areaServed'   => vseo_get( 'area_served' ),
 		'address'      => array(
 			'@type'           => 'PostalAddress',
-			'streetAddress'   => vendo_seo_get( 'addr_street' ),
-			'addressLocality' => vendo_seo_get( 'addr_locality' ),
-			'addressRegion'   => vendo_seo_get( 'addr_region' ),
-			'postalCode'      => vendo_seo_get( 'addr_postcode' ),
-			'addressCountry'  => vendo_seo_get( 'addr_country' ),
+			'streetAddress'   => vseo_get( 'addr_street' ),
+			'addressLocality' => vseo_get( 'addr_locality' ),
+			'addressRegion'   => vseo_get( 'addr_region' ),
+			'postalCode'      => vseo_get( 'addr_postcode' ),
+			'addressCountry'  => vseo_get( 'addr_country' ),
 		),
 	);
 
@@ -263,8 +263,8 @@ function vendo_seo_schema() {
 		$business['sameAs'] = $same_as;
 	}
 
-	$lat = vendo_seo_get( 'geo_lat' );
-	$lng = vendo_seo_get( 'geo_lng' );
+	$lat = vseo_get( 'geo_lat' );
+	$lng = vseo_get( 'geo_lng' );
 	if ( is_numeric( $lat ) && is_numeric( $lng ) ) {
 		$business['geo'] = array(
 			'@type'     => 'GeoCoordinates',
@@ -284,9 +284,9 @@ function vendo_seo_schema() {
 
 	$webpage = array(
 		'@type'       => 'WebPage',
-		'@id'         => vendo_seo_canonical() . '#webpage',
-		'url'         => vendo_seo_canonical(),
-		'name'        => is_front_page() && vendo_seo_get( 'seo_title' ) ? vendo_seo_get( 'seo_title' ) : wp_get_document_title(),
+		'@id'         => vseo_canonical() . '#webpage',
+		'url'         => vseo_canonical(),
+		'name'        => is_front_page() && vseo_get( 'seo_title' ) ? vseo_get( 'seo_title' ) : wp_get_document_title(),
 		'description' => $desc,
 		'inLanguage'  => 'en-GB',
 		'isPartOf'    => array( '@id' => $site_id ),
@@ -299,23 +299,23 @@ function vendo_seo_schema() {
 	);
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* ==============================================================
    Admin: Settings → Vendo SEO
-   ══════════════════════════════════════════════════════════════ */
+   ============================================================== */
 
 /**
  * Register the settings page.
  */
-function vendo_seo_admin_menu() {
+function vseo_admin_menu() {
 	add_options_page(
 		__( 'Vendo SEO', 'vendo-seo' ),
 		__( 'Vendo SEO', 'vendo-seo' ),
 		'manage_options',
 		'vendo-seo',
-		'vendo_seo_render_page'
+		'vseo_render_page'
 	);
 }
-add_action( 'admin_menu', 'vendo_seo_admin_menu' );
+add_action( 'admin_menu', 'vseo_admin_menu' );
 
 /**
  * "Settings" link on the Plugins screen row.
@@ -323,23 +323,23 @@ add_action( 'admin_menu', 'vendo_seo_admin_menu' );
  * @param array $links Action links.
  * @return array
  */
-function vendo_seo_action_links( $links ) {
+function vseo_action_links( $links ) {
 	array_unshift( $links, '<a href="' . esc_url( admin_url( 'options-general.php?page=vendo-seo' ) ) . '">' . esc_html__( 'Settings', 'vendo-seo' ) . '</a>' );
 	return $links;
 }
-add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'vendo_seo_action_links' );
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'vseo_action_links' );
 
 /**
  * Field registry: key => [label, type, section, description].
  *
  * @return array
  */
-function vendo_seo_fields() {
+function vseo_fields() {
 	return array(
 		'enabled'       => array( __( 'Enable SEO output', 'vendo-seo' ), 'checkbox', 'general', __( 'Untick to silence all front-end output without deactivating the plugin.', 'vendo-seo' ) ),
 		'seo_title'     => array( __( 'Homepage title', 'vendo-seo' ), 'text', 'general', __( 'The browser-tab / search-result title for the front page.', 'vendo-seo' ) ),
 		'seo_desc'      => array( __( 'Meta description', 'vendo-seo' ), 'textarea', 'general', __( 'Aim for ~155 characters.', 'vendo-seo' ) ),
-		'og_image'      => array( __( 'Share image', 'vendo-seo' ), 'image', 'general', __( '1200×630 PNG/JPG shown when links are shared on social media.', 'vendo-seo' ) ),
+		'og_image'      => array( __( 'Share image', 'vendo-seo' ), 'image', 'general', __( '1200x630 PNG/JPG shown when links are shared on social media.', 'vendo-seo' ) ),
 
 		'business_name' => array( __( 'Business name', 'vendo-seo' ), 'text', 'business', '' ),
 		'email'         => array( __( 'Email', 'vendo-seo' ), 'text', 'business', '' ),
@@ -350,7 +350,7 @@ function vendo_seo_fields() {
 		'addr_postcode' => array( __( 'Postcode', 'vendo-seo' ), 'text', 'business', '' ),
 		'addr_country'  => array( __( 'Country code', 'vendo-seo' ), 'text', 'business', __( 'Two letters, e.g. GB', 'vendo-seo' ) ),
 
-		'price_range'   => array( __( 'Price range', 'vendo-seo' ), 'text', 'schema', __( '£ to ££££', 'vendo-seo' ) ),
+		'price_range'   => array( __( 'Price range', 'vendo-seo' ), 'text', 'schema', __( 'One to four pound signs.', 'vendo-seo' ) ),
 		'founding_year' => array( __( 'Founding year', 'vendo-seo' ), 'text', 'schema', '' ),
 		'area_served'   => array( __( 'Area served', 'vendo-seo' ), 'text', 'schema', '' ),
 		'geo_lat'       => array( __( 'Office latitude', 'vendo-seo' ), 'text', 'schema', __( 'Optional. Right-click your pin in Google Maps to copy coordinates.', 'vendo-seo' ) ),
@@ -367,8 +367,8 @@ function vendo_seo_fields() {
 /**
  * Register setting, sections and fields.
  */
-function vendo_seo_admin_init() {
-	register_setting( 'vendo_seo', VENDO_SEO_OPTION, array( 'sanitize_callback' => 'vendo_seo_sanitize' ) );
+function vseo_admin_init() {
+	register_setting( 'vendo_seo', VENDO_SEO_OPTION, array( 'sanitize_callback' => 'vseo_sanitize' ) );
 
 	$sections = array(
 		'general'  => __( 'Titles & sharing', 'vendo-seo' ),
@@ -380,18 +380,18 @@ function vendo_seo_admin_init() {
 		add_settings_section( 'vendo_seo_' . $id, $title, '__return_false', 'vendo-seo' );
 	}
 
-	foreach ( vendo_seo_fields() as $key => $def ) {
+	foreach ( vseo_fields() as $key => $def ) {
 		add_settings_field(
 			$key,
 			$def[0],
-			'vendo_seo_render_field',
+			'vseo_render_field',
 			'vendo-seo',
 			'vendo_seo_' . $def[2],
 			array( 'key' => $key, 'type' => $def[1], 'desc' => $def[3], 'label_for' => 'vendo_seo_' . $key )
 		);
 	}
 }
-add_action( 'admin_init', 'vendo_seo_admin_init' );
+add_action( 'admin_init', 'vseo_admin_init' );
 
 /**
  * Sanitize all options on save.
@@ -399,9 +399,9 @@ add_action( 'admin_init', 'vendo_seo_admin_init' );
  * @param array $input Raw input.
  * @return array
  */
-function vendo_seo_sanitize( $input ) {
+function vseo_sanitize( $input ) {
 	$clean = array();
-	foreach ( vendo_seo_fields() as $key => $def ) {
+	foreach ( vseo_fields() as $key => $def ) {
 		$value = isset( $input[ $key ] ) ? $input[ $key ] : '';
 		switch ( $def[1] ) {
 			case 'checkbox':
@@ -425,12 +425,12 @@ function vendo_seo_sanitize( $input ) {
  *
  * @param array $args key/type/desc.
  */
-function vendo_seo_render_field( $args ) {
+function vseo_render_field( $args ) {
 	$key   = $args['key'];
 	$type  = $args['type'];
 	$id    = 'vendo_seo_' . $key;
 	$name  = VENDO_SEO_OPTION . '[' . $key . ']';
-	$value = vendo_seo_get( $key );
+	$value = vseo_get( $key );
 
 	switch ( $type ) {
 		case 'checkbox':
@@ -440,7 +440,7 @@ function vendo_seo_render_field( $args ) {
 			echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" rows="3" class="large-text">' . esc_textarea( $value ) . '</textarea>';
 			break;
 		case 'image':
-			echo '<input type="url" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" class="regular-text" placeholder="https://…" /> ';
+			echo '<input type="url" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" class="regular-text" placeholder="https://..." /> ';
 			echo '<button type="button" class="button vendo-seo-media" data-target="' . esc_attr( $id ) . '">' . esc_html__( 'Choose image', 'vendo-seo' ) . '</button>';
 			if ( $value ) {
 				echo '<p><img src="' . esc_url( $value ) . '" alt="" style="max-width:240px;height:auto;border:1px solid #ccd0d4;border-radius:4px;" /></p>';
@@ -458,7 +458,7 @@ function vendo_seo_render_field( $args ) {
 /**
  * Render the settings page.
  */
-function vendo_seo_render_page() {
+function vseo_render_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
@@ -466,7 +466,7 @@ function vendo_seo_render_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Vendo SEO', 'vendo-seo' ); ?></h1>
 
-		<?php if ( vendo_seo_conflict() ) : ?>
+		<?php if ( vseo_conflict() ) : ?>
 			<div class="notice notice-warning"><p>
 				<?php esc_html_e( 'Another SEO plugin (Yoast / Rank Math / AIOSEO / SEOPress) is active, so Vendo SEO is standing down — nothing is output on the front end to avoid duplicate tags. Your settings here are kept.', 'vendo-seo' ); ?>
 			</p></div>
@@ -490,7 +490,7 @@ function vendo_seo_render_page() {
  *
  * @param string $hook Current admin page.
  */
-function vendo_seo_admin_assets( $hook ) {
+function vseo_admin_assets( $hook ) {
 	if ( 'settings_page_vendo-seo' !== $hook ) {
 		return;
 	}
@@ -510,4 +510,4 @@ function vendo_seo_admin_assets( $hook ) {
 	});';
 	wp_add_inline_script( 'jquery', $js );
 }
-add_action( 'admin_enqueue_scripts', 'vendo_seo_admin_assets' );
+add_action( 'admin_enqueue_scripts', 'vseo_admin_assets' );
