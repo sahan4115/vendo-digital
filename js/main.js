@@ -1,0 +1,441 @@
+/* ════════════════════════════════════════════════════════════
+   VENDO. — main.js
+   Preloader · custom cursor · magnetic UI · GSAP scroll story ·
+   Three.js particle field · services accordion · tilt cards
+   ════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(pointer: fine)").matches;
+  var hasGSAP = typeof window.gsap !== "undefined";
+  var hasThree = typeof window.THREE !== "undefined";
+
+  /* ── Graceful fallback if CDNs fail ───────── */
+  if (!hasGSAP) {
+    document.documentElement.classList.add("no-gsap");
+    document.querySelectorAll(".hero-title .word, .pre-logo span").forEach(function (el) {
+      el.style.transform = "none";
+    });
+    var pre = document.getElementById("preloader");
+    if (pre) pre.remove();
+    document.body.removeAttribute("data-loading");
+  } else {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
+  /* ════════ THREE.JS — breathing particle field ════════
+     A plane of points displaced by layered sine waves,
+     tinted Vendo Green, with gentle mouse parallax.       */
+  (function initWebGL() {
+    var canvas = document.getElementById("webgl");
+    if (!canvas || !hasThree || prefersReduced) return;
+
+    var renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
+    } catch (e) { return; }
+
+    var DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+    renderer.setPixelRatio(DPR);
+
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x051412, 0.055);
+
+    var camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+    camera.position.set(0, 3.2, 9);
+    camera.lookAt(0, 0, 0);
+
+    // Fewer particles on small screens to protect mobile frame rate
+    var isSmall = window.innerWidth < 760;
+    var COLS = isSmall ? 90 : 160;
+    var ROWS = isSmall ? 60 : 100;
+    var W = 30, D = 20;
+
+    var count = COLS * ROWS;
+    var positions = new Float32Array(count * 3);
+    var seeds = new Float32Array(count);
+    var i = 0, ix, iz;
+    for (ix = 0; ix < COLS; ix++) {
+      for (iz = 0; iz < ROWS; iz++) {
+        positions[i * 3] = (ix / (COLS - 1) - 0.5) * W;
+        positions[i * 3 + 1] = 0;
+        positions[i * 3 + 2] = (iz / (ROWS - 1) - 0.5) * D;
+        seeds[i] = Math.random();
+        i++;
+      }
+    }
+
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("aSeed", new THREE.BufferAttribute(seeds, 1));
+
+    var mat = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uTime: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uPixelRatio: { value: DPR }
+      },
+      vertexShader: [
+        "uniform float uTime;",
+        "uniform vec2 uMouse;",
+        "uniform float uPixelRatio;",
+        "attribute float aSeed;",
+        "varying float vGlow;",
+        "void main() {",
+        "  vec3 p = position;",
+        "  float t = uTime * 0.6;",
+        "  float wave = sin(p.x * 0.55 + t) * 0.55",
+        "             + sin(p.z * 0.85 + t * 1.3) * 0.4",
+        "             + sin((p.x + p.z) * 0.32 + t * 0.7) * 0.55;",
+        "  p.y += wave;",
+        "  p.y += sin(aSeed * 6.2831 + t * 2.0) * 0.07;",
+        "  p.x += uMouse.x * (1.0 - abs(p.z) / 10.0) * 1.4;",
+        "  p.y += uMouse.y * 0.6;",
+        "  vec4 mv = modelViewMatrix * vec4(p, 1.0);",
+        "  gl_Position = projectionMatrix * mv;",
+        "  vGlow = smoothstep(-1.4, 1.6, wave) * (0.55 + aSeed * 0.45);",
+        "  gl_PointSize = (1.4 + vGlow * 2.4) * uPixelRatio * (9.0 / -mv.z);",
+        "}"
+      ].join("\n"),
+      fragmentShader: [
+        "varying float vGlow;",
+        "void main() {",
+        "  float d = length(gl_PointCoord - 0.5);",
+        "  if (d > 0.5) discard;",
+        "  float alpha = smoothstep(0.5, 0.05, d) * (0.18 + vGlow * 0.6);",
+        "  vec3 green = vec3(0.557, 0.996, 0.733);", // #8EFEBB
+        "  vec3 sage  = vec3(0.10, 0.36, 0.30);",
+        "  gl_FragColor = vec4(mix(sage, green, vGlow), alpha);",
+        "}"
+      ].join("\n")
+    });
+
+    scene.add(new THREE.Points(geo, mat));
+
+    var mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+    window.addEventListener("pointermove", function (e) {
+      mouse.tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+
+    function resize() {
+      var w = canvas.clientWidth || window.innerWidth;
+      var h = canvas.clientHeight || window.innerHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+    // Catches viewport changes that don't fire a window resize (emulation,
+    // some orientation changes)
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(canvas);
+
+    var clock = new THREE.Clock();
+    var running = true;
+    var heroVisible = true;
+
+    // Stop rendering when the hero scrolls out or the tab hides
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        heroVisible = entries[0].isIntersecting;
+      }, { threshold: 0 }).observe(canvas);
+    }
+    document.addEventListener("visibilitychange", function () {
+      running = !document.hidden;
+    });
+
+    (function tick() {
+      requestAnimationFrame(tick);
+      if (!running || !heroVisible) return;
+      mouse.x += (mouse.tx - mouse.x) * 0.05;
+      mouse.y += (mouse.ty - mouse.y) * 0.05;
+      mat.uniforms.uTime.value = clock.getElapsedTime();
+      mat.uniforms.uMouse.value.set(mouse.x, -mouse.y);
+      renderer.render(scene, camera);
+    })();
+  })();
+
+  if (!hasGSAP) return; // everything below depends on GSAP
+
+  /* ════════ PRELOADER → HERO sequence ════════ */
+  (function intro() {
+    var preloader = document.getElementById("preloader");
+    var countEl = document.getElementById("preCount");
+    var heroWords = document.querySelectorAll(".hero-title .word");
+    var tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    if (prefersReduced) {
+      if (preloader) preloader.remove();
+      document.body.removeAttribute("data-loading");
+      gsap.set(heroWords, { y: 0 });
+      gsap.set(".hero-eyebrow, .hero-sub, .btn-hero, .hero-scroll", { opacity: 1 });
+      return;
+    }
+
+    gsap.set(".hero-eyebrow, .hero-sub, .btn-hero, .hero-scroll", { opacity: 0, y: 24 });
+
+    // Failsafe: rAF is suspended in background tabs, which would hold the
+    // preloader forever. If the intro hasn't finished after 8s of wall time,
+    // jump straight to the loaded state.
+    setTimeout(function () {
+      if (document.getElementById("preloader")) {
+        tl.progress(1);
+      }
+    }, 8000);
+
+    var counter = { v: 0 };
+    tl.to(".pre-logo span", { y: 0, duration: 1, stagger: 0.06 })
+      .to(".pre-meta", { opacity: 1, duration: 0.5 }, "-=0.5")
+      .to(counter, {
+        v: 100, duration: 1.4, ease: "power2.inOut",
+        onUpdate: function () {
+          if (countEl) countEl.textContent = String(Math.round(counter.v)).padStart(2, "0");
+        }
+      }, "-=0.6")
+      .to(".pre-logo span", { y: "-110%", duration: 0.7, stagger: 0.04, ease: "expo.in" })
+      .to(".pre-meta", { opacity: 0, duration: 0.3 }, "<")
+      .to(".pre-veil", { scaleY: 1, duration: 0.55, ease: "expo.inOut" }, "-=0.35")
+      .add(function () {
+        document.body.removeAttribute("data-loading");
+      })
+      .to(preloader, {
+        yPercent: -100, duration: 0.9, ease: "expo.inOut",
+        onComplete: function () { preloader.remove(); }
+      })
+      // hero reveal
+      .to(heroWords, { y: 0, duration: 1.2, stagger: 0.09 }, "-=0.45")
+      .to(".hero-eyebrow", { opacity: 1, y: 0, duration: 0.8 }, "-=0.9")
+      .to(".hero-sub", { opacity: 1, y: 0, duration: 0.8 }, "-=0.7")
+      .to(".btn-hero", { opacity: 1, y: 0, duration: 0.8 }, "-=0.65")
+      .to(".hero-scroll", { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
+  })();
+
+  /* ════════ CUSTOM CURSOR ════════ */
+  (function cursor() {
+    if (!finePointer || prefersReduced) return;
+    var el = document.querySelector(".cursor");
+    if (!el) return;
+    var label = el.querySelector(".cursor-text");
+
+    var x = gsap.quickTo(el, "x", { duration: 0.35, ease: "power3.out" });
+    var y = gsap.quickTo(el, "y", { duration: 0.35, ease: "power3.out" });
+    window.addEventListener("pointermove", function (e) {
+      x(e.clientX); y(e.clientY);
+    }, { passive: true });
+
+    document.querySelectorAll("[data-cursor]").forEach(function (target) {
+      target.addEventListener("pointerenter", function () {
+        label.textContent = target.getAttribute("data-cursor");
+        el.classList.add("is-label");
+      });
+      target.addEventListener("pointerleave", function () {
+        el.classList.remove("is-label");
+      });
+    });
+  })();
+
+  /* ════════ MAGNETIC ELEMENTS ════════ */
+  (function magnetic() {
+    if (!finePointer || prefersReduced) return;
+    document.querySelectorAll("[data-magnetic]").forEach(function (el) {
+      var xTo = gsap.quickTo(el, "x", { duration: 0.5, ease: "elastic.out(1, 0.5)" });
+      var yTo = gsap.quickTo(el, "y", { duration: 0.5, ease: "elastic.out(1, 0.5)" });
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect();
+        xTo((e.clientX - r.left - r.width / 2) * 0.35);
+        yTo((e.clientY - r.top - r.height / 2) * 0.35);
+      });
+      el.addEventListener("pointerleave", function () { xTo(0); yTo(0); });
+    });
+  })();
+
+  /* ════════ NAV: shrink + hide on scroll down ════════ */
+  (function nav() {
+    var navEl = document.getElementById("nav");
+    if (!navEl) return;
+    var last = 0;
+    window.addEventListener("scroll", function () {
+      var yPos = window.scrollY;
+      navEl.classList.toggle("is-scrolled", yPos > 40);
+      if (yPos > 400 && yPos > last + 4) navEl.classList.add("is-hidden");
+      else if (yPos < last - 4) navEl.classList.remove("is-hidden");
+      last = yPos;
+    }, { passive: true });
+  })();
+
+  /* ════════ FULLSCREEN MENU ════════ */
+  (function menu() {
+    var burger = document.getElementById("burger");
+    var menuEl = document.getElementById("menu");
+    if (!burger || !menuEl) return;
+
+    function setOpen(open) {
+      menuEl.classList.toggle("is-open", open);
+      menuEl.setAttribute("aria-hidden", String(!open));
+      burger.setAttribute("aria-expanded", String(open));
+      burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      document.body.style.overflow = open ? "hidden" : "";
+      document.body.classList.toggle("menu-open", open);
+    }
+    burger.addEventListener("click", function () {
+      setOpen(!menuEl.classList.contains("is-open"));
+    });
+    menuEl.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", function () { setOpen(false); });
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setOpen(false);
+    });
+  })();
+
+  /* ════════ MARQUEE: infinite loop, speeds up with scroll ════════ */
+  (function marquee() {
+    var track = document.getElementById("marqueeTrack");
+    if (!track || prefersReduced) return;
+    var tween = gsap.to(track, { xPercent: -50, ease: "none", duration: 22, repeat: -1 });
+    ScrollTrigger.create({
+      onUpdate: function (self) {
+        var v = Math.abs(self.getVelocity()) / 2200;
+        gsap.to(tween, { timeScale: 1 + Math.min(v, 3), duration: 0.3, overwrite: true });
+      }
+    });
+  })();
+
+  /* ════════ SECTION REVEALS ════════ */
+  (function reveals() {
+    if (prefersReduced) return;
+    var targets = [
+      ".section-head", ".case", ".meta-card", ".step",
+      ".work-more", ".cta-title", ".btn-big", ".cta-note", ".cta-ring"
+    ];
+    document.querySelectorAll(targets.join(",")).forEach(function (el) {
+      gsap.from(el, {
+        opacity: 0, y: 56, duration: 1.1, ease: "expo.out",
+        scrollTrigger: { trigger: el, start: "top 88%", once: true }
+      });
+    });
+
+    // mark cases in view so the dashboard chart line draws itself
+    document.querySelectorAll(".case").forEach(function (el) {
+      ScrollTrigger.create({
+        trigger: el, start: "top 70%", once: true,
+        onEnter: function () { el.classList.add("in-view"); }
+      });
+    });
+  })();
+
+  /* ════════ MANIFESTO: words light up as you scroll ════════ */
+  (function manifesto() {
+    var el = document.getElementById("manifestoText");
+    if (!el) return;
+    var accents = ["fail", "enjoy", "fix", "love", "mediocre"];
+    var words = el.textContent.trim().split(/\s+/);
+    el.innerHTML = words.map(function (w) {
+      var isAccent = accents.some(function (a) { return w.toLowerCase().indexOf(a) === 0; });
+      return '<span class="w' + (isAccent ? " accent" : "") + '">' + w + "</span>";
+    }).join(" ");
+
+    var spans = el.querySelectorAll(".w");
+    if (prefersReduced) {
+      spans.forEach(function (s) { s.classList.add("lit"); });
+      return;
+    }
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 80%",
+      end: "bottom 45%",
+      scrub: 0.4,
+      onUpdate: function (self) {
+        var n = Math.floor(self.progress * spans.length);
+        spans.forEach(function (s, idx) { s.classList.toggle("lit", idx <= n); });
+      }
+    });
+  })();
+
+  /* ════════ STAT COUNTERS ════════ */
+  (function counters() {
+    document.querySelectorAll("[data-count]").forEach(function (el) {
+      var target = parseInt(el.getAttribute("data-count"), 10);
+      if (prefersReduced) { el.textContent = target; return; }
+      var obj = { v: 0 };
+      ScrollTrigger.create({
+        trigger: el, start: "top 85%", once: true,
+        onEnter: function () {
+          gsap.to(obj, {
+            v: target, duration: 1.8, ease: "power3.out",
+            onUpdate: function () { el.textContent = Math.round(obj.v); }
+          });
+        }
+      });
+    });
+  })();
+
+  /* ════════ SERVICES ACCORDION ════════ */
+  (function services() {
+    var items = document.querySelectorAll(".service");
+    function close(item) {
+      item.classList.remove("is-open");
+      item.querySelector(".service-body").style.maxHeight = "0px";
+    }
+    function open(item) {
+      item.classList.add("is-open");
+      var body = item.querySelector(".service-body");
+      body.style.maxHeight = body.scrollHeight + "px";
+    }
+    items.forEach(function (item) {
+      function toggle() {
+        var isOpen = item.classList.contains("is-open");
+        items.forEach(close);
+        if (!isOpen) open(item);
+      }
+      item.querySelector(".service-row").addEventListener("click", toggle);
+      item.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+      });
+    });
+    // keep the open panel sized correctly on resize
+    window.addEventListener("resize", function () {
+      var openBody = document.querySelector(".service.is-open .service-body");
+      if (openBody) openBody.style.maxHeight = openBody.scrollHeight + "px";
+    }, { passive: true });
+  })();
+
+  /* ════════ TILT CARDS (stats) ════════ */
+  (function tilt() {
+    if (!finePointer || prefersReduced) return;
+    document.querySelectorAll("[data-tilt]").forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        var r = card.getBoundingClientRect();
+        var rx = ((e.clientY - r.top) / r.height - 0.5) * -8;
+        var ry = ((e.clientX - r.left) / r.width - 0.5) * 8;
+        card.style.transform = "perspective(700px) rotateX(" + rx + "deg) rotateY(" + ry + "deg)";
+      });
+      card.addEventListener("pointerleave", function () {
+        card.style.transform = "perspective(700px) rotateX(0deg) rotateY(0deg)";
+      });
+    });
+  })();
+
+  /* ════════ HERO PARALLAX ON SCROLL ════════ */
+  (function heroParallax() {
+    if (prefersReduced) return;
+    gsap.to(".hero-inner", {
+      yPercent: 18, opacity: 0.25, ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.5 }
+    });
+  })();
+
+  /* ════════ BACK TO TOP ════════ */
+  (function toTop() {
+    var btn = document.getElementById("toTop");
+    if (btn) btn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
+    });
+  })();
+
+})();

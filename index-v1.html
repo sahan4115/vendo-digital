@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendo Digital — Digital Agency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <!-- Three.js r160 — used for the hero orbit particle/constellation layer -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0A0A0A;
+      --white: #FFFFFF;
+      --gray-100: #F7F7F6;
+      --gray-200: #EFEFED;
+      --gray-400: #AEADA9;
+      --gray-600: #6B6B67;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width .35s ease, height .35s ease;
+      opacity: 0.4;
+    }
+
+    /* ─────────────────────────────────────────────
+       INTRO LOADER
+    ───────────────────────────────────────────── */
+    #intro {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9000;
+      transition: opacity 0.8s ease;
+    }
+    #intro.out { opacity: 0; pointer-events: none; }
+
+    .intro-word {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.04em;
+      overflow: hidden;
+    }
+    .intro-word span {
+      display: inline-block;
+      transform: translateY(100%);
+      animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .intro-word span:nth-child(2)  { animation-delay: 0.06s; }
+    .intro-word span:nth-child(3)  { animation-delay: 0.12s; }
+    .intro-word span:nth-child(4)  { animation-delay: 0.18s; }
+    .intro-word span:nth-child(5)  { animation-delay: 0.24s; }
+    .intro-word span:nth-child(6)  { animation-delay: 0.3s; }
+    .intro-word span:nth-child(7)  { animation-delay: 0.36s; }
+    .intro-word span:nth-child(8)  { animation-delay: 0.42s; }
+    .intro-word span:nth-child(9)  { animation-delay: 0.48s; }
+    .intro-word span:nth-child(10) { animation-delay: 0.54s; }
+    .intro-word span:nth-child(11) { animation-delay: 0.60s; }
+    .intro-word span:nth-child(12) { animation-delay: 0.66s; }
+    .intro-word span:nth-child(13) { animation-delay: 0.72s; }
+    @keyframes slideUp { to { transform: translateY(0); } }
+
+    /* ─────────────────────────────────────────────
+       NAVIGATION
+    ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 2s forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: var(--black);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+    }
+    .logo-mark svg { width: 14px; height: 14px; }
+
+    .nav-pill {
+      background: var(--black);
+      border-radius: 100px;
+      padding: 10px 22px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-pill a {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-pill a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--black);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { background: #333; transform: translateY(-1px); }
+
+    /* ─────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 40px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-orbit {
+      position: relative;
+      width: min(560px, 88vw);
+      height: min(560px, 88vw);
+      margin-bottom: 56px;
+    }
+
+    .orbit-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 116px; height: 116px;
+      background: var(--black);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+    }
+    .orbit-center-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .orbit-card {
+      position: absolute;
+      border-radius: 18px;
+      overflow: visible; /* allow glow to bleed out */
+      /* Float + tilt driven entirely by JS — no CSS animation here */
+      will-change: transform;
+      z-index: 1;
+    }
+    /* Clip the actual card face (img + gradients) while letting glow escape */
+    .orbit-card > img,
+    .orbit-card > .card-label,
+    .orbit-card > .card-shimmer {
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    .orbit-card img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 18px; }
+    .orbit-card.c1 { width: 128px; height: 142px; top: 2%;     left: 33%; }
+    .orbit-card.c2 { width: 112px; height: 128px; top: 20%;    right: 2%; }
+    .orbit-card.c3 { width: 120px; height: 136px; bottom: 12%; right: 4%; }
+    .orbit-card.c4 { width: 108px; height: 124px; bottom: 2%;  left: 34%; }
+    .orbit-card.c5 { width: 116px; height: 132px; bottom: 14%; left: 2%;  }
+    .orbit-card.c6 { width: 110px; height: 126px; top: 20%;    left: 2%;  }
+
+    /* ── Holographic shimmer overlay on each card ────────────────────── */
+    .card-shimmer {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      /* Iridescent diagonal sweep — position shifts via CSS vars set in JS */
+      background: linear-gradient(
+        calc(105deg + var(--shimmer-rotate, 0deg)),
+        transparent 25%,
+        rgba(180, 180, 255, 0.18) 40%,
+        rgba(255, 255, 255, 0.22) 50%,
+        rgba(180, 255, 220, 0.14) 60%,
+        transparent 75%
+      );
+      mix-blend-mode: overlay;
+    }
+
+    /* ── Glow halo behind each card ─────────────────────────────────── */
+    .card-glow {
+      position: absolute;
+      inset: -6px;
+      border-radius: 22px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      background: radial-gradient(ellipse at center,
+        rgba(100, 100, 255, 0.28) 0%,
+        rgba(80, 200, 180, 0.12) 50%,
+        transparent 70%
+      );
+      filter: blur(12px);
+    }
+
+    /* ── Three.js WebGL canvas ───────────────────────────────────────── */
+    #orbit-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* mouse events fall through to DOM cards */
+      z-index: 0;
+      border-radius: 50%;
+    }
+
+    .grad-brand  { background: linear-gradient(135deg, #2d1b69 0%, #553c9a 100%); }
+    .grad-seo    { background: linear-gradient(135deg, #0a2342 0%, #1e6091 100%); }
+    .grad-social { background: linear-gradient(135deg, #134e5e 0%, #38ef7d 100%); }
+    .grad-ads    { background: linear-gradient(135deg, #c0392b 0%, #f39c12 100%); }
+
+    .card-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 8px 10px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.72));
+      font-size: 9px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-text {
+      text-align: center;
+      max-width: 800px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.2s forwards;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 20px;
+    }
+
+    .hero-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(44px, 7vw, 86px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--gray-600);
+      line-height: 1.65;
+      max-width: 460px;
+      margin: 0 auto 36px;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--black);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 14px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: #333; transform: translateY(-2px); }
+
+    .btn-outline {
+      color: var(--black);
+      font-size: 14px;
+      font-weight: 400;
+      padding: 14px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      border: 1.5px solid var(--gray-200);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--black); transform: translateY(-2px); }
+
+    /* ─────────────────────────────────────────────
+       TICKER
+    ───────────────────────────────────────────── */
+    .ticker {
+      width: 100%;
+      overflow: hidden;
+      border-top: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 15px 0;
+    }
+    .ticker-track {
+      display: flex;
+      animation: marquee 22s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      padding: 0 36px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .ticker-item::after {
+      content: '✦';
+      font-size: 7px;
+      color: var(--gray-400);
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION COMMONS
+    ───────────────────────────────────────────── */
+    .section-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--black);
+    }
+
+    .section-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(36px, 5vw, 68px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      color: var(--black);
+    }
+
+    /* ─────────────────────────────────────────────
+       SERVICES
+    ───────────────────────────────────────────── */
+    #services {
+      padding: 90px 40px;
+      background: var(--white);
+    }
+
+    .services-intro {
+      max-width: 1200px;
+      margin: 0 auto 52px;
+    }
+
+    .services-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .svc-card {
+      background: var(--gray-100);
+      border-radius: 28px;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .svc-card:hover { transform: translateY(-6px); }
+    .svc-card.full { grid-column: 1 / -1; }
+    .svc-card.dark { background: var(--black); }
+
+    .svc-img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+    }
+    .svc-img.tall { height: 320px; }
+
+    .svc-body { padding: 36px; }
+
+    .svc-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .svc-num::before {
+      content: '';
+      width: 5px; height: 5px;
+      background: currentColor;
+      border-radius: 50%;
+    }
+    .svc-card.dark .svc-num { color: rgba(255,255,255,0.3); }
+
+    .svc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 3vw, 40px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      margin-bottom: 14px;
+    }
+    .svc-card.dark .svc-title { color: var(--white); }
+
+    .svc-desc {
+      font-size: 14.5px;
+      color: var(--gray-600);
+      line-height: 1.7;
+      max-width: 420px;
+      font-weight: 300;
+    }
+    .svc-card.dark .svc-desc { color: rgba(255,255,255,0.5); }
+
+    .svc-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 22px;
+    }
+    .svc-tag {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--gray-200);
+      border-radius: 100px;
+      padding: 5px 13px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-600);
+    }
+    .svc-card.dark .svc-tag {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* gradient fills for cards without images */
+    .fill-grad-1 { background: linear-gradient(135deg, #0a0a0a 0%, #1e3c72 50%, #2a5298 100%); height: 260px; }
+    .fill-grad-2 { background: linear-gradient(135deg, #2d1b69 0%, #c0392b 100%); height: 260px; }
+    .fill-grad-3 { background: linear-gradient(135deg, #134e5e 0%, #38ef7d 100%); height: 260px; }
+
+    /* ─────────────────────────────────────────────
+       PROCESS
+    ───────────────────────────────────────────── */
+    #process {
+      background: var(--black);
+      padding: 100px 40px;
+      color: var(--white);
+    }
+
+    .process-header {
+      max-width: 1200px;
+      margin: 0 auto 80px;
+    }
+    .process-header .section-tag  { color: rgba(255,255,255,0.3); }
+    .process-header .section-tag::before { background: rgba(255,255,255,0.5); }
+    .process-header .section-headline { color: var(--white); }
+
+    .process-steps {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .step {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 36px 26px;
+      transition: background 0.3s;
+    }
+    .step:hover { background: rgba(255,255,255,0.08); }
+
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.22);
+      margin-bottom: 40px;
+    }
+    .step-icon {
+      width: 42px; height: 42px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      margin-bottom: 18px;
+    }
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .step-desc {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.42);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ─────────────────────────────────────────────
+       WORK
+    ───────────────────────────────────────────── */
+    #work {
+      background: var(--gray-100);
+      padding: 100px 40px;
+    }
+
+    .work-header {
+      max-width: 1200px;
+      margin: 0 auto 52px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .work-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 14px;
+    }
+
+    .work-card {
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--white);
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .work-card:hover { transform: scale(1.01); }
+    .work-card.featured { grid-row: 1 / 3; }
+
+    .work-visual {
+      width: 100%;
+      height: 300px;
+      transition: transform 0.5s ease;
+    }
+    .work-card.featured .work-visual { height: 100%; min-height: 480px; }
+    .work-card:hover .work-visual { transform: scale(1.04); }
+
+    .wg1 { background: linear-gradient(135deg, #0a0a0a 0%, #1e3c72 40%, #2a5298 100%); }
+    .wg2 { background: linear-gradient(135deg, #2d1b69 0%, #ee3ec9 100%); }
+    .wg3 { background: linear-gradient(135deg, #134e5e 0%, #38ef7d 100%); }
+
+    .work-info { padding: 22px 26px; }
+    .work-client {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 5px;
+    }
+    .work-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--black);
+    }
+    .work-arrow {
+      position: absolute;
+      top: 18px; right: 18px;
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.88);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.25s, transform 0.25s;
+      backdrop-filter: blur(6px);
+    }
+    .work-card:hover .work-arrow { opacity: 1; transform: scale(1); }
+
+    /* ─────────────────────────────────────────────
+       CLIENTS
+    ───────────────────────────────────────────── */
+    #clients {
+      background: var(--white);
+      padding: 80px 40px;
+    }
+    .clients-inner { max-width: 1200px; margin: 0 auto; }
+    .clients-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .client-tile {
+      background: var(--gray-100);
+      border-radius: 16px;
+      padding: 28px 20px;
+      display: grid;
+      place-items: center;
+      transition: background 0.2s;
+    }
+    .client-tile:hover { background: var(--gray-200); }
+    .client-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-400);
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+    .client-tile:hover .client-name { color: var(--black); }
+
+    /* ─────────────────────────────────────────────
+       FAQ
+    ───────────────────────────────────────────── */
+    #faq {
+      padding: 100px 40px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .faq-inner { max-width: 780px; margin: 0 auto; }
+    .faq-header { margin-bottom: 56px; }
+    .faq-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 16px;
+    }
+    .faq-item { border-bottom: 1px solid var(--gray-200); }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: -0.02em;
+      text-align: left;
+      cursor: none;
+      gap: 16px;
+    }
+    .faq-icon {
+      width: 27px; height: 27px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 300;
+      flex-shrink: 0;
+      line-height: 1;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .faq-item.open .faq-icon {
+      background: var(--black);
+      border-color: var(--black);
+      color: var(--white);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .faq-a {
+      padding-bottom: 22px;
+      font-size: 14.5px;
+      color: var(--gray-600);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ─────────────────────────────────────────────
+       CTA
+    ───────────────────────────────────────────── */
+    #cta {
+      background: var(--black);
+      padding: 120px 40px;
+      text-align: center;
+    }
+    .cta-inner { max-width: 680px; margin: 0 auto; }
+    .cta-eye {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 22px;
+    }
+    .cta-head {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(38px, 5.5vw, 68px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      margin-bottom: 22px;
+    }
+    .cta-sub {
+      font-size: 15px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.65;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+    .btn-white {
+      background: var(--white);
+      color: var(--black);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 15px 34px;
+      border-radius: 100px;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-white:hover { background: #e6e6e6; transform: translateY(-2px); }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 44px 40px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.01em;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+
+    /* ─────────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: 0.1s; }
+    .rd2 { transition-delay: 0.2s; }
+    .rd3 { transition-delay: 0.3s; }
+    .rd4 { transition-delay: 0.4s; }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .services-grid,
+      .work-grid,
+      .process-steps,
+      .clients-grid { grid-template-columns: 1fr; }
+      .svc-card.full { grid-column: 1; }
+      .work-card.featured { grid-row: auto; }
+      .work-card.featured .work-visual { min-height: 280px; }
+      .nav-pill { display: none; }
+      .work-header { flex-direction: column; align-items: flex-start; }
+      .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+    @media (max-width: 580px) {
+      nav { padding: 14px 18px; }
+      #hero, #services, #process, #work, #clients, #faq, #cta { padding-left: 18px; padding-right: 18px; }
+      footer { padding: 36px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Intro -->
+  <div id="intro">
+    <div class="intro-word">
+      <span>V</span><span>e</span><span>n</span><span>d</span><span>o</span><span>&nbsp;</span><span>D</span><span>i</span><span>g</span><span>i</span><span>t</span><span>a</span><span>l</span>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 1L13 7L7 13L1 7L7 1Z" fill="white"/>
+        </svg>
+      </div>
+      Vendo Digital
+    </a>
+    <div class="nav-pill">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#cta" class="nav-cta">Get a Quote →</a>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-orbit" id="heroOrbit">
+      <!-- Three.js WebGL canvas — rendered behind all cards -->
+      <canvas id="orbit-canvas"></canvas>
+
+      <div class="orbit-center">
+        <div class="orbit-center-text">Vendo<br>Digital</div>
+      </div>
+
+      <div class="orbit-card c1">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_36hAgeQy1ea5Zlr5AJsCCUyuqRu/hf_20260605_114346_0261da0f-4ffd-4ab5-970d-6acee977cb18.png" alt="Web Design" />
+        <div class="card-label">Web Design</div>
+        <div class="card-shimmer"></div>
+        <div class="card-glow"></div>
+      </div>
+      <div class="orbit-card c2 grad-brand">
+        <div class="card-label">Branding</div>
+        <div class="card-shimmer"></div>
+        <div class="card-glow"></div>
+      </div>
+      <div class="orbit-card c3">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_36hAgeQy1ea5Zlr5AJsCCUyuqRu/hf_20260605_114348_5110e5b1-c77f-41ca-bff3-bd2ad5730536.png" alt="Identity" />
+        <div class="card-label">Identity</div>
+        <div class="card-shimmer"></div>
+        <div class="card-glow"></div>
+      </div>
+      <div class="orbit-card c4">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_36hAgeQy1ea5Zlr5AJsCCUyuqRu/hf_20260605_114351_1db4dc1f-15fb-4d28-9e92-9ef8a2f6ea85.png" alt="Analytics" />
+        <div class="card-label">Analytics</div>
+        <div class="card-shimmer"></div>
+        <div class="card-glow"></div>
+      </div>
+      <div class="orbit-card c5 grad-seo">
+        <div class="card-label">SEO</div>
+        <div class="card-shimmer"></div>
+        <div class="card-glow"></div>
+      </div>
+      <div class="orbit-card c6 grad-social">
+        <div class="card-label">Social</div>
+        <div class="card-shimmer"></div>
+        <div class="card-glow"></div>
+      </div>
+    </div>
+
+    <div class="hero-text">
+      <div class="hero-eyebrow">Digital Agency · Est. 2020</div>
+      <h1 class="hero-headline">Your brand,<br>built for tomorrow.</h1>
+      <p class="hero-sub">We craft digital experiences that move people — from strategy and identity to web design and performance marketing.</p>
+      <div class="hero-actions">
+        <a href="#work" class="btn-primary">See our work</a>
+        <a href="#cta" class="btn-outline">Start a project</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item">Web Design</span>
+      <span class="ticker-item">Brand Identity</span>
+      <span class="ticker-item">SEO</span>
+      <span class="ticker-item">Paid Advertising</span>
+      <span class="ticker-item">Social Media</span>
+      <span class="ticker-item">Email Marketing</span>
+      <span class="ticker-item">E-commerce</span>
+      <span class="ticker-item">Content Strategy</span>
+      <span class="ticker-item">Web Design</span>
+      <span class="ticker-item">Brand Identity</span>
+      <span class="ticker-item">SEO</span>
+      <span class="ticker-item">Paid Advertising</span>
+      <span class="ticker-item">Social Media</span>
+      <span class="ticker-item">Email Marketing</span>
+      <span class="ticker-item">E-commerce</span>
+      <span class="ticker-item">Content Strategy</span>
+    </div>
+  </div>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="services-intro reveal">
+      <div class="section-tag">What we do</div>
+      <h2 class="section-headline">On-brand results.<br>Built by experts.</h2>
+    </div>
+
+    <div class="services-grid">
+      <div class="svc-card full reveal rd1">
+        <img class="svc-img tall"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_36hAgeQy1ea5Zlr5AJsCCUyuqRu/hf_20260605_114346_0261da0f-4ffd-4ab5-970d-6acee977cb18.png"
+          alt="Web Design & Development" />
+        <div class="svc-body">
+          <div class="svc-num">Web Design &amp; Development — 01</div>
+          <h3 class="svc-title">Websites that<br>convert.</h3>
+          <p class="svc-desc">We design and build high-performance websites that are fast, beautiful, and engineered to turn visitors into customers.</p>
+          <div class="svc-tags">
+            <span class="svc-tag">Landing Pages</span>
+            <span class="svc-tag">E-commerce</span>
+            <span class="svc-tag">Web Apps</span>
+            <span class="svc-tag">CMS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc-card dark reveal rd2">
+        <img class="svc-img"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_36hAgeQy1ea5Zlr5AJsCCUyuqRu/hf_20260605_114348_5110e5b1-c77f-41ca-bff3-bd2ad5730536.png"
+          alt="Brand Identity" />
+        <div class="svc-body">
+          <div class="svc-num">Brand Identity — 02</div>
+          <h3 class="svc-title">Brands people<br>remember.</h3>
+          <p class="svc-desc">Strategic identity systems built from the ground up — logo, type, colour, and voice, all working in harmony.</p>
+          <div class="svc-tags">
+            <span class="svc-tag">Logo Design</span>
+            <span class="svc-tag">Guidelines</span>
+            <span class="svc-tag">Packaging</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc-card reveal rd3">
+        <img class="svc-img"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_36hAgeQy1ea5Zlr5AJsCCUyuqRu/hf_20260605_114351_1db4dc1f-15fb-4d28-9e92-9ef8a2f6ea85.png"
+          alt="Performance Marketing" />
+        <div class="svc-body">
+          <div class="svc-num">Performance Marketing — 03</div>
+          <h3 class="svc-title">Growth that<br>scales.</h3>
+          <p class="svc-desc">Data-driven campaigns across Google, Meta, and TikTok that drive qualified traffic and measurable ROI.</p>
+          <div class="svc-tags">
+            <span class="svc-tag">Google Ads</span>
+            <span class="svc-tag">Meta Ads</span>
+            <span class="svc-tag">SEO</span>
+            <span class="svc-tag">Analytics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process">
+    <div class="process-header reveal">
+      <div class="section-tag">How we work</div>
+      <h2 class="section-headline">From idea to live<br>in four steps.</h2>
+    </div>
+
+    <div class="process-steps">
+      <div class="step reveal rd1">
+        <div class="step-num">01</div>
+        <div class="step-icon">🔍</div>
+        <div class="step-title">Discover &amp; Strategy</div>
+        <p class="step-desc">We dig deep into your brand, market, and goals to craft a strategy where every decision has a clear purpose.</p>
+      </div>
+      <div class="step reveal rd2">
+        <div class="step-num">02</div>
+        <div class="step-icon">✏️</div>
+        <div class="step-title">Design &amp; Prototype</div>
+        <p class="step-desc">We bring concepts to life with pixel-perfect designs and interactive prototypes before a line of code is written.</p>
+      </div>
+      <div class="step reveal rd3">
+        <div class="step-num">03</div>
+        <div class="step-icon">⚙️</div>
+        <div class="step-title">Build &amp; Launch</div>
+        <p class="step-desc">Our engineers build fast, scalable solutions and handle every detail of your launch so you don't have to.</p>
+      </div>
+      <div class="step reveal rd4">
+        <div class="step-num">04</div>
+        <div class="step-icon">📈</div>
+        <div class="step-title">Grow &amp; Optimise</div>
+        <p class="step-desc">We monitor performance, run continuous tests, and keep results climbing long after go-live.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work">
+    <div class="work-header reveal">
+      <div>
+        <div class="section-tag">Selected work</div>
+        <h2 class="section-headline">Results we're<br>proud of.</h2>
+      </div>
+      <a href="#cta" class="btn-primary">Start a project →</a>
+    </div>
+
+    <div class="work-grid">
+      <div class="work-card featured reveal rd1">
+        <div class="work-visual wg1" style="height:100%; min-height:480px;"></div>
+        <div class="work-info">
+          <div class="work-client">Apex Commerce</div>
+          <div class="work-title">Full rebrand + Shopify rebuild — 312% revenue lift</div>
+        </div>
+        <div class="work-arrow">↗</div>
+      </div>
+      <div class="work-card reveal rd2">
+        <div class="work-visual wg2"></div>
+        <div class="work-info">
+          <div class="work-client">Solace Studio</div>
+          <div class="work-title">Brand identity &amp; site — 4× engagement</div>
+        </div>
+        <div class="work-arrow">↗</div>
+      </div>
+      <div class="work-card reveal rd3">
+        <div class="work-visual wg3"></div>
+        <div class="work-info">
+          <div class="work-client">GreenPeak Co.</div>
+          <div class="work-title">Google &amp; Meta campaign — 8.2× ROAS</div>
+        </div>
+        <div class="work-arrow">↗</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clients -->
+  <section id="clients">
+    <div class="clients-inner">
+      <div class="clients-label reveal">Trusted by growing brands</div>
+      <div class="clients-grid reveal rd1">
+        <div class="client-tile"><div class="client-name">Apex Co.</div></div>
+        <div class="client-tile"><div class="client-name">Solace</div></div>
+        <div class="client-tile"><div class="client-name">GreenPeak</div></div>
+        <div class="client-tile"><div class="client-name">Luminary</div></div>
+        <div class="client-tile"><div class="client-name">Orbis</div></div>
+        <div class="client-tile"><div class="client-name">Faro Labs</div></div>
+        <div class="client-tile"><div class="client-name">Nuvola</div></div>
+        <div class="client-tile"><div class="client-name">Vantage</div></div>
+        <div class="client-tile"><div class="client-name">Crestline</div></div>
+        <div class="client-tile"><div class="client-name">Dune</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="faq-inner">
+      <div class="faq-header reveal">
+        <div class="faq-eyebrow">FAQ</div>
+        <h2 class="section-headline">Not AI answers.<br>Real ones.</h2>
+      </div>
+      <div class="reveal rd1">
+        <div class="faq-item open">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What services does Vendo Digital offer?
+            <span class="faq-icon">−</span>
+          </button>
+          <div class="faq-answer" style="max-height:200px;">
+            <div class="faq-a">We offer end-to-end digital services: brand identity, web design and development, SEO, paid advertising (Google &amp; Meta), social media management, email marketing, and CRO. Whether you need one service or the full stack, we have you covered.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How long does a typical project take?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-a">Timelines vary by scope. A brand identity project typically takes 3–4 weeks. A full website build runs 6–10 weeks. Ad campaigns can be live within 5–7 business days.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Do you work with startups or only established brands?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-a">Both. We love helping early-stage startups build their brand from scratch, and we're equally comfortable optimising and scaling established businesses. Our process adapts to where you are.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What does a project with Vendo Digital cost?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-a">We price based on scope, not guesswork. Brand projects start at £3,500. Website builds from £6,000. Performance marketing retainers from £1,500/month. Get in touch for a no-obligation quote.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Will we own everything once the project is done?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-a">Absolutely. Full IP and asset ownership transfers to you on final payment — source files, brand assets, code, everything.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Do you offer ongoing support after launch?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-a">Yes. We offer retainer packages for ongoing marketing, maintenance, and growth optimisation. Many of our clients stay with us long-term — we become part of their team.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta">
+    <div class="cta-inner">
+      <div class="cta-eye reveal">Ready to start?</div>
+      <h2 class="cta-head reveal rd1">Let's build<br>something great.</h2>
+      <p class="cta-sub reveal rd2">Drop us a message and we'll get back within 24 hours with a clear plan and honest pricing.</p>
+      <a href="mailto:hello@vendodigital.com" class="btn-white reveal rd3">hello@vendodigital.com →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Vendo Digital®</div>
+      <div class="footer-links">
+        <a href="#">Services</a>
+        <a href="#">Work</a>
+        <a href="#">About</a>
+        <a href="#">Instagram</a>
+        <a href="#">LinkedIn</a>
+      </div>
+      <div class="footer-copy">© 2026 Vendo Digital Ltd.</div>
+    </div>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════════════
+       SECTION 1 — PAGE UTILITIES (intro, cursor, FAQ, scroll reveal)
+    ═══════════════════════════════════════════════════════════════════ */
+
+    // Intro dismissal
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('intro').classList.add('out');
+      }, 1800);
+    });
+
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+    (function animateRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animateRing); })();
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.width = '18px'; cursor.style.height = '18px'; ring.style.width = '52px'; ring.style.height = '52px'; });
+      el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; });
+    });
+
+    // FAQ accordion
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item'), answer = item.querySelector('.faq-answer'), icon = btn.querySelector('.faq-icon'), isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-answer').style.maxHeight = '0'; i.querySelector('.faq-icon').textContent = '+'; });
+      if (!isOpen) { item.classList.add('open'); answer.style.maxHeight = answer.scrollHeight + 'px'; icon.textContent = '−'; }
+    }
+
+    // Scroll reveal
+    const revEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }); }, { threshold: 0.1 });
+    revEls.forEach(el => obs.observe(el));
+
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SECTION 2 — THREE.JS ORBIT HERO SYSTEM
+       ─────────────────────────────────────────────────────────────────
+       Architecture:
+         • WebGL canvas fills .hero-orbit (pointer-events:none)
+         • Scene renders: particle field + constellation lines + node rings
+         • DOM cards receive real-time perspective tilt + float in JS
+         • Holographic shimmer + glow activate near cursor
+    ═══════════════════════════════════════════════════════════════════ */
+    (function initOrbitSystem() {
+
+      // ── Wait for Three.js to be available ─────────────────────────
+      if (typeof THREE === 'undefined') {
+        console.warn('Three.js not loaded — orbit 3D effects skipped');
+        initFallbackCardEntrance();
+        return;
+      }
+
+      /* ──────────────────────────────────────────────────────────────
+         SETUP: Renderer + Scene + Camera
+         We use an Orthographic camera that maps 1:1 to CSS pixels.
+         The orbit container is square (560×560 max), centered at 0,0.
+      ────────────────────────────────────────────────────────────── */
+      const orbitEl   = document.getElementById('heroOrbit');
+      const canvas    = document.getElementById('orbit-canvas');
+      const orbitSize = () => orbitEl.offsetWidth; // responsive square
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0x000000, 0); // transparent background
+
+      // Orthographic camera: half-size = orbitSize/2 so 1 unit = 1 CSS px
+      let H = orbitSize() / 2;
+      const camera = new THREE.OrthographicCamera(-H, H, H, -H, -500, 500);
+      camera.position.z = 300;
+
+      const scene = new THREE.Scene();
+
+      function resizeRenderer() {
+        const sz = orbitSize();
+        renderer.setSize(sz, sz, false); // false = don't set CSS size (handled by CSS)
+        H = sz / 2;
+        camera.left = -H; camera.right = H; camera.top = H; camera.bottom = -H;
+        camera.updateProjectionMatrix();
+      }
+      resizeRenderer();
+      window.addEventListener('resize', resizeRenderer);
+
+
+      /* ──────────────────────────────────────────────────────────────
+         CARD NODE POSITIONS
+         These mirror the CSS card centers relative to orbit center (0,0).
+         Y is negated because Three.js Y+ is up, CSS Y+ is down.
+         Pre-computed for a 560px orbit; we scale on resize.
+      ────────────────────────────────────────────────────────────── */
+      const BASE_SIZE = 560; // reference orbit size
+      // [x, y] in Three.js coords (y flipped vs CSS)
+      const NODE_POSITIONS_BASE = [
+        [ -31,  198],  // c1 top-center
+        [ 213,  104],  // c2 right-top
+        [ 198, -145],  // c3 right-bottom
+        [ -36, -207],  // c4 bottom-center
+        [-211, -136],  // c5 left-bottom
+        [-214,  105],  // c6 left-top
+      ];
+
+      function scaledNodes() {
+        const s = orbitSize() / BASE_SIZE;
+        return NODE_POSITIONS_BASE.map(([x, y]) => [x * s, y * s]);
+      }
+
+
+      /* ──────────────────────────────────────────────────────────────
+         1. PARTICLE FIELD
+         ~180 small points scattered inside the orbit radius.
+         Each particle drifts slowly; mouse presence deflects them.
+      ────────────────────────────────────────────────────────────── */
+      const PARTICLE_COUNT = 180;
+      const pGeom   = new THREE.BufferGeometry();
+      const pPos    = new Float32Array(PARTICLE_COUNT * 3); // x,y,z per particle
+      const pVel    = [];    // {vx, vy} — base drift velocities
+      const pBase   = [];    // {bx, by, bz} — home positions for gentle return
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        // Distribute within a circle of radius ~230 (< H=280)
+        const angle  = Math.random() * Math.PI * 2;
+        const radius = 60 + Math.random() * 190;
+        const bx = Math.cos(angle) * radius;
+        const by = Math.sin(angle) * radius;
+        const bz = (Math.random() - 0.5) * 30;
+        pBase.push({ bx, by, bz });
+        pPos[i * 3]     = bx;
+        pPos[i * 3 + 1] = by;
+        pPos[i * 3 + 2] = bz;
+        pVel.push({ vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12 });
+      }
+      pGeom.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+
+      const pMat = new THREE.PointsMaterial({
+        color: 0xaaaacc,
+        size: 1.8,
+        sizeAttenuation: true,
+        transparent: true,
+        opacity: 0.55,
+        depthWrite: false,
+      });
+      const particles = new THREE.Points(pGeom, pMat);
+      scene.add(particles);
+
+
+      /* ──────────────────────────────────────────────────────────────
+         2. CONSTELLATION LINES
+         6 lines from origin → each node position.
+         3 cross-connections between alternating nodes.
+         Lines use a custom animated dash offset to give "energy flow".
+      ────────────────────────────────────────────────────────────── */
+      const lineGroup = new THREE.Group();
+      scene.add(lineGroup);
+
+      // We rebuild line positions on resize; store refs to update them
+      const lineObjects = [];
+
+      function buildConstellationLines() {
+        // Clear existing
+        while (lineGroup.children.length) lineGroup.remove(lineGroup.children[0]);
+        lineObjects.length = 0;
+
+        const nodes = scaledNodes();
+        const lineMat = new THREE.LineDashedMaterial({
+          color: 0x8888cc,
+          linewidth: 1,
+          dashSize: 8,
+          gapSize: 12,
+          transparent: true,
+          opacity: 0.22,
+          depthWrite: false,
+        });
+
+        // Spoke lines: origin → each node
+        nodes.forEach(([nx, ny]) => {
+          const pts = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(nx, ny, 0)];
+          const geo = new THREE.BufferGeometry().setFromPoints(pts);
+          const line = new THREE.Line(geo, lineMat.clone());
+          line.computeLineDistances();
+          lineGroup.add(line);
+          lineObjects.push(line);
+        });
+
+        // Cross-connections: 0↔2, 1↔4, 2↔5, 3↔1  (skip-one connections feel natural)
+        const crosses = [[0,2],[1,4],[2,5],[3,1]];
+        crosses.forEach(([a, b]) => {
+          const [ax, ay] = nodes[a], [bx, by] = nodes[b];
+          const pts = [new THREE.Vector3(ax, ay, 0), new THREE.Vector3(bx, by, 0)];
+          const geo = new THREE.BufferGeometry().setFromPoints(pts);
+          const line = new THREE.Line(geo, lineMat.clone());
+          line.material.opacity = 0.10;
+          line.computeLineDistances();
+          lineGroup.add(line);
+          lineObjects.push(line);
+        });
+      }
+      buildConstellationLines();
+      window.addEventListener('resize', buildConstellationLines);
+
+
+      /* ──────────────────────────────────────────────────────────────
+         3. NODE RINGS
+         A thin torus at each card position — wireframe ring that
+         slowly rotates on its local axes, glows on mouse proximity.
+      ────────────────────────────────────────────────────────────── */
+      const nodeGroup = new THREE.Group();
+      scene.add(nodeGroup);
+      const nodeRings = [];
+
+      function buildNodeRings() {
+        while (nodeGroup.children.length) nodeGroup.remove(nodeGroup.children[0]);
+        nodeRings.length = 0;
+
+        const nodes = scaledNodes();
+        nodes.forEach(([nx, ny], i) => {
+          const radius = 10 + i % 2 * 3; // slight variation between rings
+          const geo    = new THREE.TorusGeometry(radius, 1.4, 8, 40);
+          const mat    = new THREE.MeshBasicMaterial({
+            color: 0x9999ee,
+            wireframe: false,
+            transparent: true,
+            opacity: 0.35,
+            depthWrite: false,
+          });
+          const ring = new THREE.Mesh(geo, mat);
+          ring.position.set(nx, ny, 0);
+          ring.rotation.x = Math.random() * Math.PI;
+          ring.rotation.y = Math.random() * Math.PI;
+          nodeGroup.add(ring);
+          nodeRings.push({ mesh: ring, baseOpacity: 0.35, rotSpeed: { x: 0.004 + Math.random() * 0.004, y: 0.006 + Math.random() * 0.004 } });
+        });
+      }
+      buildNodeRings();
+      window.addEventListener('resize', buildNodeRings);
+
+
+      /* ──────────────────────────────────────────────────────────────
+         4. CENTRAL ORB
+         A slowly rotating icosahedron wireframe at origin.
+         Acts as a visual anchor / "hub" of the constellation.
+      ────────────────────────────────────────────────────────────── */
+      const orbGeo = new THREE.IcosahedronGeometry(22, 1);
+      const orbMat = new THREE.MeshBasicMaterial({ color: 0xaaaaff, wireframe: true, transparent: true, opacity: 0.18, depthWrite: false });
+      const centralOrb = new THREE.Mesh(orbGeo, orbMat);
+      scene.add(centralOrb);
+
+
+      /* ──────────────────────────────────────────────────────────────
+         DOM CARD TILT + FLOAT SYSTEM
+         We replace CSS @keyframes float with per-frame JS transforms.
+         Each card stores individual float phase, tilt targets, and
+         current spring values for smooth interpolation.
+      ────────────────────────────────────────────────────────────── */
+      const orbitCards = Array.from(document.querySelectorAll('.orbit-card'));
+
+      // Per-card state
+      const cardStates = orbitCards.map((el, i) => ({
+        el,
+        shimmer: el.querySelector('.card-shimmer'),
+        glow:    el.querySelector('.card-glow'),
+        floatPhase: i * (Math.PI * 2 / 6), // evenly distributed phases
+        floatAmp: 10 + Math.random() * 4,  // slight amplitude variation
+        floatSpeed: 0.65 + i * 0.05,       // slight speed variation per card
+        // 3D tilt — current and target values (springs)
+        tiltX: 0, tiltY: 0, scale: 1,
+        tiltXTarget: 0, tiltYTarget: 0, scaleTarget: 1,
+        // Entrance alpha (0→1 over first 2.3s)
+        alpha: 0, alphaTarget: 0,
+        entered: false,
+      }));
+
+      // Staggered entrance — reveal cards after intro finishes
+      cardStates.forEach((cs, i) => {
+        setTimeout(() => {
+          cs.alphaTarget = 1;
+          cs.entered = true;
+        }, 2200 + i * 100);
+      });
+
+      // ── Mouse tracking (global page coords) ─────────────────────
+      // mx, my already tracked globally above
+
+      /* ──────────────────────────────────────────────────────────────
+         MAIN ANIMATION LOOP
+         Runs every frame: updates Three.js scene + DOM card transforms.
+      ────────────────────────────────────────────────────────────── */
+      let clock = 0;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        clock += 0.016; // ~60fps timestep
+
+        const orbitRect = orbitEl.getBoundingClientRect();
+        const orbitCX   = orbitRect.left + orbitRect.width  / 2; // page center of orbit
+        const orbitCY   = orbitRect.top  + orbitRect.height / 2;
+
+        // Mouse in scene coords (Three.js Y+ = up, CSS Y+ = down)
+        const smx = mx - orbitCX;
+        const smy = -(my - orbitCY);
+        const mouseInOrbit = Math.hypot(smx, smy) < orbitRect.width * 0.6;
+
+        /* ── Update Three.js objects ─────────────────────────────── */
+
+        // 1. Animate constellation line dash offsets (energy flow effect)
+        lineObjects.forEach((line, i) => {
+          line.material.dashOffset -= 0.04 + i * 0.005;
+        });
+
+        // 2. Animate node rings — rotate + react to mouse
+        const nodes = scaledNodes();
+        nodeRings.forEach(({ mesh, baseOpacity, rotSpeed }, i) => {
+          mesh.rotation.x += rotSpeed.x;
+          mesh.rotation.y += rotSpeed.y;
+
+          // Mouse proximity to this node
+          const [nx, ny] = nodes[i];
+          const distToMouse = Math.hypot(smx - nx, smy - ny);
+          const proximity   = Math.max(0, 1 - distToMouse / 90); // 0–1 within 90px
+
+          // Lerp opacity and scale toward mouse-driven targets
+          const targetOpacity = baseOpacity + proximity * 0.55;
+          mesh.material.opacity += (targetOpacity - mesh.material.opacity) * 0.08;
+          const targetScale = 1 + proximity * 0.5;
+          mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, 1), 0.08);
+
+          // Color shift from grey-blue → cyan-white near cursor
+          const targetColor = new THREE.Color().lerpColors(
+            new THREE.Color(0x8888dd),
+            new THREE.Color(0x99ffee),
+            proximity
+          );
+          mesh.material.color.lerp(targetColor, 0.08);
+        });
+
+        // 3. Animate central orb
+        centralOrb.rotation.x += 0.004;
+        centralOrb.rotation.y += 0.006;
+        const orbPulse = 1 + Math.sin(clock * 0.8) * 0.06;
+        centralOrb.scale.set(orbPulse, orbPulse, orbPulse);
+
+        // 4. Update particle positions — drift + mouse repulsion
+        const posArr = pGeom.attributes.position.array;
+        const repelRadius = 70;
+        const repelForce  = 0.9;
+        const returnForce = 0.006;
+        const dampening   = 0.96;
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const idx = i * 3;
+          let px = posArr[idx], py = posArr[idx + 1];
+          const { bx, by, bz } = pBase[i];
+          let { vx, vy } = pVel[i];
+
+          // Mouse repulsion (only when mouse is near orbit)
+          if (mouseInOrbit) {
+            const dx = px - smx, dy = py - smy;
+            const dist = Math.hypot(dx, dy);
+            if (dist < repelRadius && dist > 0.1) {
+              const force = (repelRadius - dist) / repelRadius * repelForce;
+              vx += (dx / dist) * force;
+              vy += (dy / dist) * force;
+            }
+          }
+
+          // Gentle return toward home position
+          vx += (bx - px) * returnForce;
+          vy += (by - py) * returnForce;
+
+          // Dampen velocity
+          vx *= dampening;
+          vy *= dampening;
+
+          // Integrate
+          px += vx;
+          py += vy;
+
+          posArr[idx]     = px;
+          posArr[idx + 1] = py;
+          posArr[idx + 2] = bz + Math.sin(clock * 0.4 + i * 0.3) * 8;
+          pVel[i] = { vx, vy };
+        }
+        pGeom.attributes.position.needsUpdate = true;
+
+        /* ── Update DOM cards (float + tilt) ────────────────────── */
+        cardStates.forEach((cs, i) => {
+          const { el, shimmer, glow } = cs;
+
+          // Entrance fade-in
+          cs.alpha += (cs.alphaTarget - cs.alpha) * 0.06;
+
+          // Float: smooth sinusoidal Y offset
+          const floatY = Math.sin(clock * cs.floatSpeed + cs.floatPhase) * cs.floatAmp;
+
+          // Tilt: measure mouse vs card center in page coords
+          const rect  = el.getBoundingClientRect();
+          const cardCX = rect.left + rect.width  / 2;
+          const cardCY = rect.top  + rect.height / 2;
+          const dx     = mx - cardCX;
+          const dy     = my - cardCY;
+          const dist   = Math.hypot(dx, dy);
+          const hoverZone = 130; // px — how far mouse must be for tilt to engage
+
+          const inZone = dist < hoverZone;
+
+          if (inZone) {
+            // Max tilt: ±16 degrees, falloff with distance
+            const strength = Math.max(0, 1 - dist / hoverZone);
+            cs.tiltXTarget  = -(dy / rect.height) * 22 * strength;  // rotateX
+            cs.tiltYTarget  =  (dx / rect.width)  * 22 * strength;  // rotateY
+            cs.scaleTarget  = 1 + 0.06 * strength;
+
+            // Activate holographic shimmer
+            const shimmerAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+            if (shimmer) {
+              shimmer.style.setProperty('--shimmer-rotate', shimmerAngle + 'deg');
+              shimmer.style.opacity = (0.7 * strength).toFixed(2);
+            }
+            if (glow) glow.style.opacity = (0.8 * strength).toFixed(2);
+
+          } else {
+            cs.tiltXTarget = 0;
+            cs.tiltYTarget = 0;
+            cs.scaleTarget = 1;
+            if (shimmer) shimmer.style.opacity = '0';
+            if (glow)    glow.style.opacity    = '0';
+          }
+
+          // Spring interpolation — smooth, elastic feel
+          const spring = 0.10;
+          cs.tiltX += (cs.tiltXTarget - cs.tiltX) * spring;
+          cs.tiltY += (cs.tiltYTarget - cs.tiltY) * spring;
+          cs.scale += (cs.scaleTarget - cs.scale) * spring;
+
+          // Compose final transform
+          const tx = cs.tiltX.toFixed(3);
+          const ty = cs.tiltY.toFixed(3);
+          const sc = cs.scale.toFixed(4);
+          const fy = floatY.toFixed(2);
+          const alpha = Math.min(1, cs.alpha).toFixed(3);
+
+          // perspective + translateZ adds physical depth on tilt
+          const translateZ = (Math.abs(cs.tiltX) + Math.abs(cs.tiltY)) * 0.6;
+
+          el.style.transform = `translateY(${fy}px) perspective(700px) rotateX(${tx}deg) rotateY(${ty}deg) translateZ(${translateZ.toFixed(1)}px) scale(${sc})`;
+          el.style.opacity   = alpha;
+          el.style.boxShadow = inZone
+            ? `0 ${8 + Math.abs(cs.tiltX) * 0.8}px ${28 + Math.abs(cs.tiltX) * 2}px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12)`
+            : '0 4px 14px rgba(0,0,0,0.12)';
+        });
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      /* ──────────────────────────────────────────────────────────────
+         INITIAL CARD STATE — hide before entrance sequence
+      ────────────────────────────────────────────────────────────── */
+      orbitCards.forEach(el => {
+        el.style.opacity   = '0';
+        el.style.transition = 'none'; // JS drives everything
+      });
+
+    })(); // end initOrbitSystem
+
+
+    /* ═══════════════════════════════════════════════════════════════════
+       FALLBACK — if Three.js fails to load, simple CSS entrance only
+    ═══════════════════════════════════════════════════════════════════ */
+    function initFallbackCardEntrance() {
+      const orbitCards = document.querySelectorAll('.orbit-card');
+      orbitCards.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+      });
+      orbitCards.forEach((el, i) => {
+        setTimeout(() => { el.style.opacity = '1'; }, 2200 + i * 100);
+      });
+    }
+
+  </script>
+</body>
+</html>

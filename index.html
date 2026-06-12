@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendo. — UI/UX Design Agency</title>
+  <meta name="description" content="Vendo is a UI/UX design agency crafting interfaces people love to use. Product design, UX research, design systems and motion — from London to the world." />
+  <meta name="theme-color" content="#051412" />
+
+  <!-- Favicon: the V. icon in Vendo Green on Vendo Black -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23051412'/%3E%3Ctext x='6' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='22' fill='%238EFEBB'%3EV%3C/text%3E%3Ccircle cx='26' cy='23' r='3' fill='%238EFEBB'/%3E%3C/svg%3E" />
+
+  <!-- Brand typography: Manrope (primary) + Instrument Sans (secondary) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-loading>
+
+  <!-- ════════ PRELOADER ════════ -->
+  <div id="preloader" aria-hidden="true">
+    <div class="pre-center">
+      <div class="pre-logo" id="preLogo">
+        <span>V</span><span>e</span><span>n</span><span>d</span><span>o</span><span class="dot">.</span>
+      </div>
+      <div class="pre-meta">
+        <span class="pre-tag">UI/UX Design Agency</span>
+        <span class="pre-count" id="preCount">00</span>
+      </div>
+    </div>
+    <div class="pre-veil"></div>
+  </div>
+
+  <!-- Custom cursor (fine pointers only) -->
+  <div class="cursor" aria-hidden="true"><span class="cursor-text"></span></div>
+
+  <!-- Film grain -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ════════ NAV ════════ -->
+  <header class="nav" id="nav">
+    <a class="nav-logo" href="#top" aria-label="Vendo home" data-magnetic>Vendo<span class="dot">.</span></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work" data-line>Work</a>
+      <a href="#services" data-line>Services</a>
+      <a href="#studio" data-line>Studio</a>
+      <a href="#process" data-line>Process</a>
+    </nav>
+    <a class="btn btn-nav" href="#contact" data-magnetic><span class="btn-fill"></span><span class="btn-label">Start a project</span></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Fullscreen menu (mobile / tablet) -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu-links" aria-label="Menu">
+      <a href="#work"><em>01</em><span>Work</span></a>
+      <a href="#services"><em>02</em><span>Services</span></a>
+      <a href="#studio"><em>03</em><span>Studio</span></a>
+      <a href="#process"><em>04</em><span>Process</span></a>
+      <a href="#contact"><em>05</em><span>Contact</span></a>
+    </nav>
+    <div class="menu-foot">
+      <a href="mailto:hello@vendodigital.co.uk">hello@vendodigital.co.uk</a>
+      <span>London, UK</span>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <!-- ════════ HERO ════════ -->
+    <section class="hero" id="hero">
+      <canvas id="webgl" aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <p class="hero-eyebrow"><span class="pulse-dot"></span>Accepting new projects — Q3 2026</p>
+        <h1 class="hero-title" aria-label="Design that sells itself.">
+          <span class="line"><span class="word">Design</span> <span class="word">that</span></span>
+          <span class="line"><span class="word ital">sells</span>&nbsp;<span class="word green">itself<i class="dot">.</i></span></span>
+        </h1>
+        <div class="hero-foot">
+          <p class="hero-sub">Vendo is a UI/UX agency turning complex products into interfaces people genuinely love to use.</p>
+          <a class="btn btn-hero" href="#work" data-magnetic data-cursor="View">
+            <span class="btn-fill"></span><span class="btn-label">See the work</span>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="scroll-track"><span class="scroll-thumb"></span></div>
+      </div>
+    </section>
+
+    <!-- ════════ MARQUEE ════════ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track" id="marqueeTrack">
+        <span>Product Design <i>✦</i> UX Research <i>✦</i> Design Systems <i>✦</i> Brand Identity <i>✦</i> Motion &amp; Interaction <i>✦</i>&nbsp;</span>
+        <span>Product Design <i>✦</i> UX Research <i>✦</i> Design Systems <i>✦</i> Brand Identity <i>✦</i> Motion &amp; Interaction <i>✦</i>&nbsp;</span>
+      </div>
+    </div>
+
+    <!-- ════════ MANIFESTO ════════ -->
+    <section class="manifesto" id="studio">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <span class="section-tag">Studio</span>
+      </div>
+      <p class="manifesto-text" id="manifestoText">Most products don't fail because of bad code — they fail because nobody enjoys using them. We exist to fix that. Research-led, detail-obsessed, and allergic to mediocre interfaces.</p>
+      <div class="manifesto-meta">
+        <div class="meta-card" data-tilt>
+          <span class="meta-num" data-count="87">0</span><span class="meta-plus">+</span>
+          <span class="meta-label">Products shipped</span>
+        </div>
+        <div class="meta-card" data-tilt>
+          <span class="meta-num" data-count="14">0</span><span class="meta-plus">×</span>
+          <span class="meta-label">Design awards</span>
+        </div>
+        <div class="meta-card" data-tilt>
+          <span class="meta-num" data-count="98">0</span><span class="meta-plus">%</span>
+          <span class="meta-label">Client retention</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ SELECTED WORK ════════ -->
+    <section class="work" id="work">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <span class="section-tag">Selected work</span>
+        <span class="section-hint">2024 — 2026</span>
+      </div>
+
+      <div class="work-grid">
+        <!-- Case 1 -->
+        <article class="case" data-cursor="Open" tabindex="0">
+          <div class="case-media sage">
+            <div class="mock mock-app" aria-hidden="true">
+              <div class="mock-bar"><i></i><i></i><i></i></div>
+              <div class="mock-hero shimmer"></div>
+              <div class="mock-row"><div class="mock-chip green"></div><div class="mock-chip"></div><div class="mock-chip"></div></div>
+              <div class="mock-cols"><div class="mock-block"></div><div class="mock-block tall green-soft"></div><div class="mock-block"></div></div>
+            </div>
+          </div>
+          <div class="case-info">
+            <h3>Lumafold Banking</h3>
+            <p>Fintech app redesign — onboarding conversion up 64%</p>
+            <ul class="case-tags"><li>Product design</li><li>Design system</li></ul>
+          </div>
+        </article>
+
+        <!-- Case 2 -->
+        <article class="case" data-cursor="Open" tabindex="0">
+          <div class="case-media charcoal">
+            <div class="mock mock-dash" aria-hidden="true">
+              <div class="mock-side"><i></i><i></i><i></i><i></i></div>
+              <div class="mock-main">
+                <div class="mock-kpis"><span></span><span class="green-soft"></span><span></span></div>
+                <div class="mock-chart">
+                  <svg viewBox="0 0 200 60" preserveAspectRatio="none"><path class="chart-line" d="M0 50 C 25 48, 35 30, 55 32 S 90 44, 110 28 S 150 8, 175 14 S 195 10, 200 6" fill="none"/></svg>
+                </div>
+                <div class="mock-rows"><i></i><i></i><i></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="case-info">
+            <h3>Northbeam Analytics</h3>
+            <p>B2B dashboard — from spreadsheet chaos to clarity</p>
+            <ul class="case-tags"><li>UX research</li><li>Data viz</li></ul>
+          </div>
+        </article>
+
+        <!-- Case 3 -->
+        <article class="case" data-cursor="Open" tabindex="0">
+          <div class="case-media green">
+            <div class="mock mock-mobile" aria-hidden="true">
+              <div class="phone">
+                <div class="phone-notch"></div>
+                <div class="phone-hero"></div>
+                <div class="phone-rows"><i></i><i></i></div>
+                <div class="phone-cta"></div>
+              </div>
+              <div class="phone phone-back">
+                <div class="phone-notch"></div>
+                <div class="phone-rows top"><i></i><i></i><i></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="case-info">
+            <h3>Orbi Health</h3>
+            <p>Wellness app — 4.9★ across 40k App Store reviews</p>
+            <ul class="case-tags"><li>Mobile UX</li><li>Brand</li></ul>
+          </div>
+        </article>
+
+        <!-- Case 4 -->
+        <article class="case" data-cursor="Open" tabindex="0">
+          <div class="case-media sage">
+            <div class="mock mock-web" aria-hidden="true">
+              <div class="mock-bar"><i></i><i></i><i></i></div>
+              <div class="mock-nav"><span class="green-soft"></span><span></span><span></span><span></span></div>
+              <div class="mock-headline"><i></i><i class="short"></i></div>
+              <div class="mock-cards"><span></span><span class="green-soft"></span><span></span></div>
+            </div>
+          </div>
+          <div class="case-info">
+            <h3>Fieldstone Estate</h3>
+            <p>Luxury property platform — bookings up 3.2×</p>
+            <ul class="case-tags"><li>Web design</li><li>Motion</li></ul>
+          </div>
+        </article>
+      </div>
+
+      <a class="btn btn-ghost work-more" href="#contact" data-magnetic><span class="btn-fill"></span><span class="btn-label">Your project here</span></a>
+    </section>
+
+    <!-- ════════ SERVICES ════════ -->
+    <section class="services" id="services">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <span class="section-tag">What we do</span>
+      </div>
+
+      <div class="service-list" id="serviceList">
+        <div class="service" tabindex="0">
+          <div class="service-row">
+            <span class="service-idx">01</span>
+            <h3 class="service-name">Product Design</h3>
+            <span class="service-toggle" aria-hidden="true"></span>
+          </div>
+          <div class="service-body">
+            <p>End-to-end UI design for web and native apps. Flows, wireframes, high-fidelity screens and clickable prototypes — shipped with developer-ready specs.</p>
+            <ul><li>Interface design</li><li>Prototyping</li><li>Handoff</li></ul>
+          </div>
+        </div>
+        <div class="service" tabindex="0">
+          <div class="service-row">
+            <span class="service-idx">02</span>
+            <h3 class="service-name">UX Research</h3>
+            <span class="service-toggle" aria-hidden="true"></span>
+          </div>
+          <div class="service-body">
+            <p>We find out why users drop off before we touch a pixel. Interviews, usability testing and journey mapping that turn opinions into evidence.</p>
+            <ul><li>User interviews</li><li>Usability testing</li><li>Journey maps</li></ul>
+          </div>
+        </div>
+        <div class="service" tabindex="0">
+          <div class="service-row">
+            <span class="service-idx">03</span>
+            <h3 class="service-name">Design Systems</h3>
+            <span class="service-toggle" aria-hidden="true"></span>
+          </div>
+          <div class="service-body">
+            <p>Token-based component libraries that keep ten squads shipping one consistent product. Documented, versioned, and loved by engineers.</p>
+            <ul><li>Tokens</li><li>Component libraries</li><li>Documentation</li></ul>
+          </div>
+        </div>
+        <div class="service" tabindex="0">
+          <div class="service-row">
+            <span class="service-idx">04</span>
+            <h3 class="service-name">Brand Identity</h3>
+            <span class="service-toggle" aria-hidden="true"></span>
+          </div>
+          <div class="service-body">
+            <p>Logos, type systems and art direction with a point of view. Identities built to flex across product, marketing and motion.</p>
+            <ul><li>Identity</li><li>Art direction</li><li>Guidelines</li></ul>
+          </div>
+        </div>
+        <div class="service" tabindex="0">
+          <div class="service-row">
+            <span class="service-idx">05</span>
+            <h3 class="service-name">Motion &amp; Interaction</h3>
+            <span class="service-toggle" aria-hidden="true"></span>
+          </div>
+          <div class="service-body">
+            <p>Micro-interactions, page transitions and product films. The layer of craft users can't articulate but always feel.</p>
+            <ul><li>Micro-interactions</li><li>Transitions</li><li>Product film</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ PROCESS ════════ -->
+    <section class="process" id="process">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <span class="section-tag">How we work</span>
+      </div>
+      <div class="process-track" id="processTrack">
+        <div class="step">
+          <span class="step-num">①</span>
+          <h3>Discover</h3>
+          <p>Stakeholder workshops, user interviews and audit of what exists. We map the real problem — not the assumed one.</p>
+          <span class="step-time">Week 1–2</span>
+        </div>
+        <div class="step">
+          <span class="step-num">②</span>
+          <h3>Define</h3>
+          <p>Journeys, information architecture and low-fi flows. Every screen earns its place before it gets dressed.</p>
+          <span class="step-time">Week 3–4</span>
+        </div>
+        <div class="step">
+          <span class="step-num">③</span>
+          <h3>Design</h3>
+          <p>High-fidelity UI, motion studies and a living design system. Tested with real users, iterated weekly.</p>
+          <span class="step-time">Week 5–8</span>
+        </div>
+        <div class="step">
+          <span class="step-num">④</span>
+          <h3>Deliver</h3>
+          <p>Developer pairing through build, QA on every breakpoint, and a measurement plan so wins are provable.</p>
+          <span class="step-time">Week 9+</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ CTA ════════ -->
+    <section class="cta" id="contact">
+      <div class="cta-ring" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs><path id="circlePath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+          <text><textPath href="#circlePath">VENDO DIGITAL — UI/UX AGENCY — EST. 2019 — LONDON — </textPath></text>
+        </svg>
+        <span class="cta-ring-dot">V.</span>
+      </div>
+      <h2 class="cta-title">
+        <span class="line">Let's make your</span>
+        <span class="line">product <em>unmissable</em><i class="dot">.</i></span>
+      </h2>
+      <a class="btn btn-big" href="mailto:hello@vendodigital.co.uk" data-magnetic data-cursor="Say hi">
+        <span class="btn-fill"></span><span class="btn-label">hello@vendodigital.co.uk</span>
+      </a>
+      <p class="cta-note">Replies within 24h. No account managers, you talk to designers.</p>
+    </section>
+
+  </main>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="footer">
+    <div class="footer-top">
+      <span class="footer-logo" aria-hidden="true">Vendo<span class="dot">.</span></span>
+    </div>
+    <div class="footer-grid">
+      <div class="f-col">
+        <span class="f-head">Sitemap</span>
+        <a href="#work" data-line>Work</a>
+        <a href="#services" data-line>Services</a>
+        <a href="#studio" data-line>Studio</a>
+        <a href="#contact" data-line>Contact</a>
+      </div>
+      <div class="f-col">
+        <span class="f-head">Social</span>
+        <a href="#" data-line>Instagram</a>
+        <a href="#" data-line>Dribbble</a>
+        <a href="#" data-line>LinkedIn</a>
+        <a href="#" data-line>X</a>
+      </div>
+      <div class="f-col">
+        <span class="f-head">Studio</span>
+        <span class="f-text">14 Mint Street<br/>London SE1 4QU</span>
+        <a href="mailto:hello@vendodigital.co.uk" data-line>hello@vendodigital.co.uk</a>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>© 2026 Vendo Digital Ltd.</span>
+      <span>www.vendodigital.co.uk</span>
+      <button class="to-top" id="toTop" data-magnetic>Back to top ↑</button>
+    </div>
+  </footer>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
