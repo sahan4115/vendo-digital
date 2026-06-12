@@ -1,0 +1,16 @@
+/*
+Theme Name: Vendo Digital
+Theme URI: https://vendodigital.co.uk/
+Author: Vendo Digital
+Author URI: https://vendodigital.co.uk/
+Description: Custom one-page theme for Vendo Digital — a PPC, SEO and web design agency in Surrey. Animated landing page built with GSAP and Three.js. The actual styles live in assets/css/style.css (enqueued from functions.php); this file only carries the required WordPress theme header.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.5
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: vendo
+*/
+
+/* Styles are loaded from assets/css/style.css — see functions.php. */
