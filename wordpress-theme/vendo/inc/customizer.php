@@ -120,6 +120,16 @@ function vendo_fields() {
 		'yt'             => array( '#', 'YouTube URL', 'contact' ),
 		'copyright'      => array( 'Vendo Digital Ltd.', 'Copyright name', 'contact' ),
 		'site_url_label' => array( 'www.vendodigital.co.uk', 'Footer site label', 'contact' ),
+
+		// ── SEO & sharing ────────────────────────────────────
+		'seo_title'      => array( 'Vendo Digital — PPC, SEO & Web Design Agency, Surrey', 'Browser/search title', 'seo' ),
+		'seo_desc'       => array( 'Vendo Digital is a PPC, SEO and web design agency in Sutton, Surrey. We took a dental practice from a standing start to £90K/month — no jargon, no waffle, no lock-in contracts.', 'Meta description (~155 chars)', 'seo', 'textarea' ),
+		'phone_intl'     => array( '+44 20 7101 4967', 'Phone in international format (for schema)', 'seo' ),
+		'founding_year'  => array( '2019', 'Founding year', 'seo' ),
+		'price_range'    => array( '££', 'Price range (£ to ££££)', 'seo' ),
+		'area_served'    => array( 'United Kingdom', 'Area served', 'seo' ),
+		'geo_lat'        => array( '', 'Office latitude (optional — from Google Maps)', 'seo' ),
+		'geo_lng'        => array( '', 'Office longitude (optional — from Google Maps)', 'seo' ),
 	);
 }
 
@@ -164,6 +174,7 @@ function vendo_customize_register( $wp_customize ) {
 		'flow'      => __( 'How It Works', 'vendo' ),
 		'cta'       => __( 'Call To Action', 'vendo' ),
 		'contact'   => __( 'Contact & Footer', 'vendo' ),
+		'seo'       => __( 'SEO & Sharing', 'vendo' ),
 	);
 
 	$i = 0;
@@ -199,5 +210,26 @@ function vendo_customize_register( $wp_customize ) {
 			)
 		);
 	}
+
+	// Open Graph / social share image (proper media uploader).
+	$wp_customize->add_setting(
+		'vendo_og_image',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'esc_url_raw',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		new WP_Customize_Image_Control(
+			$wp_customize,
+			'vendo_og_image',
+			array(
+				'label'       => __( 'Share image (1200×630)', 'vendo' ),
+				'description' => __( 'Shown when the homepage is shared on social media. Upload a 1200×630 PNG/JPG.', 'vendo' ),
+				'section'     => 'vendo_seo',
+			)
+		)
+	);
 }
 add_action( 'customize_register', 'vendo_customize_register' );

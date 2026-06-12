@@ -27,6 +27,38 @@ original static site.
 Built on WordPress-native APIs only (Customizer + custom post type +
 meta boxes) — no ACF or other plugins required.
 
+## SEO (built in)
+
+The theme ships its own SEO layer (`inc/seo.php`), so you don't need an
+SEO plugin — but it **automatically stands down** if Yoast, Rank Math,
+All in One SEO or SEOPress is active, so nothing is ever duplicated.
+
+What it outputs on the homepage:
+
+- A search/browser **title** and **meta description** (editable under
+  Customize → SEO & Sharing).
+- **Canonical** URL, and a richer robots directive (`max-image-preview:large`).
+- **Open Graph** + **Twitter Card** tags for clean link previews. Upload a
+  1200×630 **Share image** in the SEO section to get large image cards.
+- **JSON-LD structured data** (`@graph`): a `ProfessionalService`
+  (LocalBusiness) node with your name, address, phone, price range,
+  founding year, social profiles and areas of expertise (auto-built from
+  your service names), plus `WebSite` and `WebPage` nodes.
+
+To finish the local-SEO setup:
+
+1. **Customize → SEO & Sharing** → upload a share image; optionally paste
+   your office **latitude/longitude** (from Google Maps → right-click your
+   pin → copy the numbers) so the business shows a precise map location.
+2. Set **Settings → General → Site Title** to `Vendo Digital`.
+3. Submit `https://yoursite.com/wp-sitemap.xml` (WordPress builds this
+   automatically) to **Google Search Console**.
+4. Validate the markup at **search.google.com/test/rich-results**.
+
+No FAQ schema is included on purpose: the page has no visible FAQ
+section, and Google's guidelines prohibit marking up content that isn't
+on the page. (If you add a real FAQ section later, FAQ schema can go with it.)
+
 ## What's inside
 
 ```

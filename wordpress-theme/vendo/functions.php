@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/helpers.php';
 require get_template_directory() . '/inc/case-studies.php';
+require get_template_directory() . '/inc/seo.php';
 
 if ( ! function_exists( 'vendo_setup' ) ) {
 	/**

@@ -10,8 +10,8 @@
 <head>
   <meta charset="<?php bloginfo( 'charset' ); ?>" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Vendo Digital is a PPC, SEO and web design agency in Sutton, Surrey. We took a dental practice from a standing start to £90K/month — no jargon, no waffle, no lock-in contracts." />
   <meta name="theme-color" content="#051412" />
+  <?php // SEO meta (description, canonical, Open Graph, JSON-LD) is output by inc/seo.php via wp_head(). ?>
 
   <!-- Favicon: the V. icon in Vendo Green on Vendo Black -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23051412'/%3E%3Ctext x='6' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='22' fill='%238EFEBB'%3EV%3C/text%3E%3Ccircle cx='26' cy='23' r='3' fill='%238EFEBB'/%3E%3C/svg%3E" />
