@@ -375,34 +375,92 @@
     });
   })();
 
-  /* ════════ SERVICES ACCORDION ════════ */
+  /* ════════ SERVICES SHOWCASE ════════
+     Vertical tablist (left) drives a cross-fading preview stage (right).
+     Hover previews on desktop; click / keyboard work everywhere.        */
   (function services() {
-    var items = document.querySelectorAll(".service");
-    function close(item) {
-      item.classList.remove("is-open");
-      item.querySelector(".service-body").style.maxHeight = "0px";
+    var list = document.getElementById("svcList");
+    if (!list) return;
+    var items = Array.prototype.slice.call(list.querySelectorAll(".svc-item"));
+    var panels = Array.prototype.slice.call(document.querySelectorAll(".svc-panel"));
+    var marker = list.querySelector(".svc-marker");
+    var watermark = document.getElementById("svcWatermark");
+    var current = 0;
+    // Live query so hover-preview tracks the actual viewport, not load-time width
+    var hoverMQ = window.matchMedia("(min-width: 900px) and (hover: hover)");
+
+    function moveMarker(item) {
+      if (!marker) return;
+      marker.style.height = item.offsetHeight + "px";
+      marker.style.transform = "translateY(" + item.offsetTop + "px)";
+      marker.classList.add("is-ready");
     }
-    function open(item) {
-      item.classList.add("is-open");
-      var body = item.querySelector(".service-body");
-      body.style.maxHeight = body.scrollHeight + "px";
+
+    function setActive(index, focusTab) {
+      if (index < 0) index = items.length - 1;
+      if (index >= items.length) index = 0;
+      current = index;
+      items.forEach(function (it, i) {
+        var on = i === index;
+        it.classList.toggle("is-active", on);
+        it.setAttribute("aria-selected", String(on));
+        it.tabIndex = on ? 0 : -1;
+        if (on && focusTab) it.focus();
+      });
+      panels.forEach(function (p, i) {
+        var on = i === index;
+        p.classList.toggle("is-active", on);
+        if (on) p.removeAttribute("hidden"); else p.setAttribute("hidden", "");
+      });
+      if (watermark) watermark.textContent = String(index + 1).padStart(2, "0");
+      moveMarker(items[index]);
     }
-    items.forEach(function (item) {
-      function toggle() {
-        var isOpen = item.classList.contains("is-open");
-        items.forEach(close);
-        if (!isOpen) open(item);
-      }
-      item.querySelector(".service-row").addEventListener("click", toggle);
+
+    items.forEach(function (item, i) {
+      item.addEventListener("click", function () { setActive(i); });
+      // Hover/focus preview — gated at event time so resizing across the
+      // breakpoint (and mouse vs touch) is always respected.
+      item.addEventListener("pointerenter", function (e) {
+        if (hoverMQ.matches && e.pointerType !== "touch") setActive(i);
+      });
+      item.addEventListener("focus", function () {
+        if (hoverMQ.matches) setActive(i);
+      });
+      // Roving-tabindex keyboard support for the vertical tablist
       item.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        switch (e.key) {
+          case "ArrowDown": case "ArrowRight": e.preventDefault(); setActive(i + 1, true); break;
+          case "ArrowUp": case "ArrowLeft": e.preventDefault(); setActive(i - 1, true); break;
+          case "Home": e.preventDefault(); setActive(0, true); break;
+          case "End": e.preventDefault(); setActive(items.length - 1, true); break;
+          case "Enter": case " ": e.preventDefault(); setActive(i); break;
+        }
       });
     });
-    // keep the open panel sized correctly on resize
-    window.addEventListener("resize", function () {
-      var openBody = document.querySelector(".service.is-open .service-body");
-      if (openBody) openBody.style.maxHeight = openBody.scrollHeight + "px";
-    }, { passive: true });
+
+    // Initialise marker once fonts/layout settle, and keep it aligned on resize
+    function sync() { moveMarker(items[current]); }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+    window.addEventListener("load", sync);
+    window.addEventListener("resize", sync, { passive: true });
+    requestAnimationFrame(sync);
+
+    // Subtle parallax on the active visual as the pointer moves over the stage
+    var stage = document.getElementById("svcStage");
+    if (stage && !prefersReduced) {
+      stage.addEventListener("pointermove", function (e) {
+        if (!hoverMQ.matches || e.pointerType === "touch") return;
+        var r = stage.getBoundingClientRect();
+        var dx = (e.clientX - r.left) / r.width - 0.5;
+        var dy = (e.clientY - r.top) / r.height - 0.5;
+        var viz = stage.querySelector(".svc-panel.is-active .viz");
+        if (viz) viz.style.transform = "translate(" + (dx * 16) + "px," + (dy * 16) + "px)";
+      });
+      stage.addEventListener("pointerleave", function () {
+        var viz = stage.querySelector(".svc-panel.is-active .viz");
+        if (viz) viz.style.transform = "";
+      });
+    }
   })();
 
   /* ════════ TILT CARDS (stats) ════════ */

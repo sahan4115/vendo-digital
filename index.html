@@ -216,67 +216,135 @@
       <a class="btn btn-ghost work-more" href="#contact" data-magnetic><span class="btn-fill"></span><span class="btn-label">Your project here</span></a>
     </section>
 
-    <!-- ════════ SERVICES ════════ -->
+    <!-- ════════ SERVICES (interactive showcase) ════════ -->
     <section class="services" id="services">
       <div class="section-head">
         <span class="section-num">03</span>
         <span class="section-tag">What we do</span>
+        <span class="section-hint">Hover to explore</span>
       </div>
 
-      <div class="service-list" id="serviceList">
-        <div class="service" tabindex="0">
-          <div class="service-row">
-            <span class="service-idx">01</span>
-            <h3 class="service-name">Product Design</h3>
-            <span class="service-toggle" aria-hidden="true"></span>
-          </div>
-          <div class="service-body">
-            <p>End-to-end UI design for web and native apps. Flows, wireframes, high-fidelity screens and clickable prototypes — shipped with developer-ready specs.</p>
-            <ul><li>Interface design</li><li>Prototyping</li><li>Handoff</li></ul>
-          </div>
+      <div class="svc" id="svc">
+        <!-- LEFT: service index (tabs) -->
+        <div class="svc-list" id="svcList" role="tablist" aria-label="Services" aria-orientation="vertical">
+          <button class="svc-item is-active" data-svc="0" role="tab" aria-selected="true" aria-controls="svc-panel-0" id="svc-tab-0">
+            <span class="svc-idx">01</span>
+            <span class="svc-name">Product Design</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="1" role="tab" aria-selected="false" aria-controls="svc-panel-1" id="svc-tab-1" tabindex="-1">
+            <span class="svc-idx">02</span>
+            <span class="svc-name">UX Research</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="2" role="tab" aria-selected="false" aria-controls="svc-panel-2" id="svc-tab-2" tabindex="-1">
+            <span class="svc-idx">03</span>
+            <span class="svc-name">Design Systems</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="3" role="tab" aria-selected="false" aria-controls="svc-panel-3" id="svc-tab-3" tabindex="-1">
+            <span class="svc-idx">04</span>
+            <span class="svc-name">Brand Identity</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="svc-item" data-svc="4" role="tab" aria-selected="false" aria-controls="svc-panel-4" id="svc-tab-4" tabindex="-1">
+            <span class="svc-idx">05</span>
+            <span class="svc-name">Motion &amp; Interaction</span>
+            <svg class="svc-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="svc-marker" aria-hidden="true"></span>
         </div>
-        <div class="service" tabindex="0">
-          <div class="service-row">
-            <span class="service-idx">02</span>
-            <h3 class="service-name">UX Research</h3>
-            <span class="service-toggle" aria-hidden="true"></span>
+
+        <!-- RIGHT: live preview stage -->
+        <div class="svc-stage" id="svcStage">
+          <span class="svc-watermark" id="svcWatermark" aria-hidden="true">01</span>
+
+          <!-- Panel 0 — Product Design -->
+          <div class="svc-panel is-active" data-panel="0" id="svc-panel-0" role="tabpanel" aria-labelledby="svc-tab-0">
+            <div class="svc-visual">
+              <div class="viz viz-product" aria-hidden="true">
+                <div class="viz-app">
+                  <div class="viz-topbar"><i></i><i></i><i></i></div>
+                  <div class="viz-hero"></div>
+                  <div class="viz-chips"><span></span><span class="on"></span><span></span></div>
+                  <div class="viz-blocks"><b></b><b class="t"></b><b></b><b class="t on"></b></div>
+                </div>
+                <div class="viz-cursor"></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">End-to-end UI design for web and native apps. Flows, wireframes, high-fidelity screens and clickable prototypes — shipped with developer-ready specs.</p>
+              <ul class="svc-tags"><li>Interface design</li><li>Prototyping</li><li>Handoff</li></ul>
+            </div>
           </div>
-          <div class="service-body">
-            <p>We find out why users drop off before we touch a pixel. Interviews, usability testing and journey mapping that turn opinions into evidence.</p>
-            <ul><li>User interviews</li><li>Usability testing</li><li>Journey maps</li></ul>
+
+          <!-- Panel 1 — UX Research -->
+          <div class="svc-panel" data-panel="1" id="svc-panel-1" role="tabpanel" aria-labelledby="svc-tab-1" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-research" aria-hidden="true">
+                <svg class="viz-flow" viewBox="0 0 220 150" preserveAspectRatio="xMidYMid meet">
+                  <path class="viz-path" d="M24 30 H120 a18 18 0 0 1 18 18 V62 a18 18 0 0 0 18 18 H196" fill="none"/>
+                  <g class="viz-node n1"><circle cx="24" cy="30" r="9"/></g>
+                  <g class="viz-node n2"><circle cx="120" cy="30" r="9"/></g>
+                  <g class="viz-node n3"><circle cx="156" cy="80" r="9"/></g>
+                  <g class="viz-node n4"><circle cx="196" cy="80" r="9"/></g>
+                </svg>
+                <div class="viz-funnel"><i style="--w:100%"></i><i style="--w:72%"></i><i style="--w:48%"></i><i style="--w:31%"></i></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">We find out why users drop off before we touch a pixel. Interviews, usability testing and journey mapping that turn opinions into evidence.</p>
+              <ul class="svc-tags"><li>User interviews</li><li>Usability testing</li><li>Journey maps</li></ul>
+            </div>
           </div>
-        </div>
-        <div class="service" tabindex="0">
-          <div class="service-row">
-            <span class="service-idx">03</span>
-            <h3 class="service-name">Design Systems</h3>
-            <span class="service-toggle" aria-hidden="true"></span>
+
+          <!-- Panel 2 — Design Systems -->
+          <div class="svc-panel" data-panel="2" id="svc-panel-2" role="tabpanel" aria-labelledby="svc-tab-2" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-system" aria-hidden="true">
+                <div class="viz-tokens">
+                  <span class="sw s1"></span><span class="sw s2"></span><span class="sw s3"></span>
+                  <span class="sw s4"></span><span class="sw s5"></span><span class="sw s6"></span>
+                </div>
+                <div class="viz-comps"><b class="pill"></b><b class="box"></b><b class="pill on"></b><b class="box"></b></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">Token-based component libraries that keep ten squads shipping one consistent product. Documented, versioned, and loved by engineers.</p>
+              <ul class="svc-tags"><li>Tokens</li><li>Component libraries</li><li>Documentation</li></ul>
+            </div>
           </div>
-          <div class="service-body">
-            <p>Token-based component libraries that keep ten squads shipping one consistent product. Documented, versioned, and loved by engineers.</p>
-            <ul><li>Tokens</li><li>Component libraries</li><li>Documentation</li></ul>
+
+          <!-- Panel 3 — Brand Identity -->
+          <div class="svc-panel" data-panel="3" id="svc-panel-3" role="tabpanel" aria-labelledby="svc-tab-3" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-brand" aria-hidden="true">
+                <div class="viz-mark">V<span>.</span></div>
+                <div class="viz-specimen">Aa</div>
+                <div class="viz-palette"><i></i><i></i><i></i><i></i></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">Logos, type systems and art direction with a point of view. Identities built to flex across product, marketing and motion.</p>
+              <ul class="svc-tags"><li>Identity</li><li>Art direction</li><li>Guidelines</li></ul>
+            </div>
           </div>
-        </div>
-        <div class="service" tabindex="0">
-          <div class="service-row">
-            <span class="service-idx">04</span>
-            <h3 class="service-name">Brand Identity</h3>
-            <span class="service-toggle" aria-hidden="true"></span>
-          </div>
-          <div class="service-body">
-            <p>Logos, type systems and art direction with a point of view. Identities built to flex across product, marketing and motion.</p>
-            <ul><li>Identity</li><li>Art direction</li><li>Guidelines</li></ul>
-          </div>
-        </div>
-        <div class="service" tabindex="0">
-          <div class="service-row">
-            <span class="service-idx">05</span>
-            <h3 class="service-name">Motion &amp; Interaction</h3>
-            <span class="service-toggle" aria-hidden="true"></span>
-          </div>
-          <div class="service-body">
-            <p>Micro-interactions, page transitions and product films. The layer of craft users can't articulate but always feel.</p>
-            <ul><li>Micro-interactions</li><li>Transitions</li><li>Product film</li></ul>
+
+          <!-- Panel 4 — Motion & Interaction -->
+          <div class="svc-panel" data-panel="4" id="svc-panel-4" role="tabpanel" aria-labelledby="svc-tab-4" hidden>
+            <div class="svc-visual">
+              <div class="viz viz-motion" aria-hidden="true">
+                <span class="viz-ring r1"></span>
+                <span class="viz-ring r2"></span>
+                <span class="viz-ring r3"></span>
+                <div class="viz-play"></div>
+                <div class="viz-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+            </div>
+            <div class="svc-copy">
+              <p class="svc-desc">Micro-interactions, page transitions and product films. The layer of craft users can't articulate but always feel.</p>
+              <ul class="svc-tags"><li>Micro-interactions</li><li>Transitions</li><li>Product film</li></ul>
+            </div>
           </div>
         </div>
       </div>
