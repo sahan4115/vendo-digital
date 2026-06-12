@@ -24,7 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return bool
  */
 function vendo_seo_plugin_active() {
-	return defined( 'WPSEO_VERSION' )        // Yoast.
+	return defined( 'VENDO_SEO_VERSION' )    // The standalone Vendo SEO plugin.
+		|| defined( 'WPSEO_VERSION' )        // Yoast.
 		|| defined( 'RANK_MATH_VERSION' )    // Rank Math.
 		|| defined( 'AIOSEO_VERSION' )       // All in One SEO.
 		|| defined( 'SEOPRESS_VERSION' )     // SEOPress.
