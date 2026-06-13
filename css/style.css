@@ -1042,8 +1042,16 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
   clip-path: inset(-5% 100% -5% 0);
   will-change: clip-path;
 }
-.fword i { font-style: normal; }
-.fword-fill i { color: var(--white); }
+/* Square brand dot — identical box in both layers so they overlap exactly
+   (a stroked period glyph rendered as a dark hollow square that peeked out). */
+.fword i {
+  font-style: normal; color: transparent;
+  display: inline-block; vertical-align: baseline;
+  width: 0.13em; height: 0.13em; margin-left: 0.05em;
+  border-radius: 0.02em; overflow: hidden;
+}
+.fword-outline i { background: rgba(142, 254, 187, 0.35); }
+.fword-fill i { background: var(--white); }
 html.no-gsap .fword-fill { clip-path: none; }
 
 .frow {
