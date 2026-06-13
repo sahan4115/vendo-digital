@@ -1039,7 +1039,7 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
 .fword-fill {
   position: absolute; inset: 0; display: block;
   color: var(--green);
-  clip-path: inset(-5% 100% -5% 0);
+  clip-path: inset(-30% 100% -30% 0);
   will-change: clip-path;
 }
 /* Square brand dot — identical box in both layers so they overlap exactly

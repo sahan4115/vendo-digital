@@ -507,7 +507,7 @@
 
       if (prefersReduced) {
         panel.classList.add("is-active");
-        if (fill) fill.style.clipPath = "inset(-5% 0% -5% 0)";
+        if (fill) fill.style.clipPath = "inset(-30% 0% -30% 0)";
         return;
       }
 
@@ -544,7 +544,7 @@
       ScrollTrigger.create({
         trigger: wrap, start: "top top", end: "bottom bottom", scrub: 0.3,
         onUpdate: function (self) {
-          if (fill) fill.style.clipPath = "inset(-5% " + (100 - self.progress * 100) + "% -5% 0)";
+          if (fill) fill.style.clipPath = "inset(-30% " + (100 - self.progress * 100) + "% -30% 0)";
         }
       });
     });
