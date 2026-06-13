@@ -125,24 +125,9 @@
           </div>
         </form>
 
-        <!-- INFO: hours + quick contacts -->
+        <!-- INFO: intro + quick contacts -->
         <aside class="cinfo">
-          <div class="chours">
-            <div class="chours-head">
-              <h3>Opening hours</h3>
-              <span class="chours-status" id="hoursStatus">—</span>
-            </div>
-            <ul class="chours-list" id="hoursList">
-              <li data-day="1"><span>Monday</span><span>9:00 – 17:30</span></li>
-              <li data-day="2"><span>Tuesday</span><span>9:00 – 17:30</span></li>
-              <li data-day="3"><span>Wednesday</span><span>9:00 – 17:30</span></li>
-              <li data-day="4"><span>Thursday</span><span>9:00 – 17:30</span></li>
-              <li data-day="5"><span>Friday</span><span>9:00 – 17:30</span></li>
-              <li data-day="6"><span>Saturday</span><span class="closed">Closed</span></li>
-              <li data-day="0"><span>Sunday</span><span class="closed">Closed</span></li>
-            </ul>
-          </div>
-
+          <p class="cintro-lead">Prefer to write it down? Tell us what you're trying to grow and we'll send a free, human-written audit — what's leaking, what it's costing you, and what we'd do about it.</p>
           <div class="cquick">
             <a class="cquick-row" href="mailto:hello@vendodigital.co.uk" data-cursor="Email">
               <span class="cq-ico">✉</span>
@@ -155,31 +140,67 @@
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
+          <p class="cintro-fine">No account-manager layer — the person who replies is the one who'd do the work.</p>
         </aside>
       </div>
     </section>
 
-    <!-- ════════ MAP ════════ -->
-    <section class="manifesto">
+    <!-- ════════ MAP (immersive) ════════ -->
+    <section class="cmap-section">
       <div class="section-head">
         <span class="section-num">02</span>
         <span class="section-tag">Find the studio</span>
-        <span class="section-hint">5 Sandiford Road, Sutton, Surrey</span>
+        <span class="section-hint">Sutton, Surrey · since 2019</span>
       </div>
-      <div class="cmap" id="cmap">
-        <div class="cmap-card">
-          <span class="cmap-pin">📍</span>
-          <strong>Vendo Digital</strong>
-          <span>5 Sandiford Road<br/>Sutton, Surrey SM3 9RN</span>
-          <a class="fork-link" href="https://www.google.com/maps/search/?api=1&amp;query=5+Sandiford+Road+Sutton+Surrey+SM3+9RN" target="_blank" rel="noopener">Get directions <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        </div>
+
+      <div class="cmap-xl" id="cmap">
         <iframe
           class="cmap-frame"
           title="Map showing Vendo Digital, 5 Sandiford Road, Sutton, Surrey"
           src="https://www.google.com/maps?q=5%20Sandiford%20Road,%20Sutton,%20Surrey%20SM3%209RN&output=embed"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+        <!-- animated marker (decorative, centred over the embed) -->
+        <span class="cmap-beacon" aria-hidden="true"><i></i></span>
+
+        <div class="cmap-overlays">
+          <!-- address card -->
+          <div class="cmap-card" data-magnetic>
+            <span class="cmap-tag">📍 The studio</span>
+            <strong>Vendo Digital</strong>
+            <span class="cmap-addr" id="cmapAddr">5 Sandiford Road<br/>Sutton, Surrey SM3 9RN</span>
+            <div class="cmap-actions">
+              <a class="btn btn-hero cmap-go" href="https://www.google.com/maps/search/?api=1&amp;query=5+Sandiford+Road+Sutton+Surrey+SM3+9RN" target="_blank" rel="noopener" data-magnetic data-cursor="Directions">
+                <span class="btn-fill"></span><span class="btn-label">Directions</span>
+                <svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <button type="button" class="cmap-copy" id="cmapCopy" aria-label="Copy address">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- opening hours panel -->
+          <div class="chours chours-onmap">
+            <div class="chours-head">
+              <h3>Opening hours</h3>
+              <span class="chours-status" id="hoursStatus">—</span>
+            </div>
+            <ul class="chours-list" id="hoursList">
+              <li data-day="1"><span>Mon</span><span>9:00 – 17:30</span></li>
+              <li data-day="2"><span>Tue</span><span>9:00 – 17:30</span></li>
+              <li data-day="3"><span>Wed</span><span>9:00 – 17:30</span></li>
+              <li data-day="4"><span>Thu</span><span>9:00 – 17:30</span></li>
+              <li data-day="5"><span>Fri</span><span>9:00 – 17:30</span></li>
+              <li data-day="6"><span>Sat</span><span class="closed">Closed</span></li>
+              <li data-day="0"><span>Sun</span><span class="closed">Closed</span></li>
+            </ul>
+          </div>
+        </div>
       </div>
+    </section>
     </section>
 
     <!-- ════════ CTA ════════ -->

@@ -679,6 +679,30 @@
     }
   })();
 
+  /* ════════ CONTACT — copy address ════════ */
+  (function copyAddress() {
+    var btn = document.getElementById("cmapCopy");
+    var addr = document.getElementById("cmapAddr");
+    if (!btn || !addr) return;
+    var label = btn.querySelector("span");
+    btn.addEventListener("click", function () {
+      var text = addr.textContent.replace(/\s*\n\s*/g, ", ").replace(/\s+/g, " ").trim();
+      var done = function () {
+        btn.classList.add("is-copied");
+        if (label) label.textContent = "Copied";
+        setTimeout(function () { btn.classList.remove("is-copied"); if (label) label.textContent = "Copy"; }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); } catch (e) {}
+        ta.remove(); done();
+      }
+    });
+  })();
+
   /* ════════ CONTACT — interactive enquiry form ════════ */
   (function contactForm() {
     var form = document.getElementById("cform");
