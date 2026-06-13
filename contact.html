@@ -60,61 +60,126 @@
       </div>
     </section>
 
-    <!-- ════════ WAYS IN ════════ -->
+    <!-- ════════ FORM + INFO ════════ -->
     <section class="manifesto">
       <div class="section-head">
         <span class="section-num">01</span>
-        <span class="section-tag">Pick whichever suits you</span>
+        <span class="section-tag">Tell us what you're growing</span>
+        <span class="section-hint">We reply within one working day</span>
       </div>
-      <div class="contact-grid">
-        <a class="ccard" href="mailto:hello@vendodigital.co.uk?subject=Free%20site%20audit" data-tilt data-cursor="Email">
-          <span class="c-ico">✉️</span>
-          <h3>Email us</h3>
-          <span class="c-text">hello@vendodigital.co.uk</span>
-          <span class="c-text">Best for sharing your website link and a sentence on what you need.</span>
-        </a>
-        <a class="ccard" href="tel:02071014967" data-tilt data-cursor="Call">
-          <span class="c-ico">📞</span>
-          <h3>Call us</h3>
-          <span class="c-text">0207 101 4967</span>
-          <span class="c-text">You'll get a specialist, not a switchboard.</span>
-        </a>
-        <div class="ccard" data-tilt>
-          <span class="c-ico">💬</span>
-          <h3>Chat to Venny</h3>
-          <span class="c-text">Bottom-right corner of this page.</span>
-          <span class="c-text">Answers questions instantly and takes your details for the team.</span>
-        </div>
+
+      <div class="contact-split">
+        <!-- FORM -->
+        <form class="cform" id="cform" novalidate>
+          <p class="cform-lead">Which service are you after?</p>
+          <div class="cform-pills" id="cformPills" role="radiogroup" aria-label="Service of interest">
+            <button type="button" class="cform-pill is-on" data-val="Not sure yet" role="radio" aria-checked="true">Not sure yet</button>
+            <button type="button" class="cform-pill" data-val="Web Design" role="radio" aria-checked="false">Web Design</button>
+            <button type="button" class="cform-pill" data-val="Google Ads" role="radio" aria-checked="false">Google Ads</button>
+            <button type="button" class="cform-pill" data-val="SEO" role="radio" aria-checked="false">SEO</button>
+            <button type="button" class="cform-pill" data-val="Dental marketing" role="radio" aria-checked="false">Dental</button>
+            <button type="button" class="cform-pill" data-val="E-commerce" role="radio" aria-checked="false">E-commerce</button>
+          </div>
+          <input type="hidden" name="topic" id="cformTopic" value="Not sure yet" />
+
+          <div class="cfield">
+            <input type="text" id="cf-name" name="name" placeholder=" " autocomplete="name" required />
+            <label for="cf-name">Your name</label>
+            <span class="cfield-err" data-for="cf-name"></span>
+          </div>
+          <div class="cfield-row">
+            <div class="cfield">
+              <input type="email" id="cf-email" name="email" placeholder=" " autocomplete="email" required />
+              <label for="cf-email">Email</label>
+              <span class="cfield-err" data-for="cf-email"></span>
+            </div>
+            <div class="cfield">
+              <input type="tel" id="cf-phone" name="phone" placeholder=" " autocomplete="tel" />
+              <label for="cf-phone">Phone <i>(optional)</i></label>
+            </div>
+          </div>
+          <div class="cfield">
+            <input type="url" id="cf-site" name="site" placeholder=" " autocomplete="url" />
+            <label for="cf-site">Website <i>(optional)</i></label>
+          </div>
+          <div class="cfield">
+            <textarea id="cf-msg" name="message" rows="4" placeholder=" " required></textarea>
+            <label for="cf-msg">What do you need help with?</label>
+            <span class="cfield-err" data-for="cf-msg"></span>
+          </div>
+
+          <!-- honeypot: humans never fill this -->
+          <input type="text" name="website" id="cf-hp" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <button type="submit" class="btn btn-hero cform-submit" data-magnetic>
+            <span class="btn-fill"></span><span class="btn-label">Send enquiry</span>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <p class="cform-note">Or email <a href="mailto:hello@vendodigital.co.uk">hello@vendodigital.co.uk</a> · call <a href="tel:02071014967">0207 101 4967</a></p>
+
+          <!-- success state -->
+          <div class="cform-done" id="cformDone" hidden>
+            <span class="cform-check" aria-hidden="true"></span>
+            <h3>Got it — thank you!</h3>
+            <p id="cformDoneMsg">Your enquiry is on its way. We'll reply within one working day, usually faster.</p>
+          </div>
+        </form>
+
+        <!-- INFO: hours + quick contacts -->
+        <aside class="cinfo">
+          <div class="chours">
+            <div class="chours-head">
+              <h3>Opening hours</h3>
+              <span class="chours-status" id="hoursStatus">—</span>
+            </div>
+            <ul class="chours-list" id="hoursList">
+              <li data-day="1"><span>Monday</span><span>9:00 – 17:30</span></li>
+              <li data-day="2"><span>Tuesday</span><span>9:00 – 17:30</span></li>
+              <li data-day="3"><span>Wednesday</span><span>9:00 – 17:30</span></li>
+              <li data-day="4"><span>Thursday</span><span>9:00 – 17:30</span></li>
+              <li data-day="5"><span>Friday</span><span>9:00 – 17:30</span></li>
+              <li data-day="6"><span>Saturday</span><span class="closed">Closed</span></li>
+              <li data-day="0"><span>Sunday</span><span class="closed">Closed</span></li>
+            </ul>
+          </div>
+
+          <div class="cquick">
+            <a class="cquick-row" href="mailto:hello@vendodigital.co.uk" data-cursor="Email">
+              <span class="cq-ico">✉</span>
+              <span><strong>hello@vendodigital.co.uk</strong><em>Replies within 24h</em></span>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="cquick-row" href="tel:02071014967" data-cursor="Call">
+              <span class="cq-ico">☎</span>
+              <span><strong>0207 101 4967</strong><em>A specialist, not a switchboard</em></span>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <!-- ════════ WHAT THE AUDIT COVERS ════════ -->
-    <section class="fork">
-      <div class="section-head">
-        <span class="section-num">02</span>
-        <span class="section-tag">What the free audit covers</span>
-      </div>
-      <div class="fork-grid">
-        <div class="fork-card" data-tilt>
-          <span class="fork-icon">🔍</span>
-          <h3>Your website</h3>
-          <p>Speed, mobile experience and the conversion path — where visitors give up, and why.</p>
-        </div>
-        <div class="fork-card" data-tilt>
-          <span class="fork-icon">📈</span>
-          <h3>Your ads &amp; rankings</h3>
-          <p>Where your spend is leaking, which searches you should own, and the plan we'd run — with numbers attached.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════ OFFICE ════════ -->
+    <!-- ════════ MAP ════════ -->
     <section class="manifesto">
       <div class="section-head">
-        <span class="section-num">03</span>
-        <span class="section-tag">The office</span>
+        <span class="section-num">02</span>
+        <span class="section-tag">Find the studio</span>
+        <span class="section-hint">5 Sandiford Road, Sutton, Surrey</span>
       </div>
-      <p class="manifesto-text">5 Sandiford Road, Sutton, Surrey SM3 9RN. Working with businesses across the UK since 2019 — and yes, Winston and Gus will hear you arrive before we do.</p>
+      <div class="cmap" id="cmap">
+        <div class="cmap-card">
+          <span class="cmap-pin">📍</span>
+          <strong>Vendo Digital</strong>
+          <span>5 Sandiford Road<br/>Sutton, Surrey SM3 9RN</span>
+          <a class="fork-link" href="https://www.google.com/maps/search/?api=1&amp;query=5+Sandiford+Road+Sutton+Surrey+SM3+9RN" target="_blank" rel="noopener">Get directions <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <iframe
+          class="cmap-frame"
+          title="Map showing Vendo Digital, 5 Sandiford Road, Sutton, Surrey"
+          src="https://www.google.com/maps?q=5%20Sandiford%20Road,%20Sutton,%20Surrey%20SM3%209RN&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
     </section>
 
     <!-- ════════ CTA ════════ -->

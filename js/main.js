@@ -653,6 +653,136 @@
     }
   })();
 
+  /* ════════ CONTACT — opening hours live status ════════ */
+  (function openingHours() {
+    var list = document.getElementById("hoursList");
+    var status = document.getElementById("hoursStatus");
+    if (!list) return;
+    var now = new Date();
+    var day = now.getDay();                 // 0 Sun … 6 Sat
+    var mins = now.getHours() * 60 + now.getMinutes();
+    var OPEN = 9 * 60, CLOSE = 17 * 60 + 30; // 09:00–17:30
+    var weekday = day >= 1 && day <= 5;
+    var isOpen = weekday && mins >= OPEN && mins < CLOSE;
+
+    var row = list.querySelector('[data-day="' + day + '"]');
+    if (row) row.classList.add("is-today");
+
+    if (status) {
+      if (isOpen) {
+        status.textContent = "Open now";
+        status.classList.add("is-open");
+      } else {
+        status.textContent = "Closed";
+        status.classList.add("is-closed");
+      }
+    }
+  })();
+
+  /* ════════ CONTACT — interactive enquiry form ════════ */
+  (function contactForm() {
+    var form = document.getElementById("cform");
+    if (!form) return;
+
+    var CFG = window.VENDO_CHAT_CFG || null; // present when served by the WP chat plugin
+    var EMAIL = (CFG && CFG.email) || "hello@vendodigital.co.uk";
+
+    // service pills → hidden topic field
+    var pills = Array.prototype.slice.call(form.querySelectorAll(".cform-pill"));
+    var topic = document.getElementById("cformTopic");
+    pills.forEach(function (pill) {
+      pill.addEventListener("click", function () {
+        pills.forEach(function (p) { p.classList.remove("is-on"); p.setAttribute("aria-checked", "false"); });
+        pill.classList.add("is-on"); pill.setAttribute("aria-checked", "true");
+        if (topic) topic.value = pill.getAttribute("data-val");
+      });
+    });
+
+    function field(id) { return document.getElementById(id); }
+    function setError(input, msg) {
+      var wrap = input.closest(".cfield");
+      var err = wrap && wrap.querySelector(".cfield-err");
+      if (msg) { wrap.classList.add("is-invalid"); if (err) err.textContent = msg; }
+      else { wrap.classList.remove("is-invalid"); if (err) err.textContent = ""; }
+      return !msg;
+    }
+    // clear an error as the user fixes it
+    ["cf-name", "cf-email", "cf-msg"].forEach(function (id) {
+      var el = field(id);
+      if (el) el.addEventListener("input", function () { if (el.closest(".cfield").classList.contains("is-invalid")) setError(el, ""); });
+    });
+
+    function validate() {
+      var ok = true;
+      var name = field("cf-name"), email = field("cf-email"), msg = field("cf-msg");
+      if (!name.value.trim()) ok = setError(name, "Please tell us your name.") && ok;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) ok = setError(email, "Enter a valid email address.") && ok;
+      else setError(email, "");
+      if (name.value.trim()) setError(name, "");
+      if (msg.value.trim().length < 4) ok = setError(msg, "A sentence about what you need is plenty.") && ok;
+      else setError(msg, "");
+      return ok;
+    }
+
+    function showDone(message) {
+      var done = document.getElementById("cformDone");
+      var dm = document.getElementById("cformDoneMsg");
+      if (dm && message) dm.textContent = message;
+      form.classList.add("is-sent");
+      if (done) done.hidden = false;
+    }
+
+    function mailtoFallback(d) {
+      var body = "Name: " + d.name + "\nEmail: " + d.email +
+        (d.phone ? "\nPhone: " + d.phone : "") +
+        (d.site ? "\nWebsite: " + d.site : "") +
+        "\nService: " + d.topic + "\n\n" + d.message;
+      window.location.href = "mailto:" + EMAIL +
+        "?subject=" + encodeURIComponent("Enquiry — " + d.topic) +
+        "&body=" + encodeURIComponent(body);
+      showDone("Your email app should have opened with the message ready to send. If it didn't, reach us at " + EMAIL + ".");
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      // honeypot — silently "succeed" for bots
+      var hp = field("cf-hp");
+      if (hp && hp.value !== "") { showDone(); return; }
+      if (!validate()) {
+        var bad = form.querySelector(".cfield.is-invalid input, .cfield.is-invalid textarea");
+        if (bad) bad.focus();
+        return;
+      }
+      var d = {
+        name: field("cf-name").value.trim(),
+        email: field("cf-email").value.trim(),
+        phone: field("cf-phone").value.trim(),
+        site: field("cf-site").value.trim(),
+        topic: (topic && topic.value) || "Enquiry",
+        message: field("cf-msg").value.trim()
+      };
+
+      var submitBtn = form.querySelector(".cform-submit .btn-label");
+      if (submitBtn) submitBtn.textContent = "Sending…";
+
+      if (CFG && CFG.restUrl) {
+        fetch(CFG.restUrl + "enquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: d.name, email: d.email, phone: d.phone, topic: d.topic, message: d.message + (d.site ? "\n\nWebsite: " + d.site : ""), website: "" })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (res) {
+            if (res && res.ok) showDone();
+            else mailtoFallback(d);
+          })
+          .catch(function () { mailtoFallback(d); });
+      } else {
+        mailtoFallback(d);
+      }
+    });
+  })();
+
   /* ════════ SERVICE CARDS — cursor-tracking glow ════════ */
   (function serviceCards() {
     if (!finePointer || prefersReduced) return;

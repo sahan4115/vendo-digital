@@ -1328,6 +1328,177 @@ html.no-gsap .fword-fill { clip-path: none; }
 .ccard a, .ccard .c-text { color: var(--gray); font-size: 15px; transition: color .3s; }
 .ccard a:hover { color: var(--green); }
 
+/* ── Contact: form + info split ─────────────── */
+.contact-split {
+  display: grid; gap: clamp(20px, 3vw, 44px);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 920px) { .contact-split { grid-template-columns: 1.25fr 0.75fr; align-items: start; } }
+
+.cform { position: relative; }
+.cform-lead {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 14px; letter-spacing: 0.04em; color: var(--gray);
+  margin-bottom: 12px;
+}
+.cform-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(22px, 3vw, 32px); }
+.cform-pill {
+  font-family: var(--font-display); font-weight: 700; font-size: 13px;
+  color: var(--gray);
+  border: 1px solid var(--charcoal); border-radius: 100px;
+  padding: 8px 16px; cursor: pointer;
+  transition: color .3s, border-color .3s, background-color .3s, transform .2s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.cform-pill:hover { color: var(--white); border-color: rgba(142,254,187,0.4); transform: translateY(-2px); }
+.cform-pill.is-on { background: var(--green); border-color: var(--green); color: var(--black); }
+.cform-pill:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+/* floating-label fields */
+.cfield { position: relative; margin-bottom: 16px; }
+.cfield-row { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 560px) { .cfield-row { grid-template-columns: 1fr 1fr; } }
+.cfield input, .cfield textarea {
+  width: 100%;
+  background: rgba(9, 34, 31, 0.4);
+  border: 1px solid var(--sage);
+  border-radius: 12px;
+  color: var(--white);
+  font-family: var(--font-body); font-size: 16px;
+  padding: 20px 16px 8px;
+  outline: none;
+  transition: border-color .35s, background-color .35s, box-shadow .35s;
+  resize: vertical;
+}
+.cfield textarea { padding-top: 24px; min-height: 120px; }
+.cfield label {
+  position: absolute; left: 16px; top: 15px;
+  color: var(--gray); font-size: 16px;
+  pointer-events: none;
+  transition: transform .25s var(--ease), color .25s, font-size .25s;
+}
+.cfield label i { font-style: normal; color: var(--charcoal); }
+.cfield input:focus, .cfield textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(142, 254, 187, 0.12); }
+.cfield input:focus + label,
+.cfield input:not(:placeholder-shown) + label,
+.cfield textarea:focus + label,
+.cfield textarea:not(:placeholder-shown) + label {
+  transform: translateY(-12px); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green);
+}
+.cfield.is-invalid input, .cfield.is-invalid textarea { border-color: #ff6b5e; }
+.cfield-err {
+  display: block; min-height: 0; overflow: hidden;
+  color: #ff8b80; font-size: 12.5px;
+  max-height: 0; transition: max-height .3s var(--ease), margin .3s;
+}
+.cfield.is-invalid .cfield-err { max-height: 30px; margin-top: 6px; }
+
+.cf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+.cform-submit { margin-top: 8px; }
+.cform-note { margin-top: 16px; font-size: 13.5px; color: var(--gray); }
+.cform-note a { color: var(--green); }
+.cform-note a:hover { text-decoration: underline; }
+
+/* success state */
+.cform.is-sent > :not(.cform-done) { display: none; }
+.cform-done { text-align: center; padding: clamp(30px, 6vw, 60px) 0; }
+.cform-check {
+  display: inline-grid; place-items: center;
+  width: 64px; height: 64px; margin-bottom: 18px;
+  border-radius: 50%; background: var(--green);
+  position: relative;
+  animation: cPop .5s var(--ease) both;
+}
+.cform-check::after {
+  content: ""; width: 22px; height: 12px;
+  border-left: 3px solid var(--black); border-bottom: 3px solid var(--black);
+  transform: rotate(-45deg) translate(1px, -2px);
+}
+@keyframes cPop { from { transform: scale(0); } 70% { transform: scale(1.15); } to { transform: scale(1); } }
+.cform-done h3 { font-size: clamp(24px, 3vw, 34px); margin-bottom: 10px; }
+.cform-done p { color: var(--gray); max-width: 40ch; margin: 0 auto; }
+
+/* ── Contact: opening hours + quick links ───── */
+.cinfo { display: flex; flex-direction: column; gap: clamp(16px, 2vw, 22px); }
+.chours, .cquick {
+  border: 1px solid var(--sage); border-radius: var(--radius);
+  background: linear-gradient(160deg, rgba(9,34,31,0.6), rgba(5,20,18,0.3));
+  padding: clamp(22px, 2.6vw, 32px);
+}
+.chours-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.chours-head h3 { font-size: clamp(18px, 2.2vw, 22px); }
+.chours-status {
+  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 100px;
+  border: 1px solid var(--charcoal); color: var(--gray);
+}
+.chours-status.is-open { background: rgba(142,254,187,0.15); border-color: var(--green); color: var(--green); }
+.chours-status.is-closed { color: var(--gray); }
+.chours-list { list-style: none; }
+.chours-list li {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 9px 12px; border-radius: 8px;
+  font-size: 14.5px; color: var(--gray);
+  transition: background-color .3s, color .3s;
+}
+.chours-list li span:last-child { color: var(--white); }
+.chours-list li .closed { color: var(--charcoal); }
+.chours-list li.is-today {
+  background: rgba(142, 254, 187, 0.1);
+  color: var(--white);
+}
+.chours-list li.is-today span:first-child { color: var(--green); font-weight: 600; }
+
+.cquick { display: flex; flex-direction: column; gap: 4px; padding-top: 12px; padding-bottom: 12px; }
+.cquick-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 12px; border-radius: 12px;
+  transition: background-color .3s;
+}
+.cquick-row:hover { background: rgba(142, 254, 187, 0.08); }
+.cq-ico {
+  flex: 0 0 auto; width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: 50%; background: var(--sage); color: var(--green);
+  font-size: 17px;
+}
+.cquick-row span:nth-child(2) { flex: 1; display: flex; flex-direction: column; }
+.cquick-row strong { font-family: var(--font-display); font-size: 15px; }
+.cquick-row em { font-style: normal; color: var(--gray); font-size: 12.5px; margin-top: 2px; }
+.cquick-row svg { width: 18px; height: 18px; color: var(--green); transition: transform .35s var(--ease); }
+.cquick-row:hover svg { transform: translateX(5px); }
+
+/* ── Contact: map ───────────────────────────── */
+.cmap {
+  position: relative;
+  border: 1px solid var(--sage); border-radius: var(--radius);
+  overflow: hidden;
+  min-height: clamp(320px, 44vh, 480px);
+  background: var(--sage);
+}
+.cmap-frame {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: 0;
+  filter: grayscale(1) invert(0.92) hue-rotate(120deg) brightness(0.95) contrast(0.9);
+  transition: filter .5s var(--ease);
+}
+.cmap:hover .cmap-frame { filter: grayscale(0.2) invert(0.9) hue-rotate(115deg) brightness(1); }
+.cmap-card {
+  position: absolute; z-index: 1; left: clamp(16px, 2.5vw, 32px); bottom: clamp(16px, 2.5vw, 32px);
+  max-width: 280px;
+  display: flex; flex-direction: column; gap: 6px;
+  padding: clamp(18px, 2.2vw, 26px);
+  border: 1px solid rgba(142, 254, 187, 0.3); border-radius: 16px;
+  background: rgba(5, 20, 18, 0.86);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.cmap-pin { font-size: 22px; }
+.cmap-card strong { font-family: var(--font-display); font-size: 18px; }
+.cmap-card span { color: var(--gray); font-size: 14px; line-height: 1.5; }
+.cmap-card .fork-link { margin-top: 8px; }
+
 /* ── Service detail blocks (services page) ──── */
 .svc-detail {
   display: grid; gap: clamp(10px, 2vw, 24px);
