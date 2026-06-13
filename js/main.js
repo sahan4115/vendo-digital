@@ -333,7 +333,7 @@
   (function reveals() {
     if (prefersReduced) return;
     var targets = [
-      ".section-head", ".case", ".meta-card", ".fork-card",
+      ".section-head", ".case", ".meta-card", ".fork-card", ".fx-panel",
       ".svc-detail", ".ccard", ".faq2-item", ".bento-tile", ".tstep", ".srow",
       ".work-more", ".cta-title", ".btn-big", ".cta-note", ".cta-ring"
     ];
@@ -563,6 +563,56 @@
       card.addEventListener("pointerleave", function () {
         card.style.transform = "perspective(700px) rotateX(0deg) rotateY(0deg)";
       });
+    });
+  })();
+
+  /* ════════ NICHE FORK — interactive expanding accordion ════════
+     Desktop: hover/focus expands a panel (others collapse) and plays its
+     SVG visual; a soft spotlight follows the cursor. Touch/mobile: tap a
+     panel to toggle its reveal. Keyboard-accessible via focus + arrows.   */
+  (function forkx() {
+    var root = document.getElementById("forkx");
+    if (!root) return;
+    var panels = Array.prototype.slice.call(root.querySelectorAll(".fx-panel"));
+    var hoverMQ = window.matchMedia("(hover: hover) and (min-width: 900px)");
+
+    function activate(panel) {
+      panels.forEach(function (p) {
+        var on = p === panel;
+        p.classList.toggle("is-active", on);
+        p.setAttribute("aria-expanded", on ? "true" : "false");
+      });
+    }
+
+    panels.forEach(function (panel, i) {
+      panel.addEventListener("mouseenter", function () {
+        if (hoverMQ.matches) activate(panel);
+      });
+      panel.addEventListener("focus", function () {
+        if (hoverMQ.matches) activate(panel);
+      });
+      panel.addEventListener("click", function () {
+        // on touch/stacked layout, toggle; on desktop, just ensure active
+        if (hoverMQ.matches) { activate(panel); return; }
+        if (panel.classList.contains("is-active")) {
+          panel.classList.remove("is-active");
+          panel.setAttribute("aria-expanded", "false");
+        } else {
+          activate(panel);
+        }
+      });
+      panel.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); panel.click(); }
+        else if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); (panels[i + 1] || panels[0]).focus(); }
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); (panels[i - 1] || panels[panels.length - 1]).focus(); }
+      });
+      if (finePointer) {
+        panel.addEventListener("pointermove", function (e) {
+          var r = panel.getBoundingClientRect();
+          panel.style.setProperty("--mx", (e.clientX - r.left) + "px");
+          panel.style.setProperty("--my", (e.clientY - r.top) + "px");
+        });
+      }
     });
   })();
 
