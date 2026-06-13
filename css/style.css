@@ -1287,15 +1287,28 @@ html.no-gsap .fword-fill { clip-path: none; }
 @keyframes veilUp { to { transform: scaleY(0); visibility: hidden; } }
 
 .page-hero {
-  position: relative;
+  position: relative; overflow: hidden;
   min-height: 56svh;
   display: flex; align-items: flex-end;
   padding: calc(var(--nav-h) + clamp(48px, 9vh, 96px)) var(--pad) clamp(36px, 6vh, 64px);
   border-bottom: 1px solid var(--sage);
   background: radial-gradient(90% 90% at 85% 0%, rgba(9, 34, 31, 0.8), transparent 60%);
 }
+.page-hero .hero-inner { position: relative; z-index: 2; }
 .page-hero .hero-title { font-size: clamp(48px, 10vw, 132px); }
 .page-hero .hero-sub { margin-top: clamp(20px, 3.5vh, 36px); max-width: 52ch; }
+
+/* interactive cursor glow behind the inner-page hero (injected by JS) */
+.hero-glow {
+  position: absolute; top: 0; left: 0; z-index: 1;
+  width: clamp(380px, 44vw, 640px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(142,254,187,0.20), rgba(142,254,187,0.06) 42%, transparent 70%);
+  filter: blur(46px); mix-blend-mode: screen;
+  pointer-events: none; opacity: 0;
+  transition: opacity .55s var(--ease);
+  will-change: transform, opacity;
+}
+.hero-glow.is-on { opacity: 1; }
 
 /* persistent underline + full white for the current page's nav link */
 .nav-links a.is-active { color: var(--white); }

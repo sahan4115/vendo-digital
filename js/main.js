@@ -616,6 +616,39 @@
     });
   })();
 
+  /* ════════ INNER-PAGE HERO — cursor-following glow ════════
+     A soft brand-green blob trails the cursor behind the heading on the
+     inner pages' .page-hero. Injected so it works on every inner page.   */
+  (function heroGlow() {
+    var hero = document.querySelector(".page-hero");
+    if (!hero || !finePointer || prefersReduced) return;
+
+    var glow = document.createElement("div");
+    glow.className = "hero-glow";
+    glow.setAttribute("aria-hidden", "true");
+    hero.insertBefore(glow, hero.firstChild);
+
+    gsap.set(glow, { xPercent: -50, yPercent: -50 });
+    var xTo = gsap.quickTo(glow, "x", { duration: 0.6, ease: "power3.out" });
+    var yTo = gsap.quickTo(glow, "y", { duration: 0.6, ease: "power3.out" });
+
+    hero.addEventListener("pointerenter", function (e) {
+      if (e.pointerType === "touch") return;
+      var r = hero.getBoundingClientRect();
+      // snap to cursor before fading in so it doesn't slide from the corner
+      gsap.set(glow, { x: e.clientX - r.left, y: e.clientY - r.top });
+      glow.classList.add("is-on");
+    });
+    hero.addEventListener("pointermove", function (e) {
+      if (e.pointerType === "touch") return;
+      var r = hero.getBoundingClientRect();
+      xTo(e.clientX - r.left); yTo(e.clientY - r.top);
+    });
+    hero.addEventListener("pointerleave", function () {
+      glow.classList.remove("is-on");
+    });
+  })();
+
   /* ════════ HERO PARALLAX ON SCROLL ════════ */
   (function heroParallax() {
     if (prefersReduced) return;
