@@ -88,57 +88,76 @@
       <div class="section-head">
         <span class="section-num">02</span>
         <span class="section-tag">The roster</span>
-        <span class="section-hint">Hover a name — or tap, on a phone</span>
+        <span class="section-hint">Drag sideways — or use the arrows</span>
       </div>
 
-      <ul class="team-list" id="teamList">
-        <li class="tmember" tabindex="0" data-spec="Google Ads strategy — formerly at Google. Campaigns aimed at buyers, not browsers.">
-          <span class="t-idx">01</span><span class="t-name">Max Rivens</span><span class="t-role">Head of Paid Media</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="Technical SEO, digital PR and brand storytelling.">
-          <span class="t-idx">02</span><span class="t-name">Alfie Wakelin</span><span class="t-role">Head of Web, SEO &amp; PR</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="Meta performance marketing — audiences that actually convert.">
-          <span class="t-idx">03</span><span class="t-name">Toby Raeburn</span><span class="t-role">Head of Paid Social</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="WordPress and Shopify builds since 2019.">
-          <span class="t-idx">04</span><span class="t-name">Dilith Nanayakkara</span><span class="t-role">Lead Web Developer</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="Dental marketing specialist — fills appointment books.">
-          <span class="t-idx">05</span><span class="t-name">Sam Franks</span><span class="t-role">PPC Account Manager</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="E-commerce PPC — ROAS, not vanity clicks.">
-          <span class="t-idx">06</span><span class="t-name">Jake Dennis</span><span class="t-role">PPC Account Manager</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="Organic growth and outreach.">
-          <span class="t-idx">07</span><span class="t-name">Chris Tomkins</span><span class="t-role">SEO Account Manager</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="SEO and publisher outreach.">
-          <span class="t-idx">08</span><span class="t-name">Sara Jukes</span><span class="t-role">SEO Account Manager</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="Digital PR campaigns that earn links.">
-          <span class="t-idx">09</span><span class="t-name">Chloe Gleeson</span><span class="t-role">Content Writer</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="Website and PR content — no jargon, no waffle.">
-          <span class="t-idx">10</span><span class="t-name">Alexis Rivens</span><span class="t-role">Content Writer</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="10+ years of agency operations.">
-          <span class="t-idx">11</span><span class="t-name">Juliette Elliott</span><span class="t-role">Operations &amp; Finance</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="Keeps the numbers honest.">
-          <span class="t-idx">12</span><span class="t-name">Charlie Wood</span><span class="t-role">Finance Administrator</span>
-        </li>
-        <li class="tmember" tabindex="0" data-spec="15 years of operational leadership.">
-          <span class="t-idx">13</span><span class="t-name">Lyndsay Morgan</span><span class="t-role">Non-Exec Director</span>
-        </li>
-      </ul>
+      <div class="roster" id="roster">
+        <div class="roster-track" id="rosterTrack" data-cursor="Drag" tabindex="0" aria-label="Team roster — scroll horizontally">
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-01.webp')" aria-hidden="true"></span><span class="rc-spec">Google Ads strategy — formerly at Google. Campaigns aimed at buyers, not browsers.</span></div>
+            <div class="rc-meta"><span class="rc-idx">01</span><div><h3>Max Rivens</h3><p>Head of Paid Media</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-02.webp')" aria-hidden="true"></span><span class="rc-spec">Technical SEO, digital PR and brand storytelling.</span></div>
+            <div class="rc-meta"><span class="rc-idx">02</span><div><h3>Alfie Wakelin</h3><p>Head of Web, SEO &amp; PR</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-03.webp')" aria-hidden="true"></span><span class="rc-spec">Meta performance marketing — audiences that actually convert.</span></div>
+            <div class="rc-meta"><span class="rc-idx">03</span><div><h3>Toby Raeburn</h3><p>Head of Paid Social</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-04.webp')" aria-hidden="true"></span><span class="rc-spec">WordPress and Shopify builds since 2019.</span></div>
+            <div class="rc-meta"><span class="rc-idx">04</span><div><h3>Dilith Nanayakkara</h3><p>Lead Web Developer</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-05.webp')" aria-hidden="true"></span><span class="rc-spec">Dental marketing specialist — fills appointment books.</span></div>
+            <div class="rc-meta"><span class="rc-idx">05</span><div><h3>Sam Franks</h3><p>PPC Account Manager</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-06.webp')" aria-hidden="true"></span><span class="rc-spec">E-commerce PPC — ROAS, not vanity clicks.</span></div>
+            <div class="rc-meta"><span class="rc-idx">06</span><div><h3>Jake Dennis</h3><p>PPC Account Manager</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-07.webp')" aria-hidden="true"></span><span class="rc-spec">Organic growth and outreach.</span></div>
+            <div class="rc-meta"><span class="rc-idx">07</span><div><h3>Chris Tomkins</h3><p>SEO Account Manager</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-08.webp')" aria-hidden="true"></span><span class="rc-spec">SEO and publisher outreach.</span></div>
+            <div class="rc-meta"><span class="rc-idx">08</span><div><h3>Sara Jukes</h3><p>SEO Account Manager</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-09.webp')" aria-hidden="true"></span><span class="rc-spec">Digital PR campaigns that earn links.</span></div>
+            <div class="rc-meta"><span class="rc-idx">09</span><div><h3>Chloe Gleeson</h3><p>Content Writer</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-10.webp')" aria-hidden="true"></span><span class="rc-spec">Website and PR content — no jargon, no waffle.</span></div>
+            <div class="rc-meta"><span class="rc-idx">10</span><div><h3>Alexis Rivens</h3><p>Content Writer</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-11.webp')" aria-hidden="true"></span><span class="rc-spec">10+ years of agency operations.</span></div>
+            <div class="rc-meta"><span class="rc-idx">11</span><div><h3>Juliette Elliott</h3><p>Operations &amp; Finance</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-12.webp')" aria-hidden="true"></span><span class="rc-spec">Keeps the numbers honest.</span></div>
+            <div class="rc-meta"><span class="rc-idx">12</span><div><h3>Charlie Wood</h3><p>Finance Administrator</p></div></div>
+          </article>
+          <article class="roster-card">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/avatar-13.webp')" aria-hidden="true"></span><span class="rc-spec">15 years of operational leadership.</span></div>
+            <div class="rc-meta"><span class="rc-idx">13</span><div><h3>Lyndsay Morgan</h3><p>Non-Exec Director</p></div></div>
+          </article>
+          <article class="roster-card is-dogs">
+            <div class="rc-art"><span class="rc-img" style="background-image:url('images/team/dogs.webp')" aria-hidden="true"></span><span class="rc-spec">Security, snack inspection and morale. Will hear you arrive before we do.</span></div>
+            <div class="rc-meta"><span class="rc-idx">🐾</span><div><h3>Winston &amp; Gus</h3><p>Chief Morale Officers</p></div></div>
+          </article>
+        </div>
 
-      <p class="team-dogs"><span class="dogs-ava" style="background-image:url('images/team/dogs.webp')" aria-hidden="true"></span><span>+ Winston &amp; Gus <em>— Chief Morale Officers 🐾</em></span></p>
-
-      <div class="team-card" id="teamCard" aria-hidden="true">
-        <span class="tc-avatar"></span>
-        <strong class="tc-role"></strong>
-        <span class="tc-spec"></span>
+        <div class="roster-ui">
+          <div class="roster-progress" aria-hidden="true"><span id="rosterBar"></span></div>
+          <div class="roster-btns">
+            <button class="roster-btn" id="rosterPrev" aria-label="Scroll roster left">←</button>
+            <button class="roster-btn" id="rosterNext" aria-label="Scroll roster right">→</button>
+          </div>
+        </div>
       </div>
     </section>
 

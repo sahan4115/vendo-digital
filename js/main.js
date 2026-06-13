@@ -575,102 +575,82 @@
     });
   })();
 
-  /* ════════ TEAM — typographic index + cursor-chasing card ════════
-     Desktop: hovering a name dims the rest and a profile card chases
-     the cursor, tilting with horizontal velocity. Touch: rows expand
-     to show the specialty line.                                       */
-  (function team() {
-    var list = document.getElementById("teamList");
-    if (!list) return;
-    var rows = Array.prototype.slice.call(list.querySelectorAll(".tmember"));
-    var hoverMQ2 = window.matchMedia("(min-width: 900px) and (hover: hover)");
+  /* ════════ TEAM ROSTER — draggable artwork gallery ════════
+     Grab-and-throw horizontal scrolling on desktop, native swipe with
+     snap on touch, arrow paging, and a progress bar. Tap toggles the
+     specialty overlay on coarse pointers.                              */
+  (function roster() {
+    var track = document.getElementById("rosterTrack");
+    if (!track) return;
+    var cards = Array.prototype.slice.call(track.querySelectorAll(".roster-card"));
+    var bar = document.getElementById("rosterBar");
+    var prev = document.getElementById("rosterPrev");
+    var next = document.getElementById("rosterNext");
 
-    // Inject the tap-to-expand specialty rows (mobile) + avatar thumbs.
-    // Avatar artwork: data-img on the row, or the generated set by index.
-    rows.forEach(function (row, idx) {
-      var img = row.getAttribute("data-img") ||
-        "images/team/avatar-" + String(idx + 1).padStart(2, "0") + ".webp";
-      row.setAttribute("data-img", img);
-      var nameEl = row.querySelector(".t-name");
-      if (nameEl) {
-        var ava = document.createElement("span");
-        ava.className = "t-ava";
-        ava.style.backgroundImage = "url('" + img + "')";
-        nameEl.insertBefore(ava, nameEl.firstChild);
-      }
+    // progress bar + arrow states
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      var p = max > 0 ? track.scrollLeft / max : 0;
+      if (bar) bar.style.transform = "scaleX(" + Math.max(0.04, p) + ")";
+      if (prev) prev.disabled = track.scrollLeft < 4;
+      if (next) next.disabled = track.scrollLeft > max - 4;
+    }
+    track.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
 
-      var d = document.createElement("span");
-      d.className = "t-spec-row";
-      d.textContent = row.getAttribute("data-spec") || "";
-      row.appendChild(d);
-      row.addEventListener("click", function () {
-        if (hoverMQ2.matches) return; // desktop uses the hover card instead
-        var open = row.classList.contains("is-open");
-        rows.forEach(function (r) { r.classList.remove("is-open"); });
-        if (!open) row.classList.add("is-open");
+    // arrow paging: two cards per click
+    function step(dir) {
+      var w = cards[0] ? cards[0].getBoundingClientRect().width + 20 : 320;
+      track.scrollBy({ left: dir * w * 2, behavior: prefersReduced ? "auto" : "smooth" });
+    }
+    if (prev) prev.addEventListener("click", function () { step(-1); });
+    if (next) next.addEventListener("click", function () { step(1); });
+
+    // grab-and-throw drag (mouse/pen — touch already scrolls natively)
+    var down = false, startX = 0, startScroll = 0, moved = false;
+    track.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "touch") return;
+      down = true; moved = false;
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.classList.add("is-drag");
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener("pointermove", function (e) {
+      if (!down) return;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      track.scrollLeft = startScroll - dx;
+    });
+    function release() { down = false; track.classList.remove("is-drag"); }
+    track.addEventListener("pointerup", release);
+    track.addEventListener("pointercancel", release);
+
+    // keyboard support on the focusable track
+    track.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+    });
+
+    // tap-to-reveal specialty on touch devices
+    cards.forEach(function (card) {
+      card.addEventListener("click", function () {
+        if (moved || window.matchMedia("(hover: hover)").matches) return;
+        var open = card.classList.contains("is-open");
+        cards.forEach(function (c) { c.classList.remove("is-open"); });
+        if (!open) card.classList.add("is-open");
       });
     });
 
+    // entrance: cards slide in from the right, staggered
     if (!prefersReduced) {
-      gsap.from(rows, {
-        opacity: 0, y: 30, duration: 0.8, ease: "expo.out", stagger: 0.05,
-        scrollTrigger: { trigger: list, start: "top 82%", once: true }
+      gsap.from(cards, {
+        opacity: 0, x: 90, duration: 0.9, ease: "expo.out", stagger: 0.05,
+        clearProps: "transform,opacity",
+        scrollTrigger: { trigger: track, start: "top 80%", once: true }
       });
     }
-
-    // Cursor-chasing profile card
-    var card = document.getElementById("teamCard");
-    if (!card || prefersReduced) return;
-    var avatar = card.querySelector(".tc-avatar");
-    var roleEl = card.querySelector(".tc-role");
-    var specEl = card.querySelector(".tc-spec");
-    var xTo = gsap.quickTo(card, "x", { duration: 0.45, ease: "power3.out" });
-    var yTo = gsap.quickTo(card, "y", { duration: 0.45, ease: "power3.out" });
-    var rTo = gsap.quickTo(card, "rotation", { duration: 0.6, ease: "power3.out" });
-    var lastX = 0;
-    gsap.set(card, { scale: 0.85 });
-
-    list.addEventListener("pointermove", function (e) {
-      if (!hoverMQ2.matches || e.pointerType === "touch") return;
-      xTo(e.clientX + 24);
-      yTo(e.clientY - 112);
-      var dx = e.clientX - lastX;
-      lastX = e.clientX;
-      rTo(Math.max(-10, Math.min(10, dx * 0.6)));
-    });
-
-    rows.forEach(function (row) {
-      row.addEventListener("pointerenter", function (e) {
-        if (!hoverMQ2.matches || e.pointerType === "touch") return;
-        // First reveal: snap the card to the cursor instantly, otherwise it
-        // visibly flies in from the screen corner (x/y default to 0,0).
-        if (!card.classList.contains("is-on")) {
-          gsap.set(card, { x: e.clientX + 24, y: e.clientY - 112 });
-          lastX = e.clientX;
-        }
-        var img = row.getAttribute("data-img");
-        if (img) {
-          avatar.classList.add("has-img");
-          avatar.style.backgroundImage = "url('" + img + "')";
-          avatar.textContent = "";
-        } else {
-          var name = row.querySelector(".t-name").textContent.trim();
-          avatar.classList.remove("has-img");
-          avatar.style.backgroundImage = "";
-          avatar.textContent = name.split(/\s+/).map(function (w) { return w.charAt(0); }).slice(0, 2).join("").toUpperCase();
-        }
-        roleEl.textContent = row.querySelector(".t-role").textContent;
-        specEl.textContent = row.getAttribute("data-spec") || "";
-        card.classList.add("is-on");
-        gsap.to(card, { scale: 1, duration: 0.4, ease: "back.out(1.6)" });
-      });
-    });
-
-    list.addEventListener("pointerleave", function () {
-      card.classList.remove("is-on");
-      gsap.to(card, { scale: 0.85, duration: 0.3, ease: "power3.out" });
-      rTo(0);
-    });
   })();
 
   /* ════════ FAQ (faq2) — exclusive animated accordion ════════ */

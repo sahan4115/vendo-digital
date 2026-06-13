@@ -979,127 +979,93 @@ html.no-gsap .fword-fill { clip-path: none; }
 }
 .fpanel.is-active .viz-deliver .check { opacity: 1; transform: scale(1); }
 
-/* ── Team — typographic index + cursor card ─── */
-.team { position: relative; }
-.team-list { list-style: none; border-top: 1px solid var(--sage); }
-.tmember {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas: "idx name" "idx role" "idx spec";
-  column-gap: clamp(14px, 3vw, 32px);
-  align-items: baseline;
-  padding: clamp(14px, 2vw, 22px) clamp(4px, 1vw, 12px);
-  border-bottom: 1px solid var(--sage);
-  cursor: pointer;
-  outline: none;
-  transition: opacity .35s var(--ease), background-color .35s;
+/* ── Team roster — draggable artwork gallery ── */
+.roster { position: relative; }
+.roster-track {
+  display: flex; gap: clamp(14px, 1.8vw, 24px);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 6px 6px 18px;
+  cursor: grab;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
-.tmember:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
-.t-idx {
-  grid-area: idx;
+.roster-track::-webkit-scrollbar { display: none; }
+.roster-track.is-drag { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+.roster-track:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+
+.roster-card {
+  flex: 0 0 auto;
+  width: clamp(220px, 24vw, 290px);
+  scroll-snap-align: start;
+}
+.rc-art {
+  position: relative; overflow: hidden;
+  aspect-ratio: 1 / 1.04;
+  border-radius: clamp(14px, 1.6vw, 20px);
+  border: 1px solid rgba(142, 254, 187, 0.18);
+  background-color: var(--sage);
+  transition: border-color .4s, transform .5s var(--ease);
+}
+.rc-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform .7s var(--ease);
+}
+.roster-card:hover .rc-art { border-color: rgba(142, 254, 187, 0.55); transform: translateY(-6px); }
+.roster-card:hover .rc-img { transform: scale(1.07) rotate(-1.5deg); }
+.rc-spec {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+  padding: 48px 16px 14px;
+  font-size: 13.5px; line-height: 1.45; color: var(--white);
+  background: linear-gradient(to top, rgba(5, 20, 18, 0.95), rgba(5, 20, 18, 0.55) 60%, transparent);
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .4s var(--ease), transform .5s var(--ease);
+  pointer-events: none;
+}
+.roster-card:hover .rc-spec, .roster-card.is-open .rc-spec { opacity: 1; transform: none; }
+
+.rc-meta {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 14px 4px 0;
+}
+.rc-idx {
   font-family: var(--font-display); font-weight: 700;
   font-size: 13px; color: var(--green);
-  min-width: 2.2em;
 }
-.t-name {
-  grid-area: name;
-  display: flex; align-items: center; gap: clamp(12px, 1.8vw, 22px);
-  font-family: var(--font-display); font-weight: 800;
-  font-size: clamp(26px, 4.6vw, 58px);
-  letter-spacing: -0.03em; line-height: 1.05;
-  transition: transform .45s var(--ease), color .35s;
+.rc-meta h3 {
+  font-size: clamp(18px, 1.8vw, 22px); letter-spacing: -0.02em;
+  transition: color .3s;
 }
-/* generated avatar artwork in each row */
-.t-ava {
-  flex: 0 0 auto;
-  width: clamp(38px, 4.2vw, 56px); aspect-ratio: 1;
-  border-radius: 50%;
-  background-size: cover; background-position: center;
-  border: 1px solid rgba(142, 254, 187, 0.3);
-  transition: transform .45s var(--ease), border-color .35s;
-}
-.tmember:hover .t-ava { transform: scale(1.12) rotate(-6deg); border-color: var(--green); }
-.t-role {
-  grid-area: role;
-  color: var(--gray); font-size: clamp(13px, 1.6vw, 16px);
-}
-/* mobile tap-to-expand specialty */
-.t-spec-row {
-  grid-area: spec;
-  max-height: 0; overflow: hidden;
-  color: var(--green); font-size: 14px;
-  transition: max-height .45s var(--ease), padding .45s var(--ease);
-}
-.tmember.is-open .t-spec-row { max-height: 90px; padding-top: 8px; }
+.roster-card:hover .rc-meta h3 { color: var(--green); }
+.rc-meta p { color: var(--gray); font-size: 13.5px; margin-top: 2px; }
 
-/* the marquee move: hovering one row dims all the others */
-@media (hover: hover) and (min-width: 900px) {
-  .tmember {
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: "idx name role";
-  }
-  .team-list:hover .tmember { opacity: 0.22; }
-  .team-list .tmember:hover { opacity: 1; }
-  .tmember:hover { background: rgba(9, 34, 31, 0.45); }
-  .tmember:hover .t-name { color: var(--green); transform: translateX(14px); }
-  .t-spec-row { display: none; }
-}
+.roster-card.is-dogs .rc-art { background-color: var(--green); border-color: var(--green); }
+.roster-card.is-dogs .rc-idx { font-size: 16px; }
 
-.team-dogs {
-  display: flex; align-items: center; gap: 16px;
-  margin-top: clamp(22px, 4vh, 36px);
-  font-family: var(--font-display); font-weight: 800;
-  font-size: clamp(18px, 2.6vw, 28px);
-  color: var(--white);
+.roster-ui {
+  display: flex; align-items: center; gap: clamp(18px, 3vw, 32px);
+  margin-top: clamp(16px, 2.5vh, 26px);
 }
-.dogs-ava {
-  flex: 0 0 auto;
-  width: clamp(52px, 6vw, 72px); aspect-ratio: 1;
-  border-radius: 16px;
-  background-size: cover; background-position: center;
-  border: 1px solid rgba(142, 254, 187, 0.3);
-  transform: rotate(-4deg);
-  transition: transform .45s var(--ease);
+.roster-progress {
+  flex: 1; height: 2px; border-radius: 100px;
+  background: var(--sage); overflow: hidden;
 }
-.team-dogs:hover .dogs-ava { transform: rotate(4deg) scale(1.08); }
-.team-dogs em { font-style: italic; font-family: var(--font-body); font-weight: 400; color: var(--gray); font-size: 0.72em; }
-
-/* cursor-chasing profile card */
-.team-card {
-  position: fixed; top: 0; left: 0; z-index: 90;
-  width: 224px;
-  padding: 18px;
-  border-radius: 16px;
-  background: linear-gradient(165deg, #0d2f2a, var(--sage) 70%);
-  border: 1px solid rgba(142, 254, 187, 0.35);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-  opacity: 0;
-  /* transform (x/y/rotation/scale) is driven entirely by GSAP —
-     transitioning it here would fight the per-frame writes */
-  transition: opacity .25s var(--ease);
-  will-change: transform;
-  display: none;
+.roster-progress span {
+  display: block; height: 100%; width: 100%;
+  background: var(--green);
+  transform: scaleX(0); transform-origin: left;
 }
-@media (hover: hover) and (min-width: 900px) { .team-card { display: block; } }
-.team-card.is-on { opacity: 1; }
-.tc-avatar {
+.roster-btns { display: flex; gap: 10px; }
+.roster-btn {
+  width: 46px; height: 46px;
+  border: 1px solid var(--charcoal); border-radius: 50%;
+  color: var(--white); font-size: 18px;
   display: grid; place-items: center;
-  width: 64px; height: 64px; border-radius: 50%;
-  margin-bottom: 12px;
-  background: var(--green); color: var(--black);
-  font-family: var(--font-display); font-weight: 800; font-size: 22px;
-  letter-spacing: -0.02em;
+  transition: background-color .3s, border-color .3s, color .3s, transform .3s var(--ease);
 }
-/* generated artwork variant: bigger, soft-cornered, fills the card width */
-.tc-avatar.has-img {
-  width: 100%; height: 120px; border-radius: 12px;
-  background-size: cover; background-position: center top;
-  border: 1px solid rgba(142, 254, 187, 0.3);
-}
-.tc-role { display: block; font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--green); margin-bottom: 6px; }
-.tc-spec { display: block; font-size: 13.5px; color: var(--white); line-height: 1.45; }
-
+.roster-btn:hover { background: var(--green); border-color: var(--green); color: var(--black); transform: scale(1.08); }
+.roster-btn:disabled { opacity: 0.3; pointer-events: none; }
 /* ── CTA ────────────────────────────────────── */
 .cta {
   position: relative;
