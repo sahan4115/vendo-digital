@@ -415,6 +415,11 @@ section { padding: clamp(80px, 13vh, 160px) var(--pad); }
 .case-media.sage { background: radial-gradient(120% 120% at 20% 0%, #0d2f2a 0%, var(--sage) 55%, var(--black) 100%); }
 .case-media.charcoal { background: radial-gradient(120% 120% at 80% 0%, #353535 0%, var(--charcoal) 50%, #141414 100%); }
 .case-media.green { background: radial-gradient(130% 130% at 50% -10%, #b9ffd6 0%, var(--green) 55%, #4fd28d 100%); }
+.case-shot {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .7s var(--ease);
+}
+.case:hover .case-shot, .case:focus-visible .case-shot { transform: scale(1.04); }
 
 /* mockups inside cases */
 .mock {
