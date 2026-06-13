@@ -1341,6 +1341,111 @@ html.no-gsap .fword-fill { clip-path: none; }
 .svc-detail p { color: var(--gray); max-width: 58ch; }
 .svc-detail .svc-tags { margin-top: 16px; }
 
+/* ── Service cards (clickable listing grid) ──── */
+.scards {
+  display: grid; gap: clamp(14px, 1.8vw, 22px);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 660px) { .scards { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .scards { grid-template-columns: repeat(3, 1fr); } }
+
+.scard {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  min-height: clamp(280px, 30vw, 340px);
+  padding: clamp(26px, 2.6vw, 38px);
+  border: 1px solid var(--sage);
+  border-radius: var(--radius);
+  background: linear-gradient(160deg, rgba(9, 34, 31, 0.6), rgba(5, 20, 18, 0.35));
+  color: var(--white);
+  isolation: isolate;
+  transition: transform .5s var(--ease), border-color .45s, box-shadow .5s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.scard:hover, .scard:focus-visible {
+  transform: translateY(-8px);
+  border-color: rgba(142, 254, 187, 0.55);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.45);
+  outline: none;
+}
+/* cursor-tracking radial glow (position set via --mx/--my in JS) */
+.scard-glow {
+  position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 0%), rgba(142, 254, 187, 0.16), transparent 60%);
+  opacity: 0; transition: opacity .45s var(--ease);
+}
+.scard:hover .scard-glow, .scard:focus-visible .scard-glow { opacity: 1; }
+/* top accent line wipes across on hover */
+.scard::before {
+  content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%;
+  background: var(--green);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .55s var(--ease);
+}
+.scard:hover::before, .scard:focus-visible::before { transform: scaleX(1); }
+
+.scard-num {
+  position: absolute; top: clamp(14px, 1.6vw, 22px); right: clamp(16px, 1.8vw, 26px);
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(46px, 6vw, 78px); line-height: 1; letter-spacing: -0.04em;
+  color: rgba(142, 254, 187, 0.07);
+  transition: color .45s var(--ease), transform .6s var(--ease);
+  pointer-events: none;
+}
+.scard:hover .scard-num { color: rgba(142, 254, 187, 0.16); transform: translateY(-4px); }
+
+.scard-ico {
+  display: grid; place-items: center;
+  width: 56px; height: 56px; margin-bottom: auto;
+  border: 1px solid var(--charcoal); border-radius: 14px;
+  color: var(--green);
+  transition: background-color .45s var(--ease), border-color .45s, color .45s, transform .6s var(--ease);
+}
+.scard-ico svg { width: 28px; height: 28px; }
+.scard:hover .scard-ico, .scard:focus-visible .scard-ico {
+  background: var(--green); border-color: var(--green); color: var(--black);
+  transform: rotate(-6deg) scale(1.06);
+}
+
+.scard-name {
+  font-size: clamp(24px, 2.8vw, 32px); letter-spacing: -0.02em;
+  margin: clamp(22px, 3vw, 34px) 0 10px;
+  transition: color .35s;
+}
+.scard:hover .scard-name { color: var(--green); }
+.scard-tag { color: var(--gray); font-size: 15px; line-height: 1.5; max-width: 34ch; }
+
+.scard-tags {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  list-style: none; margin: 18px 0 22px;
+}
+.scard-tags li {
+  font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.1em;
+  border: 1px solid var(--charcoal); border-radius: 100px;
+  padding: 5px 11px; color: var(--gray);
+  transition: border-color .4s, color .4s;
+}
+.scard:hover .scard-tags li { border-color: rgba(142, 254, 187, 0.3); color: var(--white); }
+
+.scard-cta {
+  margin-top: auto;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  color: var(--green);
+}
+.scard-cta svg { width: 18px; height: 18px; transition: transform .4s var(--ease); }
+.scard:hover .scard-cta svg, .scard:focus-visible .scard-cta svg { transform: translateX(7px); }
+
+/* the final "not sure?" conversion card */
+.scard-cta-card {
+  justify-content: center;
+  background: linear-gradient(160deg, rgba(142, 254, 187, 0.12), rgba(9, 34, 31, 0.5));
+  border-color: rgba(142, 254, 187, 0.35);
+}
+.scard-cta-card .scard-name { color: var(--green); }
+.scard-cta-card:hover .scard-name { color: var(--white); }
+.scard-cta-strong { margin-top: 18px; font-size: 16px; }
+
 /* ── Reveal helpers (GSAP targets) ──────────── */
 .reveal { opacity: 0; transform: translateY(48px); }
 html.no-js .reveal, html.no-gsap .reveal { opacity: 1; transform: none; }

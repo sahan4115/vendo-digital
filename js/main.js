@@ -334,7 +334,7 @@
     if (prefersReduced) return;
     var targets = [
       ".section-head", ".case", ".meta-card", ".fork-card",
-      ".svc-detail", ".ccard", ".faq2-item", ".bento-tile", ".tstep",
+      ".svc-detail", ".ccard", ".faq2-item", ".bento-tile", ".tstep", ".scard",
       ".work-more", ".cta-title", ".btn-big", ".cta-note", ".cta-ring"
     ];
     document.querySelectorAll(targets.join(",")).forEach(function (el) {
@@ -651,6 +651,18 @@
         scrollTrigger: { trigger: track, start: "top 80%", once: true }
       });
     }
+  })();
+
+  /* ════════ SERVICE CARDS — cursor-tracking glow ════════ */
+  (function serviceCards() {
+    if (!finePointer || prefersReduced) return;
+    document.querySelectorAll(".scard").forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+    });
   })();
 
   /* ════════ FAQ (faq2) — exclusive animated accordion ════════ */
