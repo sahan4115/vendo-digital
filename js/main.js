@@ -585,8 +585,20 @@
     var rows = Array.prototype.slice.call(list.querySelectorAll(".tmember"));
     var hoverMQ2 = window.matchMedia("(min-width: 900px) and (hover: hover)");
 
-    // Inject the tap-to-expand specialty rows (mobile)
-    rows.forEach(function (row) {
+    // Inject the tap-to-expand specialty rows (mobile) + avatar thumbs.
+    // Avatar artwork: data-img on the row, or the generated set by index.
+    rows.forEach(function (row, idx) {
+      var img = row.getAttribute("data-img") ||
+        "images/team/avatar-" + String(idx + 1).padStart(2, "0") + ".webp";
+      row.setAttribute("data-img", img);
+      var nameEl = row.querySelector(".t-name");
+      if (nameEl) {
+        var ava = document.createElement("span");
+        ava.className = "t-ava";
+        ava.style.backgroundImage = "url('" + img + "')";
+        nameEl.insertBefore(ava, nameEl.firstChild);
+      }
+
       var d = document.createElement("span");
       d.className = "t-spec-row";
       d.textContent = row.getAttribute("data-spec") || "";
@@ -636,8 +648,17 @@
           gsap.set(card, { x: e.clientX + 24, y: e.clientY - 112 });
           lastX = e.clientX;
         }
-        var name = row.querySelector(".t-name").textContent.trim();
-        avatar.textContent = name.split(/\s+/).map(function (w) { return w.charAt(0); }).slice(0, 2).join("").toUpperCase();
+        var img = row.getAttribute("data-img");
+        if (img) {
+          avatar.classList.add("has-img");
+          avatar.style.backgroundImage = "url('" + img + "')";
+          avatar.textContent = "";
+        } else {
+          var name = row.querySelector(".t-name").textContent.trim();
+          avatar.classList.remove("has-img");
+          avatar.style.backgroundImage = "";
+          avatar.textContent = name.split(/\s+/).map(function (w) { return w.charAt(0); }).slice(0, 2).join("").toUpperCase();
+        }
         roleEl.textContent = row.querySelector(".t-role").textContent;
         specEl.textContent = row.getAttribute("data-spec") || "";
         card.classList.add("is-on");
