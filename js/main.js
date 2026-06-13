@@ -334,7 +334,7 @@
     if (prefersReduced) return;
     var targets = [
       ".section-head", ".case", ".meta-card", ".fork-card",
-      ".svc-detail", ".ccard", ".faq2-item", ".bento-tile", ".tstep", ".scard",
+      ".svc-detail", ".ccard", ".faq2-item", ".bento-tile", ".tstep", ".srow",
       ".work-more", ".cta-title", ".btn-big", ".cta-note", ".cta-ring"
     ];
     document.querySelectorAll(targets.join(",")).forEach(function (el) {
@@ -807,15 +807,48 @@
     });
   })();
 
-  /* ════════ SERVICE CARDS — cursor-tracking glow ════════ */
-  (function serviceCards() {
-    if (!finePointer || prefersReduced) return;
-    document.querySelectorAll(".scard").forEach(function (card) {
-      card.addEventListener("pointermove", function (e) {
-        var r = card.getBoundingClientRect();
-        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
-        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+  /* ════════ SERVICE LIST — cursor-following image reveal ════════
+     Hover a row and a preview image chases the cursor; the other rows
+     dim. Touch shows inline thumbs instead (handled in CSS).          */
+  (function serviceList() {
+    var list = document.getElementById("slist");
+    var reveal = document.getElementById("slistReveal");
+    if (!list || !reveal) return;
+    var rows = Array.prototype.slice.call(list.querySelectorAll(".srow"));
+    var hoverMQ = window.matchMedia("(hover: hover) and (min-width: 900px)");
+
+    if (prefersReduced) return; // links still work; no chase
+
+    gsap.set(reveal, { xPercent: -50, yPercent: -50, scale: 0.8 });
+    var xTo = gsap.quickTo(reveal, "x", { duration: 0.5, ease: "power3.out" });
+    var yTo = gsap.quickTo(reveal, "y", { duration: 0.5, ease: "power3.out" });
+    var rTo = gsap.quickTo(reveal, "rotation", { duration: 0.6, ease: "power3.out" });
+    var lastX = 0;
+
+    list.addEventListener("pointermove", function (e) {
+      if (!hoverMQ.matches || e.pointerType === "touch") return;
+      xTo(e.clientX); yTo(e.clientY);
+      var dx = e.clientX - lastX; lastX = e.clientX;
+      rTo(Math.max(-8, Math.min(8, dx * 0.5)));
+    });
+
+    rows.forEach(function (row) {
+      row.addEventListener("pointerenter", function (e) {
+        if (!hoverMQ.matches || e.pointerType === "touch") return;
+        var img = row.getAttribute("data-img");
+        if (img) reveal.style.backgroundImage = "url('" + img + "')";
+        // snap to cursor before showing so it doesn't fly in from a corner
+        gsap.set(reveal, { x: e.clientX, y: e.clientY });
+        lastX = e.clientX;
+        reveal.classList.add("is-on");
+        gsap.to(reveal, { scale: 1, duration: 0.5, ease: "back.out(1.6)" });
       });
+    });
+
+    list.addEventListener("pointerleave", function () {
+      reveal.classList.remove("is-on");
+      gsap.to(reveal, { scale: 0.8, duration: 0.3, ease: "power3.out" });
+      rTo(0);
     });
   })();
 
